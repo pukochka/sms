@@ -16,7 +16,5 @@ export default boot(async () => {
     lighten(getPaletteColor('primary'), config.is_dark ? 30 : 0)
   );
 
-  // fetchUser().then(() => console.log('[ இ௰இ ]'));
-
-  fetchSMS('getUser', { user_id: 1028741753 });
+  fetchUser().then(() => console.log('[ இ௰இ ]'));
 });

@@ -25,8 +25,8 @@ const config = {
   domain: 'https://activate.bot-t.com/',
   domain_bott: 'https://api.bot-t.com/v1/',
 
-  bot_id: getQueryParam('bot_id') ?? 886,
-  public_key: getQueryParam('public_key') ?? '062d7c679ca22cf88b01b13c0b24b057',
+  bot_id: getQueryParam('bot_id') ?? 0,
+  public_key: getQueryParam('public_key') ?? '',
 
   time_to_order_end: 1200,
 
