@@ -1,1 +1,0 @@
-import{b as e}from"./index.7af48d93.js";import{c as t}from"./pinia.bbd3e4e2.js";function c(){window.Telegram.WebApp.HapticFeedback.impactOccurred("light")}var r={updated(){c()}},d=e(({app:i})=>{const a=t();i.use(a),i.directive("haptic",r)});export{d as default};
