@@ -1,0 +1,79 @@
+body {
+  font-family: 'Yandex Sans Text', serif !important;
+}
+
+$sizes: 4, 6, 8, 10, 12, 14, 16;
+
+@each $size in $sizes {
+  .rounded-#{$size} {
+    border-radius: #{$size}px !important;
+  }
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.outline-1 {
+  outline: 1px solid var(--q-primary);
+}
+.outline-2 {
+  outline: 2px solid var(--q-primary);
+}
+
+.shadow {
+  box-shadow: rgba(100, 100, 111, 0.2) 0 7px 29px 0 !important;
+}
+
+.fz-18 {
+  font-size: 16px;
+}
+
+.sms-activate-image {
+  width: 40px;
+  height: 40px;
+  background-repeat: no-repeat;
+  display: block;
+}
+.icon-sms {
+  overflow: hidden;
+  position: relative;
+  min-width: 24px;
+  min-height: 24px;
+  border-radius: 50%;
+}
+
+.bg-back-white {
+  background: rgba(255, 255, 255, 0.4);
+}
+.bg-back-black {
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.border-left-10 {
+  border-end-start-radius: 10px;
+  border-start-start-radius: 10px;
+}
+
+.button-enter-active {
+  transition: all 0.15s ease-out;
+}
+
+.button-leave-active {
+  transition: all 0.15s cubic-bezier(1, 0.5, 0.8, 1);
+}
+
+.button-enter-from,
+.button-leave-to {
+  transform: translateX(100%);
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.2s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
