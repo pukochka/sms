@@ -43,9 +43,7 @@ export async function fetchSMS<Q extends SMSQueries>(
           'orders',
           {
             user_id: data.user?.id ?? 0,
-            user_secret_key:
-              data.systemUser?.secret_user_key ??
-              '2997ec12c0c4e2df3e316d943e3da6e72997ec123e3d4d9429971695e4d5e4d5',
+            user_secret_key: data.systemUser?.secret_user_key ?? '',
             public_key: config.public_key,
           },
           true
