@@ -26,7 +26,7 @@ const config = {
   domain_bott: 'https://api.bot-t.com/v1/',
 
   bot_id: getQueryParam('bot_id') ?? 0,
-  public_key: getQueryParam('public_key') ?? ' ',
+  public_key: getQueryParam('public_key') ?? '',
 
   time_to_order_end: 1200,
 
