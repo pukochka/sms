@@ -3,12 +3,11 @@
 
   <div
     v-if="data.canPay === false"
-    :class="[main.itemBackgroundClass]"
-    class="row justify-center items-center rounded-10 q-py-lg q-px-sm">
+    class="row bg-item justify-center items-center rounded-10 q-py-lg q-px-sm">
     <q-icon color="primary" name="info" size="32px" />
 
-    <div class="q-pl-sm" :class="[main.textClasses]">
-      {{ main.language.select_notify }}
+    <div class="q-pl-sm">
+      {{ lang.select_notify }}
     </div>
   </div>
 
@@ -17,9 +16,8 @@
       <q-input
         dense
         borderless
-        class="rounded-10 q-px-md col-grow"
-        :class="[main.itemBackgroundClass]"
-        :placeholder="main.language.search"
+        class="rounded-10 q-px-md col-grow bg-item"
+        :placeholder="lang.search"
         v-model="data.search.countries">
         <template v-slot:append>
           <q-icon name="search" v-if="data.search.countries === ''" />
@@ -43,7 +41,7 @@
         color="primary"
         icon-right="swap_vert"
         v-haptic
-        :label="main.language.price"
+        :label="lang.price"
         @click="data.usePrice" />
     </div>
 
@@ -55,16 +53,18 @@
 </template>
 
 <script lang="ts" setup>
-import { useMainStore } from 'stores/main/mainStore';
+import { computed } from 'vue';
+import { useLang } from 'src/utils/use/useLang';
+
 import { useDataStore } from 'stores/data/dataStore';
 import { useStatesStore } from 'stores/states/statesStore';
 
 import ChooseItem from 'components/stages/ChooseItem.vue';
 import ItemsLoading from 'components/other/ItemsLoading.vue';
 
-const main = useMainStore();
 const data = useDataStore();
 const states = useStatesStore();
+const lang = computed(() => useLang());
 </script>
 
 <style lang="scss" scoped></style>

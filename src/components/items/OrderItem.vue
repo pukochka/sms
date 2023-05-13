@@ -2,7 +2,7 @@
   <q-item :style="{ height: elHeight + 'px' }">
     <q-item-section>
       <q-item-label caption v-if="minHeight">
-        {{ main.language.order }} №{{ item.id }}
+        {{ lang.order }} №{{ item.id }}
       </q-item-label>
 
       <q-item-label class="row items-center q-gutter-x-sm" v-if="minHeight">
@@ -25,7 +25,7 @@
         <q-badge
           color="orange"
           text-color="black"
-          :label="main.language.order_status_text[item.status]" />
+          :label="lang.order_status_text[item.status]" />
       </q-item-label>
     </q-item-section>
 
@@ -35,7 +35,7 @@
         class="q-pa-sm rounded-10"
         color="orange-14"
         text-color="white"
-        :label="main.language.finish_activation" />
+        :label="lang.finish_activation" />
 
       <q-btn
         flat
@@ -44,7 +44,7 @@
         class="rounded-10"
         size="md"
         color="primary"
-        :label="main.language.details"
+        :label="lang.details"
         :loading="loading"
         @click="openOrder" />
     </q-item-section>
@@ -52,21 +52,24 @@
 </template>
 
 <script lang="ts" setup>
+import config from 'src/config';
+
 import { computed, PropType, ref } from 'vue';
-import { useMainStore } from 'stores/main/mainStore';
-import { useDataStore } from 'stores/data/dataStore';
 import { useQuasar } from 'quasar';
 import { CountryImage, ServiceImage } from 'src/utils/images';
+
+import { useDataStore } from 'stores/data/dataStore';
+import { useLang } from 'src/utils/use/useLang';
+
 import { fetchSMS } from 'boot/queries';
-import config from 'src/config';
 
 const props = defineProps({
   item: Object as PropType<SMSOrder>,
 });
 
 const quasar = useQuasar();
-const main = useMainStore();
 const data = useDataStore();
+const lang = computed(() => useLang());
 
 const loading = ref(false);
 

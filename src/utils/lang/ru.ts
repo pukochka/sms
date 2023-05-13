@@ -22,9 +22,12 @@ const status_text: Record<number, string> = {
 
 const ruScheme = {
   price: 'Цена',
-
   cost: 'от',
   items: 'шт',
+
+  service: 'Сервис',
+  multiService: 'Мультисервис',
+  profile: 'Профиль',
 
   select_country: 'Выбрать страну',
   select_service: 'Выбрать сервис',
@@ -41,6 +44,7 @@ const ruScheme = {
   search_operator_not_found:
     'Оператор по вашему запросу не найден, попробуйте еще раз',
   from: 'из',
+  fromAt: 'от',
   prev: 'Пред',
   next: 'След',
   arrangement: 'Изменить порядок',
@@ -89,6 +93,9 @@ const ruScheme = {
   button_open: 'Открыть',
 
   details: 'Детали',
+
+  cancel: 'Отмена',
+  confirm: 'Подтвердить',
 
   errors: {
     undefined_message:

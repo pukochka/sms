@@ -22,9 +22,12 @@ const status_text: Record<number, string> = {
 
 const enScheme = {
   price: 'Price',
-
   cost: 'from',
   items: 'pcs',
+
+  service: 'Service',
+  multiService: 'Multiservice',
+  profile: 'Profile',
 
   select_country: 'Select country',
   select_service: 'Select service',
@@ -38,6 +41,7 @@ const enScheme = {
   search_country_not_found: 'Country on your request is not found, try again',
   search_operator_not_found: 'Operator on your request is not found, try again',
   from: 'from',
+  fromAt: 'from',
   prev: 'Prev',
   next: 'Next',
   arrangement: 'Arrangement',
@@ -86,6 +90,9 @@ const enScheme = {
   button_open: 'Open',
 
   details: 'Details',
+
+  cancel: 'Cancel',
+  confirm: 'Confirm',
 
   errors: {
     undefined_message:

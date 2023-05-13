@@ -1,8 +1,5 @@
 <template>
-  <q-item
-    class="col-12 rounded-10"
-    :class="[main.itemBackgroundClass]"
-    style="height: 52px">
+  <q-item class="col-12 rounded-10 bg-item" style="height: 52px">
     <q-item-section avatar>
       <q-btn
         flat
@@ -20,7 +17,7 @@
     </q-item-section>
 
     <q-item-section>
-      <q-item-label :class="[main.textClasses]">{{ title }}</q-item-label>
+      <q-item-label>{{ title }}</q-item-label>
     </q-item-section>
 
     <q-badge
@@ -28,22 +25,23 @@
       floating
       color="primary"
       text-color="white"
-      :label="main.language.selected_country" />
+      :label="lang.selected_country" />
   </q-item>
 </template>
 
 <script lang="ts" setup>
 import { computed } from 'vue';
+import { useLang } from 'src/utils/use/useLang';
 
-import { useMainStore } from 'stores/main/mainStore';
 import { useDataStore } from 'stores/data/dataStore';
+
 import { CountryImage } from 'src/utils/images';
 
-const main = useMainStore();
 const data = useDataStore();
+const lang = computed(() => useLang());
 
 const title = computed(() =>
-  data.userValue?.language === 'ru'
+  data.userValue.language === 'ru'
     ? data.selectedCountry?.title_ru
     : data.selectedCountry?.title_eng
 );

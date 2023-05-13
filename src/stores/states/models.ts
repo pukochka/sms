@@ -24,4 +24,4 @@ export interface Dialogs {
 export type DialogNames = 'order' | 'orders_view';
 export type LoadingNames = 'init' | 'services' | 'countries' | 'operators';
 
-export type TabNames = 'catalog' | 'countries' | 'operators' | 'profile';
+export type TabNames = 'service' | 'multi-service' | 'rent';

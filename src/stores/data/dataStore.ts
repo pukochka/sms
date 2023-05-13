@@ -1,23 +1,25 @@
-import config from 'src/config';
-import { products } from 'src/utils/names/products';
-
 import { defineStore } from 'pinia';
 
-import { toCurrentTime, toTimeEnd } from 'src/utils/time';
+import config from 'src/config';
+import { toCurrentTime, toTimeEnd } from 'src/utils/helpers/time';
 
-import 'src/utils/polyfills';
-
-import { useMainStore } from 'stores/main/mainStore';
 import { useStatesStore } from 'stores/states/statesStore';
 
 import { fetchSMS } from 'boot/queries';
 
+import namesCountry from 'src/utils/names/contries';
+import { products } from 'src/utils/names/products';
+
+import 'src/utils/helpers/polyfills';
+
 import { DataStore, DataValues } from 'stores/data/models';
 
-import namesCountry from 'src/utils/names/contries';
-
 import Timeout = NodeJS.Timeout;
-import { defaultOrder, defaultSystemUser, defaultUser } from 'stores/defaults';
+import {
+  defaultOrder,
+  defaultSystemUser,
+  defaultUser,
+} from 'stores/content/defaults';
 
 let time_interval: Timeout;
 let request_getOrder_interval: Timeout;
@@ -32,6 +34,9 @@ export const useDataStore = defineStore('data', {
       countriesValue: [],
       servicesValue: [],
       operatorsValue: [],
+
+      multiCountries: [],
+      multiServices: [],
 
       ordersValue: [],
 
@@ -160,8 +165,6 @@ export const useDataStore = defineStore('data', {
     },
 
     selectService(value?: SMSUser) {
-      const main = useMainStore();
-
       this.userValue = value ?? this.userValue;
 
       this.selectedServiceValue =
@@ -169,7 +172,7 @@ export const useDataStore = defineStore('data', {
           (service) => service.name === this.user?.service
         ) ?? null;
 
-      if (this.selectedServiceValue !== null) main.useScroll(1);
+      // if (this.selectedServiceValue !== null) main.useScroll(1);
 
       this.checkCanPay();
     },
@@ -188,11 +191,15 @@ export const useDataStore = defineStore('data', {
 
     checkCanPay() {
       if (this.canPay) {
-        fetchSMS('countries', {
-          user_id: this.userValue?.id ?? 0,
-          public_key: config.public_key,
-          interval: true,
-        });
+        fetchSMS(
+          'countries',
+          {
+            user_id: this.userValue?.id ?? 0,
+            public_key: config.public_key,
+            interval: true,
+          },
+          true
+        );
         this.startCountries();
       }
     },

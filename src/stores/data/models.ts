@@ -6,6 +6,9 @@ export interface DataStore {
   servicesValue: SMSServices[];
   operatorsValue: SMSOperator[];
 
+  multiCountries: SMSMultiCountry[];
+  multiServices: SMSMultiService[];
+
   ordersValue: SMSOrder[];
 
   selectedCountryValue: SMSCountry | null;

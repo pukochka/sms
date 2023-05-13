@@ -109,6 +109,50 @@ declare interface SMSServices {
 }
 
 /**
+ * Сущность сервисов для покупки ( Multi )
+ * */
+declare interface SMSMultiService {
+  /**
+   * название сервиса
+   * */
+  name: string;
+  /**
+   * картинка сервиса
+   * */
+  image: string;
+  /**
+   * доступное количество к заказу
+   * */
+  count: number;
+  /**
+   * цена номера с учетом наценки от создателя бота
+   * */
+  cost: number;
+}
+
+/**
+ * Сущность стран для покупки ( Multi )
+ * */
+declare interface SMSMultiCountry {
+  /**
+   * название сервиса
+   * */
+  org_id: number;
+  /**
+   * картинка сервиса
+   * */
+  image: string;
+  /**
+   *
+   * */
+  name_ru: string;
+  /**
+   *
+   * */
+  name_en: string;
+}
+
+/**
  * Сущность заказа
  * */
 declare interface SMSOrder {

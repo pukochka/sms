@@ -7,8 +7,8 @@
     transition-duration="150">
     <q-card style="width: 100%" class="q-gutter-y-md q-px-md q-pb-md">
       <div class="row items-center justify-between">
-        <div :class="[main.titleClasses]" class="text-center">
-          {{ main.language.order }} №{{ data.createdOrder?.id }}
+        <div class="text-center">
+          {{ lang.order }} №{{ data.createdOrder.id }}
         </div>
 
         <q-btn
@@ -28,7 +28,7 @@
             class="row col-12 items-end"
             v-for="(item, index) in order"
             :key="index">
-            <div :class="[main.orderTitleClass]">{{ item.label }}</div>
+            <div>{{ item.label }}</div>
 
             <div class="col-grow q-mx-sm relative-position">
               <div class="order-dashed"></div>
@@ -50,29 +50,28 @@
       </div>
 
       <div class="">
-        <div :class="[main.orderTitleClass]">
-          {{ main.language.order_phone }}
+        <div>
+          {{ lang.order_phone }}
         </div>
 
         <q-list bordered separator class="rounded-10 overflow-hidden">
           <q-item
             style="max-height: 35px !important; min-height: 35px !important"
-            class="relative-position"
-            :class="[main.itemBackgroundClass]">
+            class="relative-position bg-item">
             <q-item-section>
-              <q-item-label :class="[main.titleClasses]" class="text-center">
-                {{ data.createdOrder?.phone }}
+              <q-item-label class="text-center">
+                {{ data.createdOrder.phone }}
               </q-item-label>
             </q-item-section>
 
-            <CopyButton :text="data.createdOrder?.phone" />
+            <CopyButton :text="data.createdOrder.phone" />
           </q-item>
         </q-list>
       </div>
 
       <div class="">
-        <div :class="[main.orderTitleClass]" v-if="codes.length > 0">
-          {{ main.language.order_codes }}
+        <div v-if="codes.length > 0">
+          {{ lang.order_codes }}
         </div>
 
         <ChooseItem
@@ -89,26 +88,22 @@
           v-if="
             codes.length === 0 && status !== 6 && status !== 9 && status !== 8
           "
-          class="text-center rounded-10 q-pa-sm"
-          :class="[main.itemBackgroundClass]">
+          class="text-center rounded-10 q-pa-sm bg-item">
           <q-icon name="info" color="primary" size="32px" />
 
-          <div :class="[main.textColor]">
-            {{ main.language.order_notify_wait }}
+          <div>
+            {{ lang.order_notify_wait }}
           </div>
         </div>
       </div>
 
-      <div
-        :class="[main.titleClasses]"
-        class="text-center q-pa-md"
-        v-if="orderEnd">
-        {{ main.language.order_status_text[data.createdOrder?.status ?? 8] }}
+      <div class="text-center q-pa-md" v-if="orderEnd">
+        {{ lang.order_status_text[status] }}
       </div>
 
       <div v-if="orderEnd === false">
-        <div class="text-center text-caption" :class="[main.textColor]">
-          {{ main.language.order_remained }} {{ data.timeToEnd.full }}
+        <div class="text-center text-caption">
+          {{ lang.order_remained }} {{ data.timeToEnd.full }}
         </div>
 
         <q-linear-progress
@@ -127,7 +122,7 @@
           class="rounded-10 col-12"
           size="md"
           color="primary"
-          :label="main.language.button_repeat"
+          :label="lang.button_repeat"
           :loading="loadings.second"
           v-if="codes.length > 0 && status !== 3 && status !== 1"
           @click="secondSms" />
@@ -140,7 +135,7 @@
           size="md"
           color="primary"
           v-if="codes.length > 0"
-          :label="main.language.button_confirm"
+          :label="lang.button_confirm"
           :loading="loadings.confirm"
           @click="confirmOrder" />
 
@@ -152,7 +147,7 @@
           size="md"
           color="red"
           v-if="codes.length === 0"
-          :label="main.language.button_cancel"
+          :label="lang.button_cancel"
           :loading="loadings.cancel"
           @click="cancelOrder" />
       </div>
@@ -166,19 +161,19 @@ import { computed, ref, onUpdated } from 'vue';
 import { date } from 'quasar';
 
 import { useStatesStore } from 'stores/states/statesStore';
-import { useMainStore } from 'stores/main/mainStore';
 import { useDataStore } from 'stores/data/dataStore';
+import { useLang } from 'src/utils/use/useLang';
 
 import { CountryImage, ServiceImage } from 'src/utils/images';
-import { toTimeEnd } from 'src/utils/time';
+import { toTimeEnd } from 'src/utils/helpers/time';
 import { fetchSMS } from 'boot/queries';
 
 import ChooseItem from 'components/stages/ChooseItem.vue';
 import CopyButton from 'components/other/CopyButton.vue';
 
 const states = useStatesStore();
-const main = useMainStore();
 const data = useDataStore();
+const lang = computed(() => useLang());
 
 const loadings = ref({
   second: false,
@@ -212,8 +207,9 @@ const codes = computed(() => {
 
 const country = computed(
   () =>
-    data.countriesValue.find((country) => country.id === data.createdOrder?.country)
-      ?.title ?? data.createdOrder?.country
+    data.countriesValue.find(
+      (country) => country.id === data.createdOrder?.country
+    )?.title ?? data.createdOrder?.country
 );
 
 const service = computed(
@@ -278,23 +274,6 @@ const confirmOrder = () => {
   });
 };
 
-// const reportOrder = () => {
-//   if (loadings.value.report) return;
-//   loadings.value.report = true;
-//
-//   fetchSMS('reportOrderSms', {
-//     user_id: data.user?.id ?? 0,
-//     order_id: data.createdOrder?.id ?? 0,
-//     public_key: config.public_key,
-//     user_secret_key: data.systemUser?.secret_user_key ?? '',
-//   }).then(() => {
-//     loadings.value.report = false;
-//   });
-// };
-
-const ImageCountry = () => CountryImage(data.createdOrder?.country);
-const ImageService = () => ServiceImage(data.createdOrder?.service);
-
 const closeOrder = () => {
   data.endGetOrder();
 
@@ -312,30 +291,33 @@ onUpdated(() => {
   }
 });
 
+const ImageCountry = () => CountryImage(data.createdOrder?.country);
+const ImageService = () => ServiceImage(data.createdOrder?.service);
+
 const order = computed(() => [
   {
-    label: main.language.order_time,
+    label: lang.value.order_time,
     value: time.value,
     image: '',
   },
   {
-    label: main.language.order_service,
+    label: lang.value.order_service,
     value: service.value,
     image: 'service',
   },
   {
-    label: main.language.order_country,
+    label: lang.value.order_country,
     value: country.value,
     image: 'country',
   },
   {
-    label: main.language.order_price,
+    label: lang.value.order_price,
     value: data.createdOrder?.cost + ' ₽',
     image: '',
   },
   {
-    label: main.language.order_status,
-    value: main.language.order_status_text[data.createdOrder?.status ?? 8],
+    label: lang.value.order_status,
+    value: lang.value.order_status_text[data.createdOrder?.status ?? 8],
     image: '',
   },
 ]);

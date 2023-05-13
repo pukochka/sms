@@ -2,11 +2,10 @@
   <div class="rounded-10 relative-position overflow-hidden">
     <div style="height: 364px" v-if="currentItems.length === 0 && searching">
       <div
-        class="absolute-full q-pa-md column flex-center text-center rounded-10 q-gutter-y-sm"
-        :class="[main.itemBackgroundClass]">
+        class="absolute-full bg-item q-pa-md column flex-center text-center rounded-10 q-gutter-y-sm">
         <q-icon color="primary" name="search" size="32px" />
 
-        <div :class="[main.textClasses]">{{ NotFoundText }}</div>
+        <div>{{ NotFoundText }}</div>
       </div>
     </div>
 
@@ -27,6 +26,7 @@
             :item="item" />
         </q-list>
       </q-tab-panel>
+
       <q-tab-panel name="1" class="q-pa-none">
         <q-list class="rounded-10 overflow-hidden" bordered separator>
           <component
@@ -58,10 +58,9 @@
       @click="prev" />
 
     <div
-      class="absolute-center fz-18 text-weight-bold"
-      :class="[main.textColor]"
+      class="absolute-center font-size-16 text-weight-bold"
       v-if="pageCount > 1">
-      {{ currentPage }} {{ main.language.from }} {{ pageCount }}
+      {{ currentPage }} {{ lang.from }} {{ pageCount }}
     </div>
 
     <q-btn
@@ -86,16 +85,15 @@
 <script lang="ts" setup>
 import { computed, ref, watch, withDefaults } from 'vue';
 
-import { useMainStore } from 'stores/main/mainStore';
 import { useQuasar } from 'quasar';
+import { useLang } from 'src/utils/use/useLang';
 
 import ServiceItem from '../items/ServiceItem.vue';
-import OperatorItem from '../items/OperatorItem.vue';
 import CountryItem from '../items/CountryItem.vue';
 import OrderItem from '../items/OrderItem.vue';
 import OrderCode from '../order/OrderCode.vue';
 
-const main = useMainStore();
+const lang = computed(() => useLang());
 const quasar = useQuasar();
 
 const props = withDefaults(defineProps<Props>(), {
@@ -127,10 +125,10 @@ const height = computed(() =>
 );
 
 const labelNext = computed(() =>
-  quasar.screen.width < 350 ? '' : main.language.next
+  quasar.screen.width < 350 ? '' : lang.value.next
 );
 const labelPrev = computed(() =>
-  quasar.screen.width < 350 ? '' : main.language.prev
+  quasar.screen.width < 350 ? '' : lang.value.prev
 );
 
 const pageCount = computed(() =>
@@ -159,17 +157,15 @@ const items = computed(() =>
 const RenderItem = computed(() => {
   if (props.type === 'service') return ServiceItem;
   else if (props.type === 'country') return CountryItem;
-  else if (props.type === 'operator') return OperatorItem;
   else if (props.type === 'order') return OrderItem;
   else return OrderCode;
 });
 
 const NotFoundText = computed(() => {
-  if (props.type === 'service') return main.language.search_service_not_found;
-  else if (props.type === 'country')
-    return main.language.search_country_not_found;
+  if (props.type === 'service') return lang.value.search_service_not_found;
+  else if (props.type === 'country') return lang.value.search_country_not_found;
   else if (props.type === 'operator')
-    return main.language.search_operator_not_found;
+    return lang.value.search_operator_not_found;
   else return '';
 });
 

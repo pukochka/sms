@@ -5,9 +5,8 @@
     <q-input
       dense
       borderless
-      class="rounded-10 q-px-md col-grow"
-      :class="[main.itemBackgroundClass]"
-      :placeholder="main.language.search"
+      class="rounded-10 q-px-md col-grow bg-item"
+      :placeholder="lang.search"
       v-model="data.search.services">
       <template v-slot:append>
         <q-icon v-haptic name="search" v-if="data.search.services === ''" />
@@ -35,17 +34,19 @@
 </template>
 
 <script lang="ts" setup>
-import { useMainStore } from 'stores/main/mainStore';
+import { computed } from 'vue';
+import { useLang } from 'src/utils/use/useLang';
+
 import { useDataStore } from 'stores/data/dataStore';
+import { useStatesStore } from 'stores/states/statesStore';
 
 import ChooseItem from 'components/stages/ChooseItem.vue';
 import ItemsLoading from 'components/other/ItemsLoading.vue';
-import { useStatesStore } from 'stores/states/statesStore';
 import ServiceSelected from 'components/selected/ServiceSelected.vue';
 
-const main = useMainStore();
 const data = useDataStore();
 const states = useStatesStore();
+const lang = computed(() => useLang());
 </script>
 
 <style lang="scss" scoped>

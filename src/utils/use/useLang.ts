@@ -1,11 +1,10 @@
 import { useDataStore } from 'stores/data/dataStore';
+
 import ruScheme from 'src/utils/lang/ru';
 import enScheme from 'src/utils/lang/en';
 
-export function useLanguage() {
+export function useLang() {
   const data = useDataStore();
 
-  const language = data.userValue?.language ?? 'ru';
-
-  return language === 'ru' ? ruScheme : enScheme;
+  return data.user.language === 'ru' ? ruScheme : enScheme;
 }

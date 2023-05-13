@@ -9,35 +9,11 @@
 declare enum SMSQueriesEnum {
   /**
    * Возвращает страны
-   *
-   * Объект с параметрами:
-   *  - id - Уникальный идентификатор
-   *  - title_ru - Название страны
-   *  - title_eng - Название страны
-   *  - image - Флаг страны(Если нет, то null)
-   *
    * */
   countries = 'countries',
 
   /**
-   * Возвращает операторов
-   *
-   * Объект с параметрами:
-   *  -
-   * */
-  operators = 'operators',
-
-  /**
    * Возвращает сервисы, которые можно выбрать для заказа
-   *
-   * Объект с параметрами:
-   *  - id - код сервиса
-   *  - title - название сервиса
-   *  - image - картинка сервиса (Или null)
-   *  - count - доступное количество к заказу
-   *  - cost - цена номера с учетом наценки от создателя бота
-   *  - rate - процент доставки смс (null - не писать о нём)
-   *
    * */
   services = 'services',
 
@@ -49,35 +25,16 @@ declare enum SMSQueriesEnum {
 
   /**
    * Создаем заказ
-   *
-   * Объект с параметрами:
-   *  - id - номер транзакции
-   *  - phone - номер арендованный
-   *  - time - время timestamp после которого закончится активация. Вернется по гринвичу.
-   *
    * */
   createOrder = 'createOrder',
 
   /**
    * Получение пользователя
-   *
-   * Объект с параметрами:
-   *  - id - идентификатор пользователя (tg_id)
-   *  - country - выбранная страна пользователя (Объект)
-   *  - operator - выбранный оператор (строка)
-   *  - language - (ru или eng)
-   *
    * */
   getUser = 'getUser',
 
   /**
    * Задать страну ( для заказа )
-   *
-   * Объект с параметрами:
-   *  - id - идентификатор пользователя (tg_id)
-   *  - country - выбранная страна пользователя (Объект)
-   *  - operator - выбранный оператор (строка)
-   *
    * */
   setCountry = 'setCountry',
 
@@ -88,27 +45,27 @@ declare enum SMSQueriesEnum {
   setService = 'setService',
 
   /**
-   * Задать оператора
-   *
-   * Объект с параметрами:
-   *  - id - идентификатор пользователя (tg_id)
-   *  - country - выбранная страна пользователя (Объект)
-   *  - operator - выбранный оператор (строка)
-   *
-   * */
-  setOperator = 'setOperator',
-
-  /**
    * Задать язык
-   *
-   * Объект с параметрами:
-   *  - id - идентификатор пользователя (tg_id)
-   *  - country - выбранная страна пользователя (строка)
-   *  - operator - выбранный оператор (строка)
-   *  - language - (ru или eng)
-   *
    * */
   setLanguage = 'setLanguage',
+
+  /**
+   * *********************
+   *
+   * */
+  getCountries = 'getCountries',
+
+  /**
+   * *********************
+   *
+   * */
+  getServices = 'getServices',
+
+  /**
+   * *********************
+   *
+   * */
+  createMulti = 'createMulti',
 
   /**
    * *********************
@@ -142,17 +99,39 @@ declare enum SMSQueriesEnum {
 }
 
 /**
- * Запрос /operators
  *
- * Обязательный параметры:
- *  - country - Для какой страны выбор операторов (GET string)
  * */
-declare interface SMSOperatorsParams {
+declare interface PublicKey {
   /**
-   * Для какой страны выбор операторов (GET string)
+   * Публичный ключ модуля
    * */
-  country: string;
+  public_key: string;
 }
+
+/**
+ *
+ * */
+declare interface PublicKey {
+  /**
+   * Публичный ключ модуля (GET string)
+   * */
+  public_key: string;
+}
+
+/**
+ *
+ * */
+declare interface SecretKey {
+  /**
+   * Приватный ключ пользователя(GET string)
+   * */
+  user_secret_key: string;
+}
+
+/**
+ *
+ * */
+declare type BottParams = SecretKey & PublicKey;
 
 /**
  * Запрос /services
@@ -165,7 +144,8 @@ declare interface SMSOperatorsParams {
  * */
 declare interface SMSServicesParams {
   /**
-   * Идентификатор пользователя телеграм. (У пользователя установлена выбранная страна/оператор) И поэтому сервисы вернутся только те, что выбраны у него и доступны (GET number)
+   * Идентификатор пользователя телеграм. (У пользователя установлена выбранная страна/оператор)
+   * И поэтому сервисы вернутся только те, что выбраны у него и доступны (GET number)
    * */
   public_key: string;
 }
@@ -179,15 +159,11 @@ declare interface SMSServicesParams {
  *              И поэтому сервисы вернутся только те, что выбраны у него и доступны (GET number)
  *
  * */
-declare interface SMSCountriesParams {
+declare interface SMSCountriesParams extends PublicKey {
   /**
    * Идентификатор пользователя телеграм. (У пользователя установлена выбранная страна/оператор) И поэтому сервисы вернутся только те, что выбраны у него и доступны (GET number)
    * */
   user_id: number;
-  /**
-   *
-   * */
-  public_key: string;
   /**
    *
    **/
@@ -204,19 +180,11 @@ declare interface SMSCountriesParams {
  *  - public_key - Публичный ключ модуля (GET string)
  *
  * */
-declare interface SMSCreateOrderParams {
+declare interface SMSCreateOrderParams extends BottParams {
   /**
    * Идентификатор пользователя телеграм. (У пользователя установлена выбранная страна/оператор) И поэтому сервисы вернутся только те, что выбраны у него и доступны (GET number)
    * */
   user_id: number;
-  /**
-   * Приватный ключ пользователя(GET string)
-   * */
-  user_secret_key: string;
-  /**
-   * Публичный ключ модуля (GET string)
-   * */
-  public_key: string;
   /**
    *
    * */
@@ -238,6 +206,45 @@ declare interface SMSGetUserParams {
 }
 
 /**
+ * Запрос /getCountries
+ *
+ * Для мультисервисов
+ * */
+declare type SMSGetCountriesParams = PublicKey;
+
+/**
+ * Запрос /getServices
+ *
+ * Для мультисервисов
+ * */
+declare interface SMSGetServicesParams extends PublicKey {
+  /**
+   * org_id страны
+   * */
+  country: string;
+}
+
+/**
+ * Запрос /createMulti
+ *
+ * Для мультисервисов
+ * */
+declare interface SMSCreateMultiParams extends BottParams {
+  /**
+   * Уникальный идентификатор пользователя (GET number)
+   * */
+  user_id: number;
+  /**
+   * org_id страны
+   * */
+  country: string;
+  /**
+   * "ig, tg, ...  vk"
+   * */
+  services: string;
+}
+
+/**
  * Запрос /setCountry
  *
  * Обязательный параметры:
@@ -245,7 +252,7 @@ declare interface SMSGetUserParams {
  *  - country - Код страны (GET string)
  *
  * */
-declare interface SMSSetCountryParams {
+declare interface SMSSetCountryParams extends SecretKey {
   /**
    * Уникальный идентификатор пользователя (GET number)
    * */
@@ -254,30 +261,6 @@ declare interface SMSSetCountryParams {
    * Код страны (GET string)
    * */
   country: string;
-  /**
-   * Код оператора (GET string)
-   * */
-  operator: string;
-  /**
-   * Приватный ключ пользователя(GET string)
-   * */
-  user_secret_key: string;
-}
-
-/**
- * Запрос /setOperator
- *
- * Обязательный параметры:
- *  - user_id - Уникальный идентификатор пользователя (GET number)
- *  - user_secret_key - Приватный ключ пользователя (GET string)
- *  - operator - Код оператора (GET string)
- *
- * */
-declare interface SMSSetOperatorParams {
-  /**
-   * Уникальный идентификатор пользователя (GET number)
-   * */
-  user_id: number;
   /**
    * Код оператора (GET string)
    * */
@@ -291,7 +274,7 @@ declare interface SMSSetOperatorParams {
  *  - user_id - Уникальный идентификатор пользователя (GET number)
  *
  * */
-declare interface SMSSetServiceParams {
+declare interface SMSSetServiceParams extends SecretKey {
   /**
    * Уникальный идентификатор пользователя (GET number)
    * */
@@ -300,10 +283,6 @@ declare interface SMSSetServiceParams {
    * Уникальный идентификатор заказа0
    * */
   service: string;
-  /**
-   * Приватный ключ пользователя(GET string)
-   * */
-  user_secret_key: string;
 }
 
 /**
@@ -314,7 +293,7 @@ declare interface SMSSetServiceParams {
  *  - language -  (GET string)
  *
  * */
-declare interface SMSSetLanguageParams {
+declare interface SMSSetLanguageParams extends SecretKey {
   /**
    * Уникальный идентификатор пользователя (GET number)
    * */
@@ -323,10 +302,6 @@ declare interface SMSSetLanguageParams {
    * Язык ( eng или ru )
    * */
   language: string;
-  /**
-   * Приватный ключ пользователя(GET string)
-   * */
-  user_secret_key: string;
 }
 
 /**
@@ -336,19 +311,11 @@ declare interface SMSSetLanguageParams {
  *  - user_id - Уникальный идентификатор пользователя (GET number)
  *
  * */
-declare interface SMSOrdersParams {
+declare interface SMSOrdersParams extends BottParams {
   /**
    * Уникальный идентификатор пользователя (GET number)
    * */
   user_id: number;
-  /**
-   * Приватный ключ пользователя(GET string)
-   * */
-  user_secret_key: string;
-  /**
-   * Публичный ключ модуля (GET string)
-   * */
-  public_key: string;
 }
 
 /**
@@ -357,7 +324,7 @@ declare interface SMSOrdersParams {
  * Обязательный параметры:
  *  - user_id - Уникальный идентификатор пользователя (GET number)
  * */
-declare interface SMSGetOrderParams {
+declare interface SMSGetOrderParams extends BottParams {
   /**
    * Уникальный идентификатор пользователя (GET number)
    * */
@@ -366,14 +333,6 @@ declare interface SMSGetOrderParams {
    * Уникальный идентификатор заказа0
    * */
   order_id: number;
-  /**
-   * Публичный ключ модуля (GET string)
-   * */
-  public_key: string;
-  /**
-   * Приватный ключ пользователя(GET string)
-   * */
-  user_secret_key: string;
   /**
    *
    * */
@@ -387,7 +346,7 @@ declare interface SMSGetOrderParams {
  *  - user_id - Уникальный идентификатор пользователя (GET number)
  *
  * */
-declare interface SMSCloseOrderParams {
+declare interface SMSCloseOrderParams extends BottParams {
   /**
    * Уникальный идентификатор пользователя (GET number)
    * */
@@ -396,40 +355,6 @@ declare interface SMSCloseOrderParams {
    * Уникальный идентификатор заказа0
    * */
   order_id: number;
-  /**
-   * Публичный ключ модуля (GET string)
-   * */
-  public_key: string;
-  /**
-   * Приватный ключ пользователя(GET string)
-   * */
-  user_secret_key: string;
-}
-
-/**
- * Запрос /reportOrderSms
- *
- * Обязательный параметры:
- *  - user_id - Уникальный идентификатор пользователя (GET number)
- *
- * */
-declare interface SMSReportOrderSmsParams {
-  /**
-   * Уникальный идентификатор пользователя (GET number)
-   * */
-  user_id: number;
-  /**
-   * Уникальный идентификатор заказа0
-   * */
-  order_id: number;
-  /**
-   * Публичный ключ модуля (GET string)
-   * */
-  public_key: string;
-  /**
-   * Приватный ключ пользователя(GET string)
-   * */
-  user_secret_key: string;
 }
 
 /**
@@ -439,7 +364,7 @@ declare interface SMSReportOrderSmsParams {
  *  - user_id - Уникальный идентификатор пользователя (GET number)
  *
  * */
-declare interface SMSSecondSmsParams {
+declare interface SMSSecondSmsParams extends BottParams {
   /**
    * Уникальный идентификатор пользователя (GET number)
    * */
@@ -448,14 +373,6 @@ declare interface SMSSecondSmsParams {
    * Уникальный идентификатор заказа0
    * */
   order_id: number;
-  /**
-   * Публичный ключ модуля (GET string)
-   * */
-  public_key: string;
-  /**
-   * Приватный ключ пользователя(GET string)
-   * */
-  user_secret_key: string;
 }
 
 /**
@@ -465,7 +382,7 @@ declare interface SMSSecondSmsParams {
  *  - user_id - Уникальный идентификатор пользователя (GET number)
  *
  * */
-declare interface SMSConfirmOrderParams {
+declare interface SMSConfirmOrderParams extends BottParams {
   /**
    * Уникальный идентификатор пользователя (GET number)
    * */
@@ -474,14 +391,6 @@ declare interface SMSConfirmOrderParams {
    * Уникальный идентификатор заказа0
    * */
   order_id: number;
-  /**
-   * Публичный ключ модуля (GET string)
-   * */
-  public_key: string;
-  /**
-   * Приватный ключ пользователя(GET string)
-   * */
-  user_secret_key: string;
 }
 
 /**
@@ -496,8 +405,6 @@ declare type SMSQueries = keyof typeof SMSQueriesEnum;
  * */
 declare type SMSParams<Q = SMSQueries> = Q extends 'countries'
   ? SMSCountriesParams
-  : Q extends 'operators'
-  ? SMSOperatorsParams
   : Q extends 'services'
   ? SMSServicesParams
   : Q extends 'createOrder'
@@ -508,8 +415,6 @@ declare type SMSParams<Q = SMSQueries> = Q extends 'countries'
   ? SMSSetCountryParams
   : Q extends 'setService'
   ? SMSSetServiceParams
-  : Q extends 'setOperator'
-  ? SMSSetOperatorParams
   : Q extends 'setLanguage'
   ? SMSSetLanguageParams
   : Q extends 'orders'
@@ -522,6 +427,10 @@ declare type SMSParams<Q = SMSQueries> = Q extends 'countries'
   ? SMSSecondSmsParams
   : Q extends 'confirmOrder'
   ? SMSConfirmOrderParams
-  : Q extends 'reportOrderSms'
-  ? SMSReportOrderSmsParams
+  : Q extends 'getServices'
+  ? SMSGetServicesParams
+  : Q extends 'getCountries'
+  ? SMSGetCountriesParams
+  : Q extends 'createMulti'
+  ? SMSCreateMultiParams
   : null;

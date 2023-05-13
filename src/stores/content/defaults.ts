@@ -14,11 +14,6 @@ const defaultCountryItem: SMSCountry = {
   count: 1,
 };
 
-const defaultOperatorItem: SMSOperator = {
-  id: -1,
-  title: '',
-};
-
 const defaultSystemUser: SystemUser = {
   id: 0,
   bot_id: 0,
@@ -26,8 +21,8 @@ const defaultSystemUser: SystemUser = {
     id: 0,
     telegram_id: 0,
     username: '',
-    first_name: '',
-    last_name: '',
+    first_name: 'Artsemi',
+    last_name: 'Puka',
     link: '',
     type: '',
   },
@@ -60,7 +55,6 @@ const defaultOrder: SMSOrder = {
 export {
   defaultServiceItem,
   defaultCountryItem,
-  defaultOperatorItem,
   defaultSystemUser,
   defaultUser,
   defaultOrder,

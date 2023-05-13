@@ -3,21 +3,16 @@
     <div
       v-if="modelValue"
       style="z-index: 10"
-      class="absolute-full flex flex-center rounded-10"
-      :class="[main.loadingClass]">
+      class="absolute-full flex flex-center rounded-10">
       <q-spinner color="primary" size="3em" />
     </div>
   </transition>
 </template>
 
 <script lang="ts" setup>
-import { useMainStore } from 'stores/main/mainStore';
-
 withDefaults(defineProps<Props>(), {
   modelValue: false,
 });
-
-const main = useMainStore();
 
 interface Props {
   modelValue: boolean;

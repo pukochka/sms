@@ -1,4 +1,4 @@
-export function getUserString(): string {
+export function getHash(): string {
   const url = new URL(window.location.href);
 
   url.searchParams.delete('service');

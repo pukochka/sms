@@ -7,7 +7,7 @@
     transition-duration="100">
     <q-card>
       <q-card-section class="row justify-between items-center no-wrap">
-        <div :class="[main.titleClasses]">{{ main.language.activations }}</div>
+        <div>{{ lang.activations }}</div>
 
         <q-btn
           unelevated
@@ -23,7 +23,7 @@
           <q-icon name="warning" color="white" size="26px" />
 
           <div class="">
-            {{ main.language.activations_notify }} :
+            {{ lang.activations_notify }} :
             {{ data.active_order.length }}
           </div>
         </div>
@@ -31,10 +31,9 @@
 
       <q-card-section class="q-pt-none justify-between">
         <div
-          :class="[main.itemBackgroundClass + main.titleClasses]"
-          class="rounded-10 q-pa-md q-py-xl text-center"
+          class="rounded-10 q-pa-md q-py-xl text-center bg-item"
           v-if="data.orders.length === 0">
-          {{ main.language.no_activations }}
+          {{ lang.no_activations }}
         </div>
 
         <ChooseItem
@@ -55,17 +54,17 @@
 import { computed } from 'vue';
 
 import { useStatesStore } from 'stores/states/statesStore';
-import { useMainStore } from 'stores/main/mainStore';
 import { useDataStore } from 'stores/data/dataStore';
 
 import ChooseItem from 'components/stages/ChooseItem.vue';
 
 import { useQuasar } from 'quasar';
+import { useLang } from 'src/utils/use/useLang';
 
 const states = useStatesStore();
-const main = useMainStore();
 const data = useDataStore();
 const quasar = useQuasar();
+const lang = computed(() => useLang());
 
 const elHeight = computed(() => quasar.screen.height / 5);
 </script>

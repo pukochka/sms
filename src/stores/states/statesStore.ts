@@ -17,7 +17,7 @@ export const useStatesStore = defineStore('states', {
         operators: false,
       },
 
-      tab: 'catalog',
+      tab: 'service',
 
       drawer: false,
 
@@ -38,20 +38,20 @@ export const useStatesStore = defineStore('states', {
       this.dialogs[name] = false;
     },
 
-    startLoad(url: string, params: any) {
-      if (url === 'setService' || url === 'services')
-        this.loadings.services = true;
-
-      if (url === 'setCountry' || params.hasOwnProperty('interval')) {
-        this.loadings.countries = true;
-      }
-    },
-    endLoad(url: string) {
-      if (url === 'services' || url === 'setCountry' || url === 'setService')
-        this.loadings.services = false;
-      if (url === 'countries' || url === 'setCountry')
-        this.loadings.countries = false;
-    },
+    // startLoad(url: string, params: any) {
+    //   if (url === 'setService' || url === 'services')
+    //     this.loadings.services = true;
+    //
+    //   if (url === 'setCountry' || params.hasOwnProperty('interval')) {
+    //     this.loadings.countries = true;
+    //   }
+    // },
+    // endLoad(url: string) {
+    //   if (url === 'services' || url === 'setCountry' || url === 'setService')
+    //     this.loadings.services = false;
+    //   if (url === 'countries' || url === 'setCountry')
+    //     this.loadings.countries = false;
+    // },
 
     stop() {
       this.loadings.init = false;

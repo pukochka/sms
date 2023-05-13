@@ -1,13 +1,21 @@
 <template>
   <q-layout view="lHh lpR lFf">
-    <q-header bordered :class="[main.backgroundClass]">
+    <q-inner-loading
+      :showing="states.loadings.init"
+      transition-show="none"
+      transition-hide="fade"
+      class="z-max bg-page">
+      <q-spinner-facebook size="80px" color="primary" />
+    </q-inner-loading>
+
+    <q-header class="bg-page" bordered>
       <q-toolbar>
         <q-btn
           flat
-          color="primary"
           no-caps
-          round
+          class="rounded-10"
           icon="menu"
+          color="primary"
           @click="states.toggleDrawer">
           <q-badge
             v-if="data.active_order.length > 0"
@@ -16,6 +24,23 @@
             color="orange"
             text-color="black" />
         </q-btn>
+
+        <q-tab-panels
+          v-model="states.tab"
+          animated
+          class="col-grow bg-page"
+          transition-next="slide-up"
+          transition-prev="slide-down">
+          <q-tab-panel
+            v-for="(title, index) in titles"
+            :name="title.name"
+            :key="index"
+            class="q-pa-sm">
+            <div class="text-h6 text-weight-bold text-center">
+              {{ title.label }}
+            </div>
+          </q-tab-panel>
+        </q-tab-panels>
       </q-toolbar>
     </q-header>
 
@@ -23,35 +48,51 @@
       <drawer-template></drawer-template>
     </q-drawer>
 
-    <q-page-container :class="[main.backgroundClass]">
+    <q-page-container>
       <router-view />
     </q-page-container>
+
+    <q-footer class="bg-page row no-wrap" bordered>
+      <q-btn
+        v-for="(tab, index) in tabs"
+        :key="index"
+        flat
+        no-caps
+        square
+        stack
+        color="primary"
+        class="col text-weight-bold"
+        :icon="tab.icon"
+        :label="tab.label"
+        @click="tab.action" />
+    </q-footer>
 
     <OrderView />
 
     <OrderTemplate />
-
-    <NotifyMessage />
-
-    <InitLoading />
   </q-layout>
 </template>
 
 <script lang="ts" setup>
 import { computed, watch } from 'vue';
-import { useMainStore } from 'stores/main/mainStore';
+import { useLang } from 'src/utils/use/useLang';
+
 import { useStatesStore } from 'stores/states/statesStore';
 import { useDataStore } from 'stores/data/dataStore';
 
 import OrderView from 'components/order/OrderView.vue';
 import OrderTemplate from 'components/order/OrderTemplate.vue';
-import NotifyMessage from 'components/dialogs/NotifyMessage.vue';
 import DrawerTemplate from 'layouts/DrawerTemplate.vue';
-import InitLoading from 'components/other/InitLoading.vue';
 
-const main = useMainStore();
+import {
+  mdiMessage,
+  mdiAnimation,
+  mdiOrderBoolAscending,
+} from '@quasar/extras/mdi-v7';
+
 const states = useStatesStore();
 const data = useDataStore();
+const lang = computed(() => useLang());
 
 const canPay = computed(() => data.canPay);
 
@@ -85,4 +126,37 @@ watch(country, (val) => {
     document.addEventListener('click', clickOutside, false);
   else document.removeEventListener('click', clickOutside, false);
 });
+
+const tabs = computed(() => [
+  {
+    label: lang.value.service,
+    icon: mdiMessage,
+    action: () => states.toggleTab('service'),
+  },
+  {
+    label: lang.value.multiService,
+    icon: mdiAnimation,
+    action: () => states.toggleTab('multi-service'),
+  },
+  // {
+  //   label: 'Аренда',
+  //   icon: mdiOrderBoolAscending,
+  //   action: () => states.toggleTab('rent'),
+  // },
+]);
+
+const titles = computed(() => [
+  {
+    name: 'service',
+    label: lang.value.service,
+  },
+  {
+    name: 'multi-service',
+    label: lang.value.multiService,
+  },
+  // {
+  //   name: 'rent',
+  //   label: lang.value.profile,
+  // },
+]);
 </script>

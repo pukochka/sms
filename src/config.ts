@@ -19,21 +19,22 @@
 // |  Изменение этого файла приведёт к непредусмотренным последствиям.  |
 // ----------------------------------------------------------------------
 
-import { getQueryParam } from 'src/utils/string';
+import { getQueryParam } from 'src/utils/helpers/string';
 
 const config = {
   domain: 'https://activate.bot-t.com/',
   domain_bott: 'https://api.bot-t.com/v1/',
 
-  bot_id: getQueryParam('bot_id') ?? 0,
-  public_key: getQueryParam('public_key') ?? '',
+  bot_id: getQueryParam('bot_id') ?? 886,
+  public_key: getQueryParam('public_key') ?? '062d7c679ca22cf88b01b13c0b24b057',
 
   time_to_order_end: 1200,
 
   request_interval: 5000,
   request_countries_interval: 100000,
 
-  is_dark: window.Telegram.WebApp.colorScheme === 'dark',
+  // is_dark: window.Telegram.WebApp.colorScheme === 'dark',
+  is_dark: true,
 
   activate_country_url:
     'https://smsactivate.s3.eu-central-1.amazonaws.com/assets/ico/country/',

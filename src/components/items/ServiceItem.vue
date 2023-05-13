@@ -11,7 +11,7 @@
     </q-item-section>
 
     <q-item-section>
-      <q-item-label :class="[main.textClasses]">
+      <q-item-label>
         {{ name }}
       </q-item-label>
     </q-item-section>
@@ -20,12 +20,10 @@
 
 <script lang="ts" setup>
 import { computed, withDefaults } from 'vue';
-
-import { defaultServiceItem } from 'stores/defaults';
 import { ServiceImage } from 'src/utils/images';
+import { defaultServiceItem } from 'stores/content/defaults';
 
 import { useDataStore } from 'stores/data/dataStore';
-import { useMainStore } from 'stores/main/mainStore';
 
 import { fetchSMS } from 'boot/queries';
 
@@ -34,7 +32,6 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const data = useDataStore();
-const main = useMainStore();
 
 const name = computed(() => props.item?.longName);
 

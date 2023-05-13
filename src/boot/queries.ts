@@ -3,14 +3,14 @@ import { sms, bott } from 'boot/instances';
 
 import { useDataStore } from 'stores/data/dataStore';
 
-import { getUserString } from 'src/utils/string';
+import { getHash } from 'src/utils/helpers/string';
 import { useStatesStore } from 'stores/states/statesStore';
 import { hasActivation } from 'src/utils/hasActivation';
 
 export async function fetchSMS<Q extends SMSQueries>(
   query: Q,
   params?: SMSParams<Q>,
-  init?: boolean
+  open?: boolean
 ) {
   const data = useDataStore();
   const states = useStatesStore();
@@ -29,6 +29,7 @@ export async function fetchSMS<Q extends SMSQueries>(
         /** */
 
         data.setCountries(response.data.data);
+        if (open) states.loadings.init = false;
 
         /** */
       } else if (query === 'getUser') {
@@ -36,14 +37,14 @@ export async function fetchSMS<Q extends SMSQueries>(
 
         data.setUser(response.data.data);
 
-        states.stop();
-
         fetchSMS('services', { public_key: config.public_key }, true);
         fetchSMS(
           'orders',
           {
             user_id: data.user?.id ?? 0,
-            user_secret_key: data.systemUser?.secret_user_key ?? '',
+            user_secret_key:
+              /* data.systemUser?.secret_user_key ?? */
+              '2997ec12c0c4e2df3e316d943e3da6e72997ec123e3d4d9429971695e4d5e4d5',
             public_key: config.public_key,
           },
           true
@@ -83,7 +84,7 @@ export async function fetchSMS<Q extends SMSQueries>(
 
         data.setOrders(response.data.data);
 
-        if (init) hasActivation();
+        if (open) hasActivation();
 
         /** */
       } else if (
@@ -109,13 +110,6 @@ export async function fetchSMS<Q extends SMSQueries>(
         states.openDialog('order');
 
         /** */
-      } else if (query === 'reportOrderSms') {
-        /** */
-
-        data.updateOrder(response.data.data);
-        states.removeAny(response.data.data);
-
-        /** */
       }
     });
   } catch (e) {}
@@ -128,7 +122,7 @@ export async function fetchUser() {
       url: 'module/bot/check-hash',
       data: {
         bot_id: config.bot_id,
-        userData: getUserString(),
+        userData: getHash(),
       },
     }).then((response) => {
       data.setSystemUser(response.data.data);

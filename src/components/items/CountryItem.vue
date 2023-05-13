@@ -11,20 +11,18 @@
     </q-item-section>
 
     <q-item-section>
-      <q-item-label :class="[main.textClasses]">
+      <q-item-label>
         {{ title }}
       </q-item-label>
     </q-item-section>
 
     <q-item-section side>
-      <q-item-label
-        class="text-center text-weight-bold"
-        :class="[main.textColor]">
-        {{ item.cost.toFixed(2) }} ₽
+      <q-item-label class="text-center text-weight-bold">
+        {{ price }}
       </q-item-label>
 
       <q-item-label class="text-primary text-weight-bold" caption>
-        {{ item.count }} {{ main.language.items }}
+        {{ item.count }} {{ lang.items }}
       </q-item-label>
     </q-item-section>
 
@@ -37,7 +35,7 @@
         square
         size="md"
         color="primary"
-        :label="main.language.buy"
+        :label="lang.buy"
         :loading="loading"
         @click="createOrder" />
     </transition>
@@ -49,11 +47,11 @@ import config from 'src/config';
 import namesCountry from 'src/utils/names/contries';
 
 import { withDefaults, computed, ref } from 'vue';
-import { defaultCountryItem } from 'stores/defaults';
+import { defaultCountryItem } from 'stores/content/defaults';
+import { CountryImage } from 'src/utils/images';
 
 import { useDataStore } from 'stores/data/dataStore';
-import { useMainStore } from 'stores/main/mainStore';
-import { CountryImage } from 'src/utils/images';
+import { useLang } from 'src/utils/use/useLang';
 
 import { fetchSMS } from 'boot/queries';
 
@@ -62,7 +60,7 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const data = useDataStore();
-const main = useMainStore();
+const lang = computed(() => useLang());
 
 const loading = ref(false);
 
@@ -72,6 +70,9 @@ const title = computed(() =>
     : props.item?.title_eng
 );
 
+const price = computed(
+  () => lang.value.fromAt + ' ' + props.item.cost.toFixed(2) + ' ₽'
+);
 const selected = computed(() => data.selectedCountry?.id === props.item.id);
 
 const Image = () => CountryImage(props.item?.id);

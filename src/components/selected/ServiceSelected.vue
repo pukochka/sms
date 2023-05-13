@@ -1,8 +1,5 @@
 <template>
-  <q-item
-    class="col-12 rounded-10"
-    :class="[main.itemBackgroundClass]"
-    style="height: 52px">
+  <q-item class="col-12 rounded-10 bg-item" style="height: 52px">
     <q-item-section avatar>
       <q-btn
         flat
@@ -20,7 +17,7 @@
     </q-item-section>
 
     <q-item-section>
-      <q-item-label :class="[main.textClasses]">
+      <q-item-label>
         {{ data.selectedService?.longName }}
       </q-item-label>
     </q-item-section>
@@ -30,17 +27,20 @@
       floating
       color="primary"
       text-color="white"
-      :label="main.language.selected_service" />
+      :label="lang.selected_service" />
   </q-item>
 </template>
 
 <script lang="ts" setup>
-import { useMainStore } from 'stores/main/mainStore';
+import { computed } from 'vue';
+import { useLang } from 'src/utils/use/useLang';
+
 import { useDataStore } from 'stores/data/dataStore';
+
 import { ServiceImage } from 'src/utils/images';
 
-const main = useMainStore();
 const data = useDataStore();
+const lang = computed(() => useLang());
 
 const Image = () => ServiceImage(data.selectedService?.name);
 </script>
