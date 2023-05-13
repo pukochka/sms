@@ -38,6 +38,7 @@ const enScheme = {
   search_country_not_found: 'Country on your request is not found, try again',
   search_operator_not_found: 'Operator on your request is not found, try again',
   from: 'from',
+  fromAt: 'from',
   prev: 'Prev',
   next: 'Next',
   arrangement: 'Arrangement',

@@ -41,6 +41,7 @@ const ruScheme = {
   search_operator_not_found:
     'Оператор по вашему запросу не найден, попробуйте еще раз',
   from: 'из',
+  fromAt: 'от',
   prev: 'Пред',
   next: 'След',
   arrangement: 'Изменить порядок',

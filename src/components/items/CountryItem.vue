@@ -20,7 +20,7 @@
       <q-item-label
         class="text-center text-weight-bold"
         :class="[main.textColor]">
-        {{ item.cost.toFixed(2) }} ₽
+        {{ price }}
       </q-item-label>
 
       <q-item-label class="text-primary text-weight-bold" caption>
@@ -70,6 +70,10 @@ const title = computed(() =>
   data.userValue?.language === 'ru'
     ? namesCountry[props.item?.id]
     : props.item?.title_eng
+);
+
+const price = computed(
+  () => main.language.fromAt + ' ' + (props.item.cost / 100).toFixed(2) + ' ₽'
 );
 
 const selected = computed(() => data.selectedCountry?.id === props.item.id);

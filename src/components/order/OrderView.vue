@@ -212,8 +212,9 @@ const codes = computed(() => {
 
 const country = computed(
   () =>
-    data.countriesValue.find((country) => country.id === data.createdOrder?.country)
-      ?.title ?? data.createdOrder?.country
+    data.countriesValue.find(
+      (country) => country.id === data.createdOrder?.country
+    )?.title ?? data.createdOrder?.country
 );
 
 const service = computed(
@@ -330,7 +331,7 @@ const order = computed(() => [
   },
   {
     label: main.language.order_price,
-    value: data.createdOrder?.cost + ' ₽',
+    value: ((data.createdOrder?.cost ?? 0) / 100).toFixed(2) + ' ₽',
     image: '',
   },
   {
