@@ -20,7 +20,7 @@ for (const instance of [sms, bott]) {
   instance.interceptors.request.use(function (config) {
     const states = useStatesStore();
 
-    // states.startLoad(config.url ?? '', config.params ?? {});
+    states.load(<LoadingNames>config.url ?? '', true);
 
     return config;
   });
@@ -30,7 +30,6 @@ for (const instance of [sms, bott]) {
       const states = useStatesStore();
       const lang = useLang();
 
-      console.log(response.config.url);
       states.load(<LoadingNames>response.config.url ?? '');
 
       if (response.data.result === true) {
