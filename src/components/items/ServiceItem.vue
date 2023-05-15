@@ -5,22 +5,28 @@
     @click="select"
     style="height: 52px">
     <q-item-section avatar>
-      <div class="icon-sms">
-        <Image />
-      </div>
+      <q-img
+        class="rounded-10"
+        :src="props.item.image"
+        spinner-color="primary"
+        style="height: 24px; width: 24px" />
     </q-item-section>
 
     <q-item-section>
-      <q-item-label>
+      <q-item-label class="text-subtitle1">
         {{ name }}
       </q-item-label>
     </q-item-section>
+
+    <q-inner-loading :showing="loading" class="bg-page">
+      <q-spinner size="36px" color="primary" />
+    </q-inner-loading>
   </q-item>
 </template>
 
 <script lang="ts" setup>
-import { computed, withDefaults } from 'vue';
-import { ServiceImage } from 'src/utils/images';
+import { computed, ref, withDefaults } from 'vue';
+
 import { defaultServiceItem } from 'stores/content/defaults';
 
 import { useDataStore } from 'stores/data/dataStore';
@@ -33,15 +39,19 @@ const props = withDefaults(defineProps<Props>(), {
 
 const data = useDataStore();
 
+const loading = ref(false);
+
 const name = computed(() => props.item?.longName);
 
-const Image = () => ServiceImage(props.item?.name);
-
 const select = () => {
+  loading.value = true;
+
   fetchSMS('setService', {
     service: props.item.name,
-    user_id: data.user?.id ?? 0,
-    user_secret_key: data.systemUser?.secret_user_key ?? '',
+    user_id: data.user.id,
+    user_secret_key: data.systemUser.secret_user_key,
+  }).then(() => {
+    loading.value = false;
   });
 };
 

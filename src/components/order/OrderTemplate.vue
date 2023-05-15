@@ -7,7 +7,7 @@
     transition-duration="100">
     <q-card>
       <q-card-section class="row justify-between items-center no-wrap">
-        <div>{{ lang.activations }}</div>
+        <div class="font-size-16 text-weight-bold">{{ lang.activations }}</div>
 
         <q-btn
           unelevated
@@ -18,13 +18,13 @@
           v-close-popup />
       </q-card-section>
 
-      <q-card-section class="q-pt-none" v-if="data.active_order.length > 0">
+      <q-card-section class="q-pt-none" v-if="data.activeOrders.length > 0">
         <div class="text-center rounded-10 q-pa-sm bg-orange-14 text-white">
           <q-icon name="warning" color="white" size="26px" />
 
           <div class="">
             {{ lang.activations_notify }} :
-            {{ data.active_order.length }}
+            {{ data.activeOrders.length }}
           </div>
         </div>
       </q-card-section>
@@ -36,15 +36,18 @@
           {{ lang.no_activations }}
         </div>
 
-        <ChooseItem
+        <choose-item
           v-else
           search=""
-          type="order"
           stable-height
           :current-items="data.orders"
           :el-height="elHeight"
           :searching="false"
-          :visible-items="3" />
+          :visible-items="3">
+          <template v-slot="{ item }">
+            <order-item :item="item"></order-item>
+          </template>
+        </choose-item>
       </q-card-section>
     </q-card>
   </q-dialog>
@@ -60,6 +63,7 @@ import ChooseItem from 'components/stages/ChooseItem.vue';
 
 import { useQuasar } from 'quasar';
 import { useLang } from 'src/utils/use/useLang';
+import OrderItem from 'components/items/OrderItem.vue';
 
 const states = useStatesStore();
 const data = useDataStore();

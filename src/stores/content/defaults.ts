@@ -14,6 +14,21 @@ const defaultCountryItem: SMSCountry = {
   count: 1,
 };
 
+const defaultMultiCountry: SMSMultiCountry = {
+  org_id: 0,
+  image: '',
+  name_ru: '',
+  name_en: '',
+};
+
+const defaultMultiService: SMSMultiService = {
+  cost: 0,
+  count: 0,
+  name: '',
+  longName: '',
+  image: '',
+};
+
 const defaultSystemUser: SystemUser = {
   id: 0,
   bot_id: 0,
@@ -21,8 +36,8 @@ const defaultSystemUser: SystemUser = {
     id: 0,
     telegram_id: 0,
     username: '',
-    first_name: 'Artsemi',
-    last_name: 'Puka',
+    first_name: '',
+    last_name: '',
     link: '',
     type: '',
   },
@@ -48,7 +63,7 @@ const defaultOrder: SMSOrder = {
   service: '',
   operator: '',
   country: '',
-  cost: '',
+  cost: 0,
   status: 8,
 };
 
@@ -56,6 +71,8 @@ export {
   defaultServiceItem,
   defaultCountryItem,
   defaultSystemUser,
+  defaultMultiCountry,
+  defaultMultiService,
   defaultUser,
   defaultOrder,
 };

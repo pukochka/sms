@@ -1,23 +1,12 @@
 <template>
   <q-page class="fit">
     <q-tab-panels v-model="states.tab" animated class="bg-transparent">
-      <q-tab-panel name="service">
-        <div class="q-gutter-y-md">
-          <div
-            class="q-gutter-y-sm relative-position overflow-hidden"
-            :id="'stage-' + index"
-            v-for="(stage, index) in stages"
-            :key="index">
-            <div class="text-weight-bold font-size-16">
-              {{ index + 1 }}. {{ stage.label }}
-            </div>
-
-            <component :is="stage.component" />
-          </div>
-        </div>
+      <q-tab-panel
+        :name="panel.name"
+        v-for="(panel, index) in panels"
+        :key="index">
+        <component :is="panel.component"></component>
       </q-tab-panel>
-
-      <q-tab-panel name="multi-service"> </q-tab-panel>
     </q-tab-panels>
 
     <div class="q-pt-lg"></div>
@@ -25,8 +14,31 @@
 </template>
 
 <script setup lang="ts">
-import { stages } from 'components/stages/stages';
 import { useStatesStore } from 'stores/states/statesStore';
 
+import MultiPanel from 'components/panels/MultiPanel.vue';
+import RentPanel from 'components/panels/RentPanel.vue';
+import ServicePanel from 'components/panels/ServicePanel.vue';
+
 const states = useStatesStore();
+
+const panels: Panels[] = [
+  {
+    name: 'service',
+    component: ServicePanel,
+  },
+  {
+    name: 'multi-service',
+    component: MultiPanel,
+  },
+  {
+    name: 'rent',
+    component: RentPanel,
+  },
+];
+
+interface Panels {
+  name: string;
+  component: any;
+}
 </script>

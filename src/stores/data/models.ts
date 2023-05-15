@@ -6,14 +6,16 @@ export interface DataStore {
   servicesValue: SMSServices[];
   operatorsValue: SMSOperator[];
 
-  multiCountries: SMSMultiCountry[];
-  multiServices: SMSMultiService[];
+  multiCountriesValue: SMSMultiCountry[];
+  multiServicesValue: SMSMultiService[];
+
+  multiSelectedValue: SMSMultiService[];
 
   ordersValue: SMSOrder[];
 
   selectedCountryValue: SMSCountry | null;
   selectedServiceValue: SMSServices | null;
-  selectedOperatorValue: SMSOperator | null;
+  multiSelectedCountry: SMSMultiCountry | null;
 
   createdOrderValue: SMSOrder | null;
 
@@ -21,6 +23,8 @@ export interface DataStore {
     services: string;
     operators: string;
     countries: string;
+    multiServices: string;
+    multiCountry: string;
   };
 
   timeToEnd: {

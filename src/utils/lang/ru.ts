@@ -25,24 +25,26 @@ const ruScheme = {
   cost: 'от',
   items: 'шт',
 
+  copied: 'Скопированно!',
   service: 'Сервис',
   multiService: 'Мультисервис',
   profile: 'Профиль',
+  rent: 'Аренда',
 
   select_country: 'Выбрать страну',
   select_service: 'Выбрать сервис',
+  select_services: 'Выбрать сервисы',
   select_operator: 'Выбрать оператора',
+
+  max_selecting: 'Можно выбрать от 2 до 5 сервисов',
+  multi_success: 'Успешно активировано: ',
 
   adds: 'Веб-приложение создано в сервисе',
   adds_button: 'Создать бота! Жми!',
 
   search: 'Поиск...',
-  search_service_not_found:
-    'Сервис по вашему запросу не найден, попробуйте еще раз',
-  search_country_not_found:
-    'Страна по вашему запросу не найдена, попробуйте еще раз',
-  search_operator_not_found:
-    'Оператор по вашему запросу не найден, попробуйте еще раз',
+  not_found: 'Ничего не нашлось...',
+
   from: 'из',
   fromAt: 'от',
   prev: 'Пред',
@@ -55,12 +57,14 @@ const ruScheme = {
   selected_service: 'Выбранный сервис',
 
   select_notify: 'Выберите сервис',
+  select_notify_country: 'Выберите страну',
 
   balance: 'Баланс',
   change_language: 'Сменить язык',
   activations: 'Активации',
 
   order: 'Заказ',
+  create_order: 'Создать заказ',
   activations_warning: 'Есть незаконченная активация',
   activations_notify: 'Неоконченные активации',
   no_activations: 'У вас пока нет активаций',

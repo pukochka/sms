@@ -20,6 +20,8 @@ import {
   defaultSystemUser,
   defaultUser,
 } from 'stores/content/defaults';
+import { useNotify } from 'src/utils/use/useNotify';
+import { useLang } from 'src/utils/use/useLang';
 
 let time_interval: Timeout;
 let request_getOrder_interval: Timeout;
@@ -35,14 +37,16 @@ export const useDataStore = defineStore('data', {
       servicesValue: [],
       operatorsValue: [],
 
-      multiCountries: [],
-      multiServices: [],
+      multiCountriesValue: [],
+      multiServicesValue: [],
+
+      multiSelectedValue: [],
 
       ordersValue: [],
 
       selectedCountryValue: null,
       selectedServiceValue: null,
-      selectedOperatorValue: null,
+      multiSelectedCountry: null,
 
       createdOrderValue: defaultOrder,
 
@@ -50,6 +54,8 @@ export const useDataStore = defineStore('data', {
         services: '',
         operators: '',
         countries: '',
+        multiServices: '',
+        multiCountry: '',
       },
 
       timeToEnd: {
@@ -61,61 +67,57 @@ export const useDataStore = defineStore('data', {
       price: false,
     } as DataStore),
   getters: {
-    isAuth: (state): boolean => state.userValue !== null,
     user: (state): SMSUser => state.userValue,
     systemUser: (state): SystemUser => state.systemUserValue,
-
-    selectedCountry: (state): SMSCountry | null => state.selectedCountryValue,
-    selectedService: (state): SMSServices | null => state.selectedServiceValue,
-    selectedOperator: (state): SMSOperator | null =>
-      state.selectedOperatorValue,
-
-    createdOrder: (state): SMSOrder | null => state.createdOrderValue,
-
-    canPay: (state) => state.selectedServiceValue !== null,
 
     services: (state): SMSServices[] =>
       state.servicesValue.filter((service) =>
         service.longName.toString()?.shortIncludes(state.search.services)
       ),
-
-    operators: (state): SMSOperator[] =>
-      state.operatorsValue.filter((operators) =>
-        operators.title?.shortIncludes(state.search.operators)
+    multiServices: (state): SMSMultiService[] =>
+      state.multiServicesValue.filter((service) =>
+        service.longName?.toString()?.shortIncludes(state.search.multiServices)
       ),
 
     countries: (state): SMSCountry[] =>
       state.countriesValue
-        .map((country) => {
-          country.title =
-            state.userValue?.language === 'eng'
-              ? country.title_eng
-              : namesCountry[country.id];
-
-          return country;
-        })
-
         .filter((country) =>
           (state.userValue?.language === 'eng'
-            ? country.title
+            ? country.title_eng
             : namesCountry[country.id]
           )?.shortIncludes(state.search.countries)
         )
-
         .sort(function (a, b) {
           return state.price ? a.cost - b.cost : a.cost + b.cost;
         }),
+    multiCountries: (state): SMSMultiCountry[] =>
+      state.multiCountriesValue.filter((service) =>
+        (state.userValue?.language === 'eng'
+          ? service.name_en
+          : namesCountry[service.org_id]
+        )?.shortIncludes(state.search.multiCountry)
+      ),
+
+    selectedCountry: (state): SMSCountry | null => state.selectedCountryValue,
+    selectedService: (state): SMSServices | null => state.selectedServiceValue,
+
+    multiSelected: (state): boolean => {
+      const states = useStatesStore();
+
+      return (
+        state.multiSelectedValue.length > 1 && states.tab === 'multi-service'
+      );
+    },
+
+    createdOrder: (state): SMSOrder | null => state.createdOrderValue,
+
+    canPay: (state) => state.selectedServiceValue !== null,
 
     orders: (state): SMSOrder[] => state.ordersValue.reverse(),
 
-    active_order: (state): SMSOrder[] =>
+    activeOrders: (state): SMSOrder[] =>
       state.ordersValue.filter(
-        (order) =>
-          order.status !== 8 &&
-          order.status !== 9 &&
-          order.status !== 6 &&
-          order.status !== 0 &&
-          order.status !== 10
+        (order) => ![0, 6, 8, 9, 10].includes(order.status)
       ),
   },
   actions: {
@@ -145,6 +147,14 @@ export const useDataStore = defineStore('data', {
         return country;
       });
     },
+    setMultiServices(value: SMSMultiService[]) {
+      this.multiServicesValue = value
+        .map((item) => {
+          item.longName = products[item.name]?.toString() ?? item.name;
+          return item;
+        })
+        .filter((item) => !(item.name.length > 2));
+    },
 
     setOrders(value: SMSOrder[]) {
       this.ordersValue = value;
@@ -154,9 +164,6 @@ export const useDataStore = defineStore('data', {
       const states = useStatesStore();
 
       this.createdOrderValue = value;
-
-      this.startGetOrder();
-      this.startCounter();
 
       states.openDialog('order');
     },
@@ -171,10 +178,6 @@ export const useDataStore = defineStore('data', {
         this.servicesValue.find(
           (service) => service.name === this.user?.service
         ) ?? null;
-
-      // if (this.selectedServiceValue !== null) main.useScroll(1);
-
-      this.checkCanPay();
     },
     selectCountry(value: SMSCountry) {
       this.selectedCountryValue = value;
@@ -183,30 +186,33 @@ export const useDataStore = defineStore('data', {
       this.userValue = value ?? this.userValue;
     },
 
+    selectMultiService(value: SMSMultiService) {
+      const names = this.multiSelectedValue.map((service) => service.name);
+
+      if (names.includes(value.name)) {
+        this.multiSelectedValue = this.multiSelectedValue.filter(
+          (service) => service.name !== value.name
+        );
+        return;
+      }
+
+      if (this.multiSelectedValue.length >= 5) {
+        const lang = useLang();
+        useNotify(lang.max_selecting);
+        return;
+      }
+
+      this.multiSelectedValue.push(value);
+    },
+
     nullify() {
       this.selectedServiceValue = null;
       this.selectedCountryValue = null;
-      this.selectedOperatorValue = null;
-    },
-
-    checkCanPay() {
-      if (this.canPay) {
-        fetchSMS(
-          'countries',
-          {
-            user_id: this.userValue?.id ?? 0,
-            public_key: config.public_key,
-            interval: true,
-          },
-          true
-        );
-        this.startCountries();
-      }
     },
 
     startCounter() {
       this.useCounter();
-      time_interval = setInterval(() => this.useCounter(), 1000);
+      time_interval = setInterval(this.useCounter, 1000);
     },
     endCounter() {
       clearInterval(time_interval);
@@ -238,10 +244,6 @@ export const useDataStore = defineStore('data', {
     },
     endCountries() {
       clearInterval(request_countries_interval);
-    },
-
-    modelValue(section: DataValues, text: string) {
-      this.search[section] = text;
     },
 
     usePrice() {

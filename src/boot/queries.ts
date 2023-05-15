@@ -1,11 +1,14 @@
 import config from 'src/config';
 import { sms, bott } from 'boot/instances';
 
-import { useDataStore } from 'stores/data/dataStore';
-
 import { getHash } from 'src/utils/helpers/string';
+
+import { useDataStore } from 'stores/data/dataStore';
 import { useStatesStore } from 'stores/states/statesStore';
-import { hasActivation } from 'src/utils/hasActivation';
+
+import { useNotify } from 'src/utils/use/useNotify';
+import { useColor } from 'src/utils/use/useColor';
+import { useLang } from 'src/utils/use/useLang';
 
 export async function fetchSMS<Q extends SMSQueries>(
   query: Q,
@@ -14,6 +17,8 @@ export async function fetchSMS<Q extends SMSQueries>(
 ) {
   const data = useDataStore();
   const states = useStatesStore();
+  const lang = useLang();
+
   try {
     return await sms({
       url: query,
@@ -32,29 +37,28 @@ export async function fetchSMS<Q extends SMSQueries>(
         if (open) states.loadings.init = false;
 
         /** */
-      } else if (query === 'getUser') {
+      } else if (query === 'getCountries') {
         /** */
 
-        data.setUser(response.data.data);
+        data.multiCountriesValue = response.data.data;
 
-        fetchSMS('services', { public_key: config.public_key }, true);
-        fetchSMS(
-          'orders',
-          {
-            user_id: data.user?.id ?? 0,
-            user_secret_key:
-              /* data.systemUser?.secret_user_key ?? */
-              '2997ec12c0c4e2df3e316d943e3da6e72997ec123e3d4d9429971695e4d5e4d5',
-            public_key: config.public_key,
-          },
-          true
-        );
+        /** */
+      } else if (query === 'getServices') {
+        /** */
+
+        data.setMultiServices(response.data.data);
 
         /** */
       } else if (query === 'setCountry') {
         /** */
 
         data.selectCountry(response.data.data);
+
+        /** */
+      } else if (query === 'getSettings') {
+        /** */
+
+        useColor(response.data.data ?? 1);
 
         /** */
       } else if (query === 'setService') {
@@ -69,10 +73,7 @@ export async function fetchSMS<Q extends SMSQueries>(
         data.setUser(response.data.data);
 
         /** */
-      } else if (
-        query === 'createOrder' ||
-        response.config.params.hasOwnProperty('view')
-      ) {
+      } else if (query === 'createOrder') {
         /** */
 
         data.setOrder(response.data.data);
@@ -84,7 +85,7 @@ export async function fetchSMS<Q extends SMSQueries>(
 
         data.setOrders(response.data.data);
 
-        if (open) hasActivation();
+        if (open) useNotify('', true);
 
         /** */
       } else if (
@@ -107,7 +108,32 @@ export async function fetchSMS<Q extends SMSQueries>(
         /** */
 
         data.updateOrder(response.data.data);
-        states.openDialog('order');
+        if (open) states.openDialog('order');
+
+        /** */
+      } else if (query === 'getUser') {
+        /** */
+
+        data.setUser(response.data.data);
+
+        startApp(data.user.id, data.systemUser.secret_user_key).then(
+          () => (states.loadings.init = false)
+        );
+
+        /** */
+      } else if (query === 'createMulti') {
+        /** */
+
+        useNotify(lang.multi_success + response.data?.data?.length ?? 0);
+        fetchSMS(
+          'orders',
+          {
+            user_id: data.user.id,
+            user_secret_key: data.systemUser.secret_user_key,
+            public_key: config.public_key,
+          },
+          true
+        );
 
         /** */
       }
@@ -132,4 +158,23 @@ export async function fetchUser() {
       });
     });
   } catch (e) {}
+}
+
+async function startApp(id: number, secret: string) {
+  return await Promise.all([
+    fetchSMS('services', { public_key: config.public_key }, true),
+    fetchSMS('countries', {
+      user_id: id,
+      public_key: config.public_key,
+    }),
+    fetchSMS(
+      'orders',
+      {
+        user_id: id,
+        user_secret_key: secret,
+        public_key: config.public_key,
+      },
+      true
+    ),
+  ]);
 }

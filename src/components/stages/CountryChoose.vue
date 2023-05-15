@@ -1,9 +1,7 @@
 <template>
-  <ItemsLoading v-model="states.loadings.countries" />
-
   <div
-    v-if="data.canPay === false"
-    class="row bg-item justify-center items-center rounded-10 q-py-lg q-px-sm">
+    v-if="data.selectedService === null"
+    class="row bg-item flex-center rounded-10 q-py-lg q-px-sm">
     <q-icon color="primary" name="info" size="32px" />
 
     <div class="q-pl-sm">
@@ -40,15 +38,17 @@
         size="md"
         color="primary"
         icon-right="swap_vert"
-        v-haptic
         :label="lang.price"
         @click="data.usePrice" />
     </div>
 
-    <ChooseItem
-      :type="'country'"
+    <choose-item
       :search="data.search.countries"
-      :current-items="data.countries" />
+      :current-items="data.countries">
+      <template v-slot="{ item }">
+        <country-item :item="item"></country-item>
+      </template>
+    </choose-item>
   </div>
 </template>
 
@@ -60,7 +60,7 @@ import { useDataStore } from 'stores/data/dataStore';
 import { useStatesStore } from 'stores/states/statesStore';
 
 import ChooseItem from 'components/stages/ChooseItem.vue';
-import ItemsLoading from 'components/other/ItemsLoading.vue';
+import CountryItem from 'components/items/CountryItem.vue';
 
 const data = useDataStore();
 const states = useStatesStore();

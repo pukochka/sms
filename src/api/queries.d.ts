@@ -24,6 +24,11 @@ declare enum SMSQueriesEnum {
   orders = 'orders',
 
   /**
+   * Возвращает настройку модуля
+   * */
+  getSettings = 'getSettings',
+
+  /**
    * Создаем заказ
    * */
   createOrder = 'createOrder',
@@ -221,7 +226,7 @@ declare interface SMSGetServicesParams extends PublicKey {
   /**
    * org_id страны
    * */
-  country: string;
+  country: number;
 }
 
 /**
@@ -237,7 +242,7 @@ declare interface SMSCreateMultiParams extends BottParams {
   /**
    * org_id страны
    * */
-  country: string;
+  country: number;
   /**
    * "ig, tg, ...  vk"
    * */
@@ -433,4 +438,6 @@ declare type SMSParams<Q = SMSQueries> = Q extends 'countries'
   ? SMSGetCountriesParams
   : Q extends 'createMulti'
   ? SMSCreateMultiParams
+  : Q extends 'getSettings'
+  ? PublicKey
   : null;

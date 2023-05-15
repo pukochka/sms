@@ -5,7 +5,7 @@
         class="absolute-full bg-item q-pa-md column flex-center text-center rounded-10 q-gutter-y-sm">
         <q-icon color="primary" name="search" size="32px" />
 
-        <div>{{ NotFoundText }}</div>
+        <div>{{ lang.not_found }}</div>
       </div>
     </div>
 
@@ -19,21 +19,13 @@
       :style="{ height: height }">
       <q-tab-panel name="0" class="q-pa-none">
         <q-list class="rounded-10 overflow-hidden" bordered separator>
-          <component
-            :is="RenderItem"
-            v-for="item of items"
-            :key="item.name"
-            :item="item" />
+          <slot v-for="(item, index) of items" v-bind="{ item, index }" />
         </q-list>
       </q-tab-panel>
 
       <q-tab-panel name="1" class="q-pa-none">
         <q-list class="rounded-10 overflow-hidden" bordered separator>
-          <component
-            :is="RenderItem"
-            v-for="item of items"
-            :key="item.name"
-            :item="item" />
+          <slot v-for="(item, index) of items" v-bind="{ item, index }" />
         </q-list>
       </q-tab-panel>
     </q-tab-panels>
@@ -52,7 +44,6 @@
       color="primary"
       padding="4px 8px"
       icon="navigate_before"
-      v-haptic
       v-if="currentStartIndex > 0"
       :label="labelPrev"
       @click="prev" />
@@ -72,7 +63,6 @@
       color="primary"
       padding="4px 8px"
       icon-right="navigate_next"
-      v-haptic
       v-if="
         items.length >= visibleItems &&
         currentItems.length >= currentEndIndex + 1
@@ -88,18 +78,12 @@ import { computed, ref, watch, withDefaults } from 'vue';
 import { useQuasar } from 'quasar';
 import { useLang } from 'src/utils/use/useLang';
 
-import ServiceItem from '../items/ServiceItem.vue';
-import CountryItem from '../items/CountryItem.vue';
-import OrderItem from '../items/OrderItem.vue';
-import OrderCode from '../order/OrderCode.vue';
-
 const lang = computed(() => useLang());
 const quasar = useQuasar();
 
 const props = withDefaults(defineProps<Props>(), {
   currentItems: () => [],
   search: () => '',
-  type: () => '',
   visibleItems: () => 7,
   hiddenButtons: () => false,
   elHeight: () => 52,
@@ -147,27 +131,10 @@ const currentEndIndex = computed(() =>
 
 const items = computed(() =>
   props.currentItems.filter(
-    (
-      _: SMSCountry | SMSOperator | SMSServices | SMSOrder | string,
-      index: number
-    ) => index >= currentStartIndex.value && index < currentEndIndex.value
+    (_: any, index: number) =>
+      index >= currentStartIndex.value && index < currentEndIndex.value
   )
 );
-
-const RenderItem = computed(() => {
-  if (props.type === 'service') return ServiceItem;
-  else if (props.type === 'country') return CountryItem;
-  else if (props.type === 'order') return OrderItem;
-  else return OrderCode;
-});
-
-const NotFoundText = computed(() => {
-  if (props.type === 'service') return lang.value.search_service_not_found;
-  else if (props.type === 'country') return lang.value.search_country_not_found;
-  else if (props.type === 'operator')
-    return lang.value.search_operator_not_found;
-  else return '';
-});
 
 watch(currentSearch, (val) => {
   if (val) {
@@ -213,9 +180,8 @@ const slide = (side: 'prev' | 'next') => {
 };
 
 interface Props {
-  currentItems: (SMSServices | SMSOperator | SMSCountry | SMSOrder | string)[];
+  currentItems: any[];
   search: string;
-  type: 'country' | 'service' | 'operator' | '' | 'order';
   visibleItems?: number;
   hiddenButtons?: boolean;
   elHeight?: number;

@@ -26,6 +26,10 @@ body.body--dark {
     background-color: transparent;
   }
 
+  .text-color {
+    color: #ffffff !important;
+  }
+
   .bg-item {
     background: $grey-9 !important;
   }
@@ -51,6 +55,10 @@ body.body--light {
     background-color: transparent;
   }
 
+  .text-color {
+    color: #000000 !important;
+  }
+
   .bg-item {
     background: $grey-3;
   }
@@ -58,6 +66,14 @@ body.body--light {
   .bg-page {
     background: #ffffff !important;
   }
+}
+
+.transition {
+  transition: 0.3s cubic-bezier(0.25, 0.8, 0.5, 1) transform;
+}
+
+.multi-selected {
+  transform: translateY(-100%);
 }
 
 .rounded-10 {

@@ -4,10 +4,12 @@
     no-shake
     persistent
     position="bottom"
-    transition-duration="150">
+    transition-duration="150"
+    @before-show="updateShow"
+    @hide="updateHide">
     <q-card style="width: 100%" class="q-gutter-y-md q-px-md q-pb-md">
       <div class="row items-center justify-between">
-        <div class="text-center">
+        <div class="font-size-16 text-weight-bold">
           {{ lang.order }} №{{ data.createdOrder.id }}
         </div>
 
@@ -17,8 +19,6 @@
           size="md"
           color="primary"
           icon="close"
-          v-haptic
-          @click="closeOrder"
           v-close-popup />
       </div>
 
@@ -59,7 +59,7 @@
             style="max-height: 35px !important; min-height: 35px !important"
             class="relative-position bg-item">
             <q-item-section>
-              <q-item-label class="text-center">
+              <q-item-label class="text-center font-size-16 text-weight-bold">
                 {{ data.createdOrder.phone }}
               </q-item-label>
             </q-item-section>
@@ -74,15 +74,18 @@
           {{ lang.order_codes }}
         </div>
 
-        <ChooseItem
+        <choose-item
           v-if="codes.length > 0"
           search=""
-          type=""
           stable-height
           :el-height="36"
           :hidden-buttons="true"
           :current-items="codes"
-          :visible-items="2" />
+          :visible-items="2">
+          <template v-slot="{ item }">
+            <order-code :item="item"></order-code>
+          </template>
+        </choose-item>
 
         <div
           v-if="
@@ -97,7 +100,9 @@
         </div>
       </div>
 
-      <div class="text-center q-pa-md" v-if="orderEnd">
+      <div
+        class="text-center font-size-16 text-weight-bold q-pa-md"
+        v-if="orderEnd">
         {{ lang.order_status_text[status] }}
       </div>
 
@@ -118,7 +123,6 @@
         <q-btn
           unelevated
           no-caps
-          v-haptic
           class="rounded-10 col-12"
           size="md"
           color="primary"
@@ -130,7 +134,6 @@
         <q-btn
           unelevated
           no-caps
-          v-haptic
           class="rounded-10 col-12"
           size="md"
           color="primary"
@@ -140,7 +143,6 @@
           @click="confirmOrder" />
 
         <q-btn
-          v-haptic
           unelevated
           no-caps
           class="rounded-10 col-12"
@@ -157,7 +159,7 @@
 
 <script lang="ts" setup>
 import config from 'src/config';
-import { computed, ref, onUpdated } from 'vue';
+import { computed, ref } from 'vue';
 import { date } from 'quasar';
 
 import { useStatesStore } from 'stores/states/statesStore';
@@ -170,6 +172,8 @@ import { fetchSMS } from 'boot/queries';
 
 import ChooseItem from 'components/stages/ChooseItem.vue';
 import CopyButton from 'components/other/CopyButton.vue';
+import OrderCode from 'components/order/OrderCode.vue';
+import namesCountry from 'src/utils/names/contries';
 
 const states = useStatesStore();
 const data = useDataStore();
@@ -179,7 +183,6 @@ const loadings = ref({
   second: false,
   confirm: false,
   cancel: false,
-  report: false,
 });
 
 const time = computed(() =>
@@ -205,11 +208,12 @@ const codes = computed(() => {
   return mass;
 });
 
-const country = computed(
-  () =>
-    data.countriesValue.find(
-      (country) => country.id === data.createdOrder?.country
-    )?.title ?? data.createdOrder?.country
+const country = computed(() =>
+  data.user.language === 'ru'
+    ? namesCountry[data.createdOrder?.country ?? '0']
+    : data.countriesValue.find(
+        (item) => item.id === (data.createdOrder?.country ?? '0')
+      )?.title_eng
 );
 
 const service = computed(
@@ -221,11 +225,7 @@ const service = computed(
 
 const orderEnd = computed(
   () =>
-    status.value === 8 ||
-    status.value === 9 ||
-    status.value === 6 ||
-    status.value === 0 ||
-    status.value === 10 ||
+    [0, 6, 8, 9, 10].includes(status.value) ||
     toTimeEnd(data.createdOrder?.time) >= 1
 );
 
@@ -234,10 +234,10 @@ const secondSms = () => {
   loadings.value.second = true;
 
   fetchSMS('secondSms', {
-    user_id: data.user?.id ?? 0,
+    user_id: data.user.id,
     order_id: data.createdOrder?.id ?? 0,
     public_key: config.public_key,
-    user_secret_key: data.systemUser?.secret_user_key ?? '',
+    user_secret_key: data.systemUser.secret_user_key,
   }).then(() => {
     loadings.value.second = false;
   });
@@ -248,10 +248,10 @@ const cancelOrder = () => {
   loadings.value.cancel = true;
 
   fetchSMS('closeOrder', {
-    user_id: data.user?.id ?? 0,
+    user_id: data.user.id,
     order_id: data.createdOrder?.id ?? 0,
     public_key: config.public_key,
-    user_secret_key: data.systemUserValue?.secret_user_key ?? '',
+    user_secret_key: data.systemUser.secret_user_key,
   }).then(() => {
     data.endGetOrder();
     loadings.value.cancel = false;
@@ -263,10 +263,10 @@ const confirmOrder = () => {
   loadings.value.confirm = true;
 
   fetchSMS('confirmOrder', {
-    user_id: data.user?.id ?? 0,
+    user_id: data.user.id,
     order_id: data.createdOrder?.id ?? 0,
     public_key: config.public_key,
-    user_secret_key: data.systemUser?.secret_user_key ?? '',
+    user_secret_key: data.systemUser.secret_user_key,
   }).then(() => {
     data.endGetOrder();
     data.endCounter();
@@ -274,22 +274,23 @@ const confirmOrder = () => {
   });
 };
 
-const closeOrder = () => {
+const updateShow = () => {
+  if (orderEnd.value) return;
+
+  data.startCounter();
+  data.startGetOrder();
+};
+
+const updateHide = () => {
+  data.endCounter();
   data.endGetOrder();
 
   fetchSMS('orders', {
-    user_id: data.user?.id ?? 0,
-    user_secret_key: data.systemUser?.secret_user_key ?? '',
+    user_id: data.user.id,
+    user_secret_key: data.systemUser.secret_user_key,
     public_key: config.public_key,
   });
 };
-
-onUpdated(() => {
-  if (orderEnd.value || states.dialogs.order === false) {
-    data.endCounter();
-    data.endGetOrder();
-  }
-});
 
 const ImageCountry = () => CountryImage(data.createdOrder?.country);
 const ImageService = () => ServiceImage(data.createdOrder?.service);
@@ -312,7 +313,7 @@ const order = computed(() => [
   },
   {
     label: lang.value.order_price,
-    value: data.createdOrder?.cost + ' ₽',
+    value: ((data.createdOrder?.cost ?? 0) / 100).toFixed(2) + ' ₽',
     image: '',
   },
   {

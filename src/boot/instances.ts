@@ -4,6 +4,7 @@ import config from 'src/config';
 import { useStatesStore } from 'stores/states/statesStore';
 import { useLang } from 'src/utils/use/useLang';
 import { useDialog } from 'src/utils/use/useDialog';
+import { LoadingNames } from 'stores/states/models';
 
 const sms = axios.create({
   baseURL: config.domain,
@@ -29,7 +30,8 @@ for (const instance of [sms, bott]) {
       const states = useStatesStore();
       const lang = useLang();
 
-      // states.endLoad(response.config.url ?? '');
+      console.log(response.config.url);
+      states.load(<LoadingNames>response.config.url ?? '');
 
       if (response.data.result === true) {
         return response;
@@ -48,7 +50,7 @@ for (const instance of [sms, bott]) {
       const states = useStatesStore();
       const lang = useLang();
 
-      states.endLoad(error.config.url ?? '');
+      states.load(error.config.url ?? '', true);
 
       useDialog(lang.errors.connection, true);
 

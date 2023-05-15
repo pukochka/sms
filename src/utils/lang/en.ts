@@ -25,21 +25,26 @@ const enScheme = {
   cost: 'from',
   items: 'pcs',
 
+  copied: 'Copied!',
   service: 'Service',
   multiService: 'Multiservice',
   profile: 'Profile',
+  rent: 'Rent',
 
   select_country: 'Select country',
   select_service: 'Select service',
+  select_services: 'Select services',
   select_operator: 'Select operator',
+
+  max_selecting: 'You can choose from 2 to 5 services',
+  multi_success: 'Successfully activated:',
 
   adds: 'The web application was created in the service',
   adds_button: 'Create a bot! Click!',
 
   search: 'Search...',
-  search_service_not_found: 'Service on your request is not found, try again',
-  search_country_not_found: 'Country on your request is not found, try again',
-  search_operator_not_found: 'Operator on your request is not found, try again',
+  not_found: 'Nothing was found...',
+
   from: 'from',
   fromAt: 'from',
   prev: 'Prev',
@@ -52,12 +57,14 @@ const enScheme = {
   selected_service: 'Selected service',
 
   select_notify: 'You need to select a service',
+  select_notify_country: 'Select a country',
 
   balance: 'Balance',
   change_language: 'Change the language',
   activations: 'Activations',
 
   order: 'Order',
+  create_order: 'Create order',
   activations_warning: 'There is an unfinished activation',
   activations_notify: 'Unfinished activations',
   no_activations: "You don't have any activations yet",

@@ -1,10 +1,21 @@
+import config from 'src/config';
+
 import { boot } from 'quasar/wrappers';
 import { createPinia } from 'pinia';
-import haptic from './directives/hapic';
+
+import { Dark } from 'quasar';
+
+import { fetchSMS, fetchUser } from 'boot/queries';
 
 export default boot(({ app }) => {
   const pinia = createPinia();
-
   app.use(pinia);
-  app.directive('haptic', haptic);
+
+  Dark.set(config.is_dark);
+
+  window.Telegram.WebApp.enableClosingConfirmation();
+
+  fetchSMS('getSettings', { public_key: config.public_key });
+
+  fetchUser().then(() => console.log('[ இ௰இ ]'));
 });

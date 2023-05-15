@@ -11,9 +11,6 @@ export interface StatesStore {
     state: boolean;
     message: string;
   };
-
-  anyCountriesButtons: (SMSOrder | null)[];
-  reportedOrdersValue: number[];
 }
 
 export interface Dialogs {
@@ -22,6 +19,7 @@ export interface Dialogs {
 }
 
 export type DialogNames = 'order' | 'orders_view';
-export type LoadingNames = 'init' | 'services' | 'countries' | 'operators';
+
+export type LoadingNames = 'init' | 'error' | 'getCountries';
 
 export type TabNames = 'service' | 'multi-service' | 'rent';

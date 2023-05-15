@@ -3,7 +3,7 @@
     style="max-height: 35px !important; min-height: 35px !important"
     class="relative-position bg-item">
     <q-item-section>
-      <q-item-label class="text-center">
+      <q-item-label class="font-size-16 text-weight-bold text-center">
         {{ item }}
       </q-item-label>
     </q-item-section>

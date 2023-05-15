@@ -1,6 +1,15 @@
+import config from 'src/config';
 import { defineStore } from 'pinia';
-import { LocalStorage } from 'quasar';
-import { DialogNames, StatesStore, TabNames } from 'stores/states/models';
+
+import {
+  DialogNames,
+  LoadingNames,
+  StatesStore,
+  TabNames,
+} from 'stores/states/models';
+
+import { fetchSMS } from 'boot/queries';
+import { useDataStore } from 'stores/data/dataStore';
 
 export const useStatesStore = defineStore('states', {
   state: () =>
@@ -11,10 +20,10 @@ export const useStatesStore = defineStore('states', {
       },
 
       loadings: {
+        getCountries: false,
+
         init: true,
-        services: false,
-        countries: false,
-        operators: false,
+        error: false,
       },
 
       tab: 'service',
@@ -25,9 +34,6 @@ export const useStatesStore = defineStore('states', {
         state: false,
         message: '',
       },
-
-      anyCountriesButtons: [],
-      reportedOrdersValue: LocalStorage.getItem('anyCountries') ?? [],
     } as StatesStore),
   getters: {},
   actions: {
@@ -38,41 +44,25 @@ export const useStatesStore = defineStore('states', {
       this.dialogs[name] = false;
     },
 
-    // startLoad(url: string, params: any) {
-    //   if (url === 'setService' || url === 'services')
-    //     this.loadings.services = true;
-    //
-    //   if (url === 'setCountry' || params.hasOwnProperty('interval')) {
-    //     this.loadings.countries = true;
-    //   }
-    // },
-    // endLoad(url: string) {
-    //   if (url === 'services' || url === 'setCountry' || url === 'setService')
-    //     this.loadings.services = false;
-    //   if (url === 'countries' || url === 'setCountry')
-    //     this.loadings.countries = false;
-    // },
-
-    stop() {
-      this.loadings.init = false;
-    },
-
     toggleDrawer() {
       this.drawer = !this.drawer;
     },
 
+    load(section: LoadingNames, value?: boolean) {
+      this.loadings[section] = value ?? false;
+    },
+
     toggleTab(name: TabNames) {
+      const data = useDataStore();
+      if (
+        this.tab !== 'multi-service' &&
+        name === 'multi-service' &&
+        data.multiCountriesValue.length === 0
+      ) {
+        fetchSMS('getCountries', { public_key: config.public_key });
+      }
+
       this.tab = name;
-    },
-
-    notify(message: string) {
-      this.notifyValue.state = true;
-      this.notifyValue.message = message;
-    },
-    removeAny(order: SMSOrder) {
-      this.reportedOrdersValue.push(order.id);
-
-      LocalStorage.set('anyCountries', this.reportedOrdersValue);
     },
   },
 });

@@ -21,8 +21,8 @@
           <q-item-label>{{ item.label }}</q-item-label>
         </q-item-section>
 
-        <q-item-section side :class="[item.class]">
-          <q-item-label>{{ item.value }}</q-item-label>
+        <q-item-section side>
+          <q-item-label :class="[item.class]">{{ item.value }}</q-item-label>
         </q-item-section>
       </q-item>
     </q-list>
@@ -119,7 +119,7 @@ const content = computed((): Content[] => [
     label: lang.value.activations,
     icon: mdiOrderBoolAscending,
     value: data.orders.length,
-    class: data.active_order.length > 0 ? ' bg-orange' : '',
+    class: data.activeOrders.length > 0 ? ' bg-orange rounded-10 q-pa-xs' : '',
     action: openOrdersView,
   },
   {

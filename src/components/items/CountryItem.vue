@@ -5,19 +5,21 @@
     style="height: 52px"
     class="relative-position country-item">
     <q-item-section avatar>
-      <div class="icon-sms">
-        <Image />
-      </div>
+      <q-img
+        class="rounded-10"
+        :src="props.item.image"
+        spinner-color="primary"
+        style="height: 24px; width: 24px" />
     </q-item-section>
 
     <q-item-section>
-      <q-item-label>
+      <q-item-label class="text-subtitle1">
         {{ title }}
       </q-item-label>
     </q-item-section>
 
-    <q-item-section side>
-      <q-item-label class="text-center text-weight-bold">
+    <q-item-section side class="">
+      <q-item-label class="text-center text-weight-bold text-color">
         {{ price }}
       </q-item-label>
 
@@ -28,7 +30,6 @@
 
     <transition name="button">
       <q-btn
-        v-haptic
         class="absolute-right border-left-10 q-px-lg country-item"
         v-if="selected"
         unelevated
@@ -48,7 +49,6 @@ import namesCountry from 'src/utils/names/contries';
 
 import { withDefaults, computed, ref } from 'vue';
 import { defaultCountryItem } from 'stores/content/defaults';
-import { CountryImage } from 'src/utils/images';
 
 import { useDataStore } from 'stores/data/dataStore';
 import { useLang } from 'src/utils/use/useLang';
@@ -65,17 +65,15 @@ const lang = computed(() => useLang());
 const loading = ref(false);
 
 const title = computed(() =>
-  data.userValue?.language === 'ru'
+  data.user.language === 'ru'
     ? namesCountry[props.item?.id]
     : props.item?.title_eng
 );
 
 const price = computed(
-  () => lang.value.fromAt + ' ' + props.item.cost.toFixed(2) + ' ₽'
+  () => lang.value.fromAt + ' ' + (props.item.cost / 100).toFixed(2) + ' ₽'
 );
 const selected = computed(() => data.selectedCountry?.id === props.item.id);
-
-const Image = () => CountryImage(props.item?.id);
 
 const createOrder = () => {
   loading.value = true;

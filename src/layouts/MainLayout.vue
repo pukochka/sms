@@ -1,7 +1,7 @@
 <template>
   <q-layout view="lHh lpR lFf">
     <q-inner-loading
-      :showing="states.loadings.init"
+      :showing="states.loadings.init || states.loadings.error"
       transition-show="none"
       transition-hide="fade"
       class="z-max bg-page">
@@ -13,16 +13,18 @@
         <q-btn
           flat
           no-caps
-          class="rounded-10"
+          class="rounded-10 q-mr-sm"
           icon="menu"
           color="primary"
           @click="states.toggleDrawer">
           <q-badge
-            v-if="data.active_order.length > 0"
-            floating
+            v-if="data.activeOrders.length > 0"
+            align="middle"
             rounded
+            floating
             color="orange"
-            text-color="black" />
+            :label="data.activeOrders.length"
+            text-color="white" />
         </q-btn>
 
         <q-tab-panels
@@ -36,7 +38,7 @@
             :name="title.name"
             :key="index"
             class="q-pa-sm">
-            <div class="text-h6 text-weight-bold text-center">
+            <div class="text-h6 text-weight-bold text-center text-color">
               {{ title.label }}
             </div>
           </q-tab-panel>
@@ -51,6 +53,8 @@
     <q-page-container>
       <router-view />
     </q-page-container>
+
+    <create-order-button></create-order-button>
 
     <q-footer class="bg-page row no-wrap" bordered>
       <q-btn
@@ -83,11 +87,12 @@ import { useDataStore } from 'stores/data/dataStore';
 import OrderView from 'components/order/OrderView.vue';
 import OrderTemplate from 'components/order/OrderTemplate.vue';
 import DrawerTemplate from 'layouts/DrawerTemplate.vue';
+import CreateOrderButton from 'components/other/CreateOrderButton.vue';
 
 import {
   mdiMessage,
   mdiAnimation,
-  mdiOrderBoolAscending,
+  mdiLabelPercent,
 } from '@quasar/extras/mdi-v7';
 
 const states = useStatesStore();
@@ -139,8 +144,8 @@ const tabs = computed(() => [
     action: () => states.toggleTab('multi-service'),
   },
   // {
-  //   label: 'Аренда',
-  //   icon: mdiOrderBoolAscending,
+  //   label: lang.value.rent,
+  //   icon: mdiLabelPercent,
   //   action: () => states.toggleTab('rent'),
   // },
 ]);
@@ -156,7 +161,7 @@ const titles = computed(() => [
   },
   // {
   //   name: 'rent',
-  //   label: lang.value.profile,
+  //   label: lang.value.rent,
   // },
 ]);
 </script>

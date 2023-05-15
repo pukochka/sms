@@ -39,7 +39,6 @@
 
       <q-btn
         flat
-        v-haptic
         no-caps
         class="rounded-10"
         size="md"
@@ -62,6 +61,7 @@ import { useDataStore } from 'stores/data/dataStore';
 import { useLang } from 'src/utils/use/useLang';
 
 import { fetchSMS } from 'boot/queries';
+import namesCountry from 'src/utils/names/contries';
 
 const props = defineProps({
   item: Object as PropType<SMSOrder>,
@@ -77,13 +77,15 @@ const elHeight = computed(() => quasar.screen.height / 5);
 const minHeight = computed(() => quasar.screen.height > 550);
 
 const is_active = computed(
-  () => data.active_order.find((order) => order.id === props.item?.id) ?? false
+  () => data.activeOrders.find((order) => order.id === props.item?.id) ?? false
 );
 
-const country = computed(
-  () =>
-    data.countries?.find((country) => country.id === props.item?.country)
-      ?.title ?? props.item?.country
+const country = computed(() =>
+  data.user.language === 'ru'
+    ? namesCountry[props.item?.country ?? '0']
+    : data.countriesValue.find(
+        (item) => item.id === (props.item?.country ?? '0')
+      )?.title_eng
 );
 
 const service = computed(
@@ -95,13 +97,16 @@ const service = computed(
 const openOrder = () => {
   loading.value = true;
 
-  fetchSMS('getOrder', {
-    order_id: props.item?.id ?? 0,
-    user_id: data.user?.id ?? 0,
-    public_key: config.public_key,
-    user_secret_key: data.systemUser?.secret_user_key ?? '',
-    view: true,
-  }).then(() => (loading.value = false));
+  fetchSMS(
+    'getOrder',
+    {
+      order_id: props.item?.id ?? 0,
+      user_id: data.user?.id ?? 0,
+      public_key: config.public_key,
+      user_secret_key: data.systemUser.secret_user_key,
+    },
+    true
+  ).then(() => (loading.value = false));
 };
 
 const ImageCountry = () => CountryImage(props.item?.country);

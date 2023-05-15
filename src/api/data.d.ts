@@ -128,6 +128,10 @@ declare interface SMSMultiService {
    * цена номера с учетом наценки от создателя бота
    * */
   cost: number;
+  /**
+   *
+   * */
+  longName: string;
 }
 
 /**
@@ -183,7 +187,7 @@ declare interface SMSOrder {
   /**
    *
    * */
-  cost: string;
+  cost: number;
   /**
    *
    * */
