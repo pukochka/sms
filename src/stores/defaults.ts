@@ -53,7 +53,7 @@ const defaultOrder: SMSOrder = {
   service: '',
   operator: '',
   country: '',
-  cost: '',
+  cost: 0,
   status: 8,
 };
 
