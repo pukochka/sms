@@ -45,7 +45,12 @@ export function useNotify(message: string, activations?: boolean) {
       ? rentMessage
       : '';
 
-  if (activations && data.activeOrders.length === 0) return;
+  if (
+    activations &&
+    data.activeOrders.length === 0 &&
+    data.activeRents.length === 0
+  )
+    return;
 
   Notify.create({
     message: activations ? msg : message,

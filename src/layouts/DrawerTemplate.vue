@@ -111,7 +111,7 @@ const hint = computed(() =>
     : data.activeOrders.length
     ? lang.value.active_orders_activations
     : data.activeRents.length
-    ? lang.value.active_rent
+    ? lang.value.active_orders_rent
     : ''
 );
 
