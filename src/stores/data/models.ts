@@ -2,38 +2,50 @@ export interface DataStore {
   userValue: SMSUser;
   systemUserValue: SystemUser;
 
-  countriesValue: SMSCountry[];
-  servicesValue: SMSServices[];
-  operatorsValue: SMSOperator[];
+  services: {
+    value: SMSServices[];
+    multi: SMSMultiService[];
+    rent: SMSRentService[];
 
-  multiCountriesValue: SMSMultiCountry[];
-  multiServicesValue: SMSMultiService[];
-
-  multiSelectedValue: SMSMultiService[];
-
-  ordersValue: SMSOrder[];
-
-  selectedCountryValue: SMSCountry | null;
-  selectedServiceValue: SMSServices | null;
-  multiSelectedCountry: SMSMultiCountry | null;
-
-  createdOrderValue: SMSOrder | null;
-
-  search: {
-    services: string;
-    operators: string;
-    countries: string;
-    multiServices: string;
-    multiCountry: string;
+    selectedValue: SMSServices | null;
+    selectedMulti: SMSMultiService | null;
+    selectedRent: SMSRentService | null;
   };
 
-  timeToEnd: {
-    percent: number;
-    full: string;
-    isEnd: boolean;
+  countries: {
+    value: SMSCountry[];
+    multi: SMSMultiCountry[];
+    rent: SMSRentCountry[];
+
+    selectedValue: SMSCountry | null;
+    selectedMulti: SMSMultiCountry | null;
+    selectedRent: SMSRentCountry | null;
   };
 
-  price: boolean;
+  selectedMultiServices: SMSMultiService[];
+
+  orders: {
+    value: SMSOrder[];
+    rent: SMSRentOrder[];
+
+    selectedOrder: SMSOrder;
+    selectedMulti: SMSOrder;
+    selectedRent: SMSRentOrder;
+  };
+
+  search: Record<SearchNames, string>;
+  price: Record<PriceNames, boolean>;
+
+  prolongPrice: number;
 }
 
-export type DataValues = 'services' | 'operators' | 'countries';
+export type PriceNames = 'services' | 'multi' | 'rent';
+
+export type SearchNames =
+  | 'services'
+  | 'operators'
+  | 'countries'
+  | 'multiServices'
+  | 'multiCountry'
+  | 'rentCountry'
+  | 'rentService';

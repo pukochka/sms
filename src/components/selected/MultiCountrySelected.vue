@@ -45,15 +45,15 @@ const lang = computed(() => useLang());
 
 const label = computed(() =>
   data.user.language === 'ru'
-    ? namesCountry[data.multiSelectedCountry?.org_id ?? '']
-    : data.multiSelectedCountry?.name_en ?? ''
+    ? namesCountry[data.countries.selectedMulti?.org_id ?? '']
+    : data.countries.selectedMulti?.name_en ?? ''
 );
 
-const image = computed(() => data.multiSelectedCountry?.image ?? '');
+const image = computed(() => data.countries.selectedMulti?.image ?? '');
 
 const nullify = () => {
-  data.multiSelectedCountry = null;
-  data.multiSelectedValue = [];
+  data.countries.selectedMulti = null;
+  data.selectedMultiServices = [];
 };
 </script>
 

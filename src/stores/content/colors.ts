@@ -1,27 +1,31 @@
 const palette = [
   {
     id: 1,
-    primary: '#037171',
+    primary: '#577590',
   },
   {
     id: 2,
-    primary: '#9d0208',
+    primary: '#43aa8b',
   },
   {
     id: 3,
-    primary: '#6a994e',
+    primary: '#90be6d',
   },
   {
     id: 4,
-    primary: '#7b2cbf',
+    primary: '#f8961e',
   },
   {
     id: 5,
-    primary: '#0096c7',
+    primary: '#ef745c',
   },
   {
     id: 6,
-    primary: '#ff4d6d',
+    primary: '#588157',
+  },
+  {
+    id: 7,
+    primary: '#d80032',
   },
 ];
 export { palette };

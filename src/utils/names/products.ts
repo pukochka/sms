@@ -1,3 +1,6 @@
+import { useDataStore } from 'stores/data/dataStore';
+import namesCountry from 'src/utils/names/contries';
+
 const products: Record<string, string> = {
   tg: 'Telegram',
   fb: 'facebook',
@@ -510,5 +513,16 @@ const products: Record<string, string> = {
   zy: 'Nttgame',
   zz: 'Dent',
 };
+
+export function mapServiceTitle<
+  T extends SMSServices | SMSRentService | SMSMultiService
+>(value: Array<T>): Array<T> {
+  return value
+    .map((item) => {
+      item.longName = products[item.name]?.toString() ?? item.name;
+      return item;
+    })
+    .filter((item) => !(item.name.length > 2));
+}
 
 export { products };

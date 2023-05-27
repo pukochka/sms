@@ -50,7 +50,6 @@ for (const instance of [sms, bott]) {
       const lang = useLang();
 
       states.load(error.config.url ?? '', true);
-
       useDialog(lang.errors.connection, true);
 
       return Promise.reject(error);

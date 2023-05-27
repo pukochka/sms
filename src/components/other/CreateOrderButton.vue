@@ -29,7 +29,7 @@ const loading = ref(false);
 const createOrder = () => {
   loading.value = true;
 
-  const services = data.multiSelectedValue
+  const services = data.selectedMultiServices
     .map((service) => service.name)
     .join(',');
 
@@ -38,10 +38,10 @@ const createOrder = () => {
     services: services,
     user_secret_key: data.systemUser.secret_user_key,
     public_key: config.public_key,
-    country: data.multiSelectedCountry?.org_id ?? -1,
+    country: data.countries.selectedMulti?.org_id ?? '-1',
   }).then(() => {
     loading.value = false;
-    data.multiSelectedValue = [];
+    data.selectedMultiServices = [];
   });
 };
 </script>

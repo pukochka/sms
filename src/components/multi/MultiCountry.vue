@@ -1,5 +1,5 @@
 <template>
-  <q-item clickable v-ripple @click="select">
+  <q-item style="height: 52px" clickable v-ripple @click="select">
     <q-item-section avatar>
       <q-img
         class="rounded-10"
@@ -49,7 +49,7 @@ const select = () => {
     public_key: config.public_key,
   }).then(() => {
     loading.value = false;
-    data.multiSelectedCountry = props.item;
+    data.countries.selectedMulti = props.item;
   });
 };
 

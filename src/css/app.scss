@@ -68,6 +68,13 @@ body.body--light {
   }
 }
 
+.order-dashed {
+  position: absolute;
+  bottom: 5px;
+  width: 100%;
+  border-bottom: 2px $grey-5 dotted;
+}
+
 .transition {
   transition: 0.3s cubic-bezier(0.25, 0.8, 0.5, 1) transform;
 }
@@ -88,24 +95,21 @@ body.body--light {
   font-size: 18px;
 }
 
-.sms-activate-image {
-  width: 40px;
-  height: 40px;
-  background-repeat: no-repeat;
-  display: block;
-}
-
-.icon-sms {
-  overflow: hidden;
-  position: relative;
-  min-width: 24px;
-  min-height: 24px;
-  border-radius: 50%;
+.replenish-input .q-field__control {
+  border-radius: 10px !important;
 }
 
 .border-left-10 {
   border-end-start-radius: 10px;
   border-start-start-radius: 10px;
+}
+
+.select-rent .q-tab__indicator {
+  height: calc(100% - 0.22em);
+  background: transparent;
+  border: currentColor 0.22em solid;
+  border-radius: 10px;
+  margin: 0.11em;
 }
 
 .button-enter-active {

@@ -1,9 +1,9 @@
 <template>
   <q-item
     clickable
-    @click="data.selectCountry(props.item)"
     style="height: 52px"
-    class="relative-position country-item">
+    class="relative-position country-item"
+    @click="data.services.selectedRent = item">
     <q-item-section avatar>
       <q-img
         class="rounded-10"
@@ -36,57 +36,43 @@
         square
         size="md"
         color="primary"
-        :label="lang.buy"
-        :loading="loading"
-        @click="createOrder" />
+        :label="lang.button_rent"
+        @click="openBuild" />
     </transition>
   </q-item>
 </template>
 
 <script lang="ts" setup>
-import config from 'src/config';
-
-import { computed, ref } from 'vue';
-import { defaultCountryItem } from 'stores/content/defaults';
-import { findCountryName } from 'src/utils/names/find';
+import { computed } from 'vue';
+import { defaultRentService } from 'stores/content/defaults';
 
 import { useDataStore } from 'stores/data/dataStore';
 import { useLang } from 'src/utils/use/useLang';
 
-import { fetchSMS } from 'boot/queries';
+import { useStatesStore } from 'stores/states/statesStore';
 
 const props = withDefaults(defineProps<Props>(), {
-  item: () => defaultCountryItem,
+  item: () => defaultRentService,
 });
 
 const data = useDataStore();
+const states = useStatesStore();
 const lang = computed(() => useLang());
 
-const loading = ref(false);
-
-const title = computed(() => findCountryName(props.item?.id));
+const title = computed(() => props.item?.longName ?? '');
 const price = computed(() => props.item.cost.comma(lang.value.fromAt + ' '));
 
-const selected = computed(() => data.selectedCountry?.id === props.item.id);
+const selected = computed(
+  () => data.services.selectedRent?.name === props.item.name
+);
 
-const createOrder = () => {
-  loading.value = true;
-
-  fetchSMS('createOrder', {
-    country: props.item.id,
-    user_id: data.user?.id ?? 0,
-    public_key: config.public_key,
-    user_secret_key: data.systemUserValue?.secret_user_key ?? '',
-  }).then(() => {
-    loading.value = false;
-
-    data.search.countries = '';
-    data.search.services = '';
-  });
+const openBuild = () => {
+  data.services.selectedRent = props.item;
+  states.openDialog('rent_build');
 };
 
 interface Props {
-  item?: SMSCountry;
+  item?: SMSRentService;
 }
 </script>
 

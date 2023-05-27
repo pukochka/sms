@@ -15,10 +15,25 @@ const defaultCountryItem: SMSCountry = {
 };
 
 const defaultMultiCountry: SMSMultiCountry = {
-  org_id: 0,
+  org_id: '0',
   image: '',
   name_ru: '',
   name_en: '',
+};
+
+const defaultRentCountry: SMSRentCountry = {
+  id: '0',
+  image: '',
+  title_ru: '',
+  title_eng: '',
+};
+
+const defaultRentService: SMSRentService = {
+  name: '',
+  count: 0,
+  cost: '',
+  image: '',
+  longName: '',
 };
 
 const defaultMultiService: SMSMultiService = {
@@ -61,7 +76,18 @@ const defaultOrder: SMSOrder = {
   time: 0,
   codes: '',
   service: '',
-  operator: '',
+  country: '',
+  cost: 0,
+  status: 8,
+};
+
+const defaultRentOrder: SMSRentOrder = {
+  id: 0,
+  phone: '79963811573',
+  start_time: '0',
+  end_time: '0',
+  codes: '',
+  service: '',
   country: '',
   cost: 0,
   status: 8,
@@ -73,6 +99,9 @@ export {
   defaultSystemUser,
   defaultMultiCountry,
   defaultMultiService,
+  defaultRentCountry,
+  defaultRentService,
+  defaultRentOrder,
   defaultUser,
   defaultOrder,
 };

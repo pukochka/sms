@@ -5,7 +5,7 @@
         :name="panel.name"
         v-for="(panel, index) in panels"
         :key="index">
-        <component :is="panel.component"></component>
+        <stage-view :stages="panel.stages"></stage-view>
       </q-tab-panel>
     </q-tab-panels>
 
@@ -14,31 +14,32 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue';
+import { serviceStages, multiStages, rentStages } from 'components/stages';
+
 import { useStatesStore } from 'stores/states/statesStore';
 
-import MultiPanel from 'components/panels/MultiPanel.vue';
-import RentPanel from 'components/panels/RentPanel.vue';
-import ServicePanel from 'components/panels/ServicePanel.vue';
+import StageView from 'components/stages/StageView.vue';
 
 const states = useStatesStore();
 
-const panels: Panels[] = [
+const panels = computed((): Panels[] => [
   {
     name: 'service',
-    component: ServicePanel,
+    stages: serviceStages.value,
   },
   {
     name: 'multi-service',
-    component: MultiPanel,
+    stages: multiStages.value,
   },
   {
     name: 'rent',
-    component: RentPanel,
+    stages: rentStages.value,
   },
-];
+]);
 
 interface Panels {
   name: string;
-  component: any;
+  stages: Stages[];
 }
 </script>

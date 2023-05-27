@@ -1,5 +1,5 @@
 export interface StatesStore {
-  dialogs: Dialogs;
+  dialogs: Record<DialogNames, boolean>;
 
   loadings: Record<LoadingNames, boolean>;
 
@@ -13,13 +13,19 @@ export interface StatesStore {
   };
 }
 
-export interface Dialogs {
-  order: boolean;
-  orders_view: boolean;
-}
+export type DialogNames =
+  | 'order'
+  | 'orders_view'
+  | 'rent'
+  | 'replenish'
+  | 'rent_view'
+  | 'rent_continue'
+  | 'rent_build';
 
-export type DialogNames = 'order' | 'orders_view';
-
-export type LoadingNames = 'init' | 'error' | 'getCountries';
+export type LoadingNames =
+  | 'init'
+  | 'error'
+  | 'getCountries'
+  | 'getRentCountries';
 
 export type TabNames = 'service' | 'multi-service' | 'rent';

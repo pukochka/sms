@@ -1,16 +1,16 @@
 <template>
   <q-dialog
-    v-model="states.dialogs.order"
+    v-model="states.dialogs.rent_view"
     no-shake
     persistent
-    position="bottom"
     transition-duration="150"
+    position="bottom"
     @before-show="show"
     @hide="hide">
     <q-card style="width: 100%" class="q-gutter-y-md q-px-md q-pb-md">
-      <div class="row items-center justify-between">
+      <div class="row justify-between items-center no-wrap">
         <div class="font-size-16 text-weight-bold">
-          {{ lang.order }} №{{ data.createdOrder.id }}
+          {{ lang.order }} №{{ data.createdRent.id }}
         </div>
 
         <q-btn
@@ -22,25 +22,23 @@
           v-close-popup />
       </div>
 
-      <div>
-        <div class="row q-gutter-y-sm">
-          <div
-            class="row col-12 items-end"
-            v-for="(item, index) in order"
-            :key="index">
-            <div>{{ item.label }}</div>
+      <div class="row q-gutter-y-sm">
+        <div
+          class="row col-12 items-end"
+          v-for="(item, index) in order"
+          :key="index">
+          <div>{{ item.label }}</div>
 
-            <div class="col-grow q-mx-sm relative-position">
-              <div class="order-dashed"></div>
-            </div>
+          <div class="col-grow q-mx-sm relative-position">
+            <div class="order-dashed"></div>
+          </div>
 
-            <div class="row items-end q-gutter-x-sm">
-              <ImageService v-if="item.image === 'service'" />
+          <div class="row items-end q-gutter-x-sm">
+            <ImageService v-if="item.image === 'service'" />
 
-              <ImageCountry v-else-if="item.image === 'country'" />
+            <ImageCountry v-else-if="item.image === 'country'" />
 
-              <div class="">{{ item.value }}</div>
-            </div>
+            <div class="">{{ item.value }}</div>
           </div>
         </div>
       </div>
@@ -56,11 +54,11 @@
             class="relative-position bg-item">
             <q-item-section>
               <q-item-label class="text-center font-size-16 text-weight-bold">
-                {{ data.createdOrder.phone }}
+                {{ data.createdRent.phone }}
               </q-item-label>
             </q-item-section>
 
-            <CopyButton :text="data.createdOrder.phone" />
+            <copy-button :text="data.createdOrder.phone"></copy-button>
           </q-item>
         </q-list>
       </div>
@@ -94,58 +92,68 @@
         </div>
       </div>
 
-      <div
-        class="text-center font-size-16 text-weight-bold q-pa-md"
-        v-if="orderEnd">
-        {{ lang.order_status_text[status] }}
-      </div>
+      <div class="">
+        <div class="" v-if="timer.isEnd || orderEnd"></div>
 
-      <div v-if="orderEnd === false">
-        <div class="text-center text-caption">
-          {{ lang.order_remained }} {{ timer.format }}
+        <div class="" v-else>
+          <div class="text-center text-caption">
+            {{ lang.order_remained }} {{ timer.format }}
+          </div>
+
+          <q-linear-progress
+            stripe
+            rounded
+            size="20px"
+            :value="timer.percent"
+            color="primary" />
+
+          <div class="text-center text-caption q-pt-sm">
+            {{ lang.rent_cancel_warning }}
+          </div>
         </div>
-
-        <q-linear-progress
-          stripe
-          rounded
-          size="20px"
-          :value="timer.percent"
-          color="primary" />
       </div>
 
-      <div class="row q-my-sm q-gutter-y-sm" v-if="orderEnd === false">
-        <q-btn
-          unelevated
-          no-caps
-          class="rounded-10 col-12"
-          size="md"
-          color="primary"
-          :label="lang.button_repeat"
-          :loading="loadings.second"
-          v-if="codes.length > 0 && status !== 3 && status !== 1"
-          @click="secondSms" />
+      <div
+        class="text-center font-size-16 text-weight-bold q-pt-sm"
+        v-if="orderEnd">
+        {{ lang.rent_status[status] }}
+      </div>
 
+      <div class="row q-my-sm q-gutter-y-sm">
         <q-btn
+          v-if="!orderEnd"
           unelevated
           no-caps
           class="rounded-10 col-12"
           size="md"
           color="primary"
-          v-if="codes.length > 0"
-          :label="lang.button_confirm"
+          :label="lang.rent_confirm"
           :loading="loadings.confirm"
-          @click="confirmOrder" />
+          @click="confirmRent" />
 
         <q-btn
+          v-if="!orderEnd"
+          unelevated
+          no-caps
+          class="rounded-10 col-12"
+          size="md"
+          color="primary"
+          :label="lang.prolong_rent"
+          :loading="loadings.prolong"
+          @click="prolongRent" />
+
+        <q-btn
+          v-if="
+            orderEnd === false && timer.isEnd === false && codes.length === 0
+          "
           unelevated
           no-caps
           class="rounded-10 col-12"
           size="md"
           color="red"
-          v-if="codes.length === 0"
-          :label="lang.button_cancel"
+          :label="lang.rent_cancel"
           :loading="loadings.cancel"
-          @click="cancelOrder" />
+          @click="cancelRent" />
       </div>
     </q-card>
   </q-dialog>
@@ -156,18 +164,19 @@ import config from 'src/config';
 import { computed, ref } from 'vue';
 import { date } from 'quasar';
 import { findCountryName, findServiceName } from 'src/utils/names/find';
-import { CountryImage, ServiceImage } from 'src/utils/images';
 
+import { useLang } from 'src/utils/use/useLang';
 import { useStatesStore } from 'stores/states/statesStore';
 import { useDataStore } from 'stores/data/dataStore';
 import { useTimer } from 'src/utils/helpers/timer';
-import { useLang } from 'src/utils/use/useLang';
 
 import { fetchSMS } from 'boot/queries';
 
+import { CountryImage, ServiceImage } from 'src/utils/images';
+
 import PaginationList from 'components/other/PaginationList.vue';
-import CopyButton from 'components/other/CopyButton.vue';
 import OrderCode from 'components/other/OrderCode.vue';
+import CopyButton from 'components/other/CopyButton.vue';
 
 const states = useStatesStore();
 const data = useDataStore();
@@ -175,77 +184,34 @@ const timer = useTimer();
 const lang = computed(() => useLang());
 
 const loadings = ref({
-  second: false,
   confirm: false,
+  prolong: false,
   cancel: false,
 });
 
-const time = computed(() =>
-  date.formatDate((data.createdOrder?.time ?? 0) * 1000, 'DD.MM.YYYY HH:mm')
+const status = computed(() => data.createdRent?.status ?? 9);
+
+const codes = computed(() =>
+  (data.createdRent?.codes ?? '').split('.').filter((item) => item !== '')
 );
 
-const status = computed(() => data.createdOrder?.status ?? 8);
-
-const codes = computed(() => {
-  let mass;
-
-  if (data.createdOrder?.codes === null) {
-    mass = [];
-  } else {
-    mass = JSON.parse(data.createdOrder?.codes ?? '');
-  }
-
-  mass.map((item: string) => {
-    if (item?.includes('Code:')) return item.slice(5);
-    return item;
-  });
-
-  return mass;
-});
-
-const country = computed(() => findCountryName(data.createdOrder?.country));
-const service = computed(() => findServiceName(data.createdOrder?.service));
-
-const orderEnd = computed(
-  () => [0, 6, 8, 9, 10].includes(status.value) || timer.isEnd
+const endDate = computed(() =>
+  date.formatDate(
+    Number(data.createdRent?.end_time + '000'),
+    'DD-MM-YYYY HH:mm'
+  )
 );
 
-const secondSms = () => {
-  if (loadings.value.second) return;
-  loadings.value.second = true;
+const country = computed(() => findCountryName(data.createdRent?.country));
+const service = computed(() => findServiceName(data.createdRent?.service));
+const orderEnd = computed(() => [9, 10].includes(status.value));
 
-  fetchSMS('secondSms', {
-    user_id: data.user.id,
-    order_id: data.createdOrder?.id ?? 0,
-    public_key: config.public_key,
-    user_secret_key: data.systemUser.secret_user_key,
-  }).then(() => {
-    loadings.value.second = false;
-  });
-};
-
-const cancelOrder = () => {
-  if (loadings.value.cancel) return;
-  loadings.value.cancel = true;
-
-  fetchSMS('closeOrder', {
-    user_id: data.user.id,
-    order_id: data.createdOrder?.id ?? 0,
-    public_key: config.public_key,
-    user_secret_key: data.systemUser.secret_user_key,
-  }).then(() => {
-    timer.stop();
-    loadings.value.cancel = false;
-  });
-};
-
-const confirmOrder = () => {
-  if (loadings.value.confirm) return;
+const confirmRent = () => {
   loadings.value.confirm = true;
 
-  fetchSMS('confirmOrder', {
+  fetchSMS('confirmRentOrder', {
     user_id: data.user.id,
-    order_id: data.createdOrder?.id ?? 0,
+    order_id: data.createdRent?.id ?? 0,
     public_key: config.public_key,
     user_secret_key: data.systemUser.secret_user_key,
   }).then(() => {
@@ -254,39 +220,62 @@ const confirmOrder = () => {
   });
 };
 
+const prolongRent = () => {
+  loadings.value.prolong = true;
+
+  fetchSMS('getContinuePrice', {
+    user_id: data.user.id,
+    order_id: data.createdRent?.id ?? 0,
+    public_key: config.public_key,
+    user_secret_key: data.systemUser.secret_user_key,
+    time: 4,
+  }).then(() => {
+    loadings.value.prolong = false;
+  });
+};
+
+const cancelRent = () => {
+  loadings.value.cancel = true;
+
+  fetchSMS('closeRentOrder', {
+    user_id: data.user.id,
+    order_id: data.createdRent?.id ?? 0,
+    public_key: config.public_key,
+    user_secret_key: data.systemUser.secret_user_key,
+  }).then(() => {
+    timer.stop();
+    loadings.value.cancel = false;
+  });
+};
+
 const show = () => {
   timer.start(
     () =>
-      fetchSMS('getOrder', {
+      fetchSMS('getRentOrder', {
         user_id: data.user.id,
-        user_secret_key: data.systemUser.secret_user_key,
+        order_id: data.createdRent?.id ?? 0,
         public_key: config.public_key,
-        order_id: data.createdOrder?.id ?? 0,
+        user_secret_key: data.systemUser.secret_user_key,
       }),
-    data.createdOrder?.time.toString() ?? '',
-    config.time_to_order_end
+    data.createdRent?.start_time ?? '',
+    config.time_to_cancel
   );
 };
 
 const hide = () => {
   timer.stop();
 
-  fetchSMS('orders', {
+  fetchSMS('getRentOrders', {
     user_id: data.user.id,
     user_secret_key: data.systemUser.secret_user_key,
     public_key: config.public_key,
   });
 };
 
-const ImageCountry = () => CountryImage(data.createdOrder?.country);
-const ImageService = () => ServiceImage(data.createdOrder?.service);
+const ImageCountry = () => CountryImage(data.createdRent?.country);
+const ImageService = () => ServiceImage(data.createdRent?.service);
 
 const order = computed(() => [
-  {
-    label: lang.value.order_time,
-    value: time.value,
-    image: '',
-  },
   {
     label: lang.value.order_service,
     value: service.value,
@@ -299,12 +288,17 @@ const order = computed(() => [
   },
   {
     label: lang.value.order_price,
-    value: data.createdOrder?.cost.comma(),
+    value: data.createdRent?.cost?.comma(),
     image: '',
   },
   {
     label: lang.value.order_status,
-    value: lang.value.order_status_text[data.createdOrder?.status ?? 8],
+    value: lang.value.rent_status[status.value],
+    image: '',
+  },
+  {
+    label: lang.value.date_end,
+    value: endDate.value,
     image: '',
   },
 ]);

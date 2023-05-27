@@ -78,6 +78,53 @@ declare interface SMSCountry {
 }
 
 /**
+ * Сущность страны для выбора
+ * */
+declare interface SMSRentCountry {
+  /**
+   * Уникальный идентификатор */
+  id: string;
+  /**
+   * Название страны
+   * */
+  title_ru: string;
+  /**
+   * Название страны
+   * */
+  title_eng: string;
+  /**
+   * Флаг страны(Если нет, то null)
+   * */
+  image: string | null;
+}
+
+/**
+ * Сущность страны для выбора
+ * */
+declare interface SMSRentService {
+  /**
+   *
+   * */
+  name: string;
+  /**
+   *
+   * */
+  count: number;
+  /**
+   *
+   * */
+  cost: string;
+  /**
+   *
+   * */
+  image: string;
+  /**
+   *
+   * */
+  longName: string;
+}
+
+/**
  * Сущность оператора для выбора
  * */
 declare interface SMSOperator {
@@ -141,7 +188,7 @@ declare interface SMSMultiCountry {
   /**
    * название сервиса
    * */
-  org_id: number;
+  org_id: string;
   /**
    * картинка сервиса
    * */
@@ -189,43 +236,71 @@ declare interface SMSOrder {
    * */
   cost: number;
   /**
+   * Статус
+   */
+  status: 0 | 1 | 3 | 4 | 5 | 6 | 8 | 9 | 10;
+}
+
+/**
+ * Сущность заказа
+ * */
+declare interface SMSRentOrder {
+  /**
+   * Уникальный идентификатор заказа
+   * */
+  id: number;
+  /**
+   * номер телефона
+   * */
+  phone: string;
+  /**
+   * Коды
+   * */
+  codes: string | null;
+  /**
+   * Время в unix формате
+   * */
+  start_time: string;
+  /**
+   * Время в unix формате
+   * */
+  end_time: string;
+  /**
    *
    * */
-  operator: string;
+  service: string;
+  /**
+   *
+   * */
+  country: string;
+  /**
+   *
+   * */
+  cost: number;
   /**
    * Статус
    */
   status: 0 | 1 | 3 | 4 | 5 | 6 | 8 | 9 | 10;
 }
-/**
- *
- * 1: 'Готовность принять СМС', не использую
- * 4: 'Ожидает СМС',
- * 5: 'Ожидание повторного СМС', не использую
- * 6: 'Активация подтверждена',
- * 7: 'Пришла СМС',
- * 8: 'Отмена активации',
- *
- *
- * Стандарт ( с повтором )
- * 4 -> 7 -> 5 -> 7 -> 6
- *
- * Стандарт ( без повтором )
- * 4 -> 7 -> 6
- *
- * Отена активации
- * 4 -> 8 ( 9 )
- *
- * Время истекло без смс
- * 4 -> 8 ( 9 )
- *
- * Время истекло с смс
- * 4 -> 7 -> 8 ( 9 )
- *
- * Отена активации - пользователь использовал метод closeOrder
- * Активация подтверждена - пользователь использовал метод confirmOrder или время истекло
- *
- *
- *
- * 1 5
- * */
+
+declare interface Stages {
+  label: string;
+
+  caption?: string;
+
+  search:
+    | 'services'
+    | 'operators'
+    | 'countries'
+    | 'multiServices'
+    | 'multiCountry'
+    | 'rentCountry'
+    | 'rentService';
+  condition: boolean;
+  list: Array<any>;
+  selected: any | null;
+  itemComponent: any;
+  price?: 'services' | 'multi' | 'rent';
+  text?: string;
+  selectedComponent?: any;
+}

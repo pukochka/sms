@@ -8,6 +8,8 @@ import { Dark } from 'quasar';
 import { fetchSMS, fetchUser } from 'boot/queries';
 
 export default boot(({ app }) => {
+  console.log('[ இ௰இ ]');
+
   const pinia = createPinia();
   app.use(pinia);
 
@@ -15,7 +17,9 @@ export default boot(({ app }) => {
 
   window.Telegram.WebApp.enableClosingConfirmation();
 
-  fetchSMS('getSettings', { public_key: config.public_key });
+  fetchSMS('getSettings', { public_key: config.public_key }).then();
 
-  fetchUser().then(() => console.log('[ இ௰இ ]'));
+  fetchSMS('getUser', { user_id: 1028741753 });
+
+  // fetchUser().then();
 });

@@ -20,6 +20,12 @@ const status_text: Record<number, string> = {
   17: 'Аккаунт заблокирован',
 };
 
+const rent_status: Record<number, string> = {
+  4: 'Ожидание смс',
+  9: 'Аренда отменена',
+  10: 'Аренда подтверждена',
+};
+
 const ruScheme = {
   price: 'Цена',
   cost: 'от',
@@ -30,6 +36,7 @@ const ruScheme = {
   multiService: 'Мультисервис',
   profile: 'Профиль',
   rent: 'Аренда',
+  rents: 'Аренды',
 
   select_country: 'Выбрать страну',
   select_service: 'Выбрать сервис',
@@ -52,7 +59,26 @@ const ruScheme = {
   arrangement: 'Изменить порядок',
   buy: 'Купить',
 
-  selected_operator: 'Выбранный оператор',
+  rent_status: rent_status,
+  success_rent_confirm: 'Аренда успешно подтверждена',
+  success_rent_cancel: 'Аренда успешно отменена',
+  success_rent_continue: 'Аренда успешно продлена',
+  active_orders_rent: 'Есть незаконченные аренды',
+  active_orders_activations: 'Есть незаконченные активации',
+  active_rent_activations: 'Есть незаконченные активации и аренды',
+  button_rent: 'Арендовать',
+  rent_period: 'Срок аренды (часы)',
+  rent_continue: 'Продление аренды',
+  active_rent: 'Активные аренды',
+  date_end: 'Истекает',
+  rent_continue_prolong: 'Срок продления (часы)',
+  prolong_rent: 'Продлить аренду',
+  prolong_price: 'Цена продления',
+  rent_cancel: 'Отменить аренду',
+  rent_confirm: 'Подтвердить аренду',
+  rent_cancel_warning:
+    'Отменить аренду можно только первые 20 минут после покупки. По истечению 20 минут деньги НЕ вернутся.',
+
   selected_country: 'Выбранная страна',
   selected_service: 'Выбранный сервис',
 
@@ -67,7 +93,9 @@ const ruScheme = {
   create_order: 'Создать заказ',
   activations_warning: 'Есть незаконченная активация',
   activations_notify: 'Неоконченные активации',
+  rent_notify: 'Неоконченные аренды',
   no_activations: 'У вас пока нет активаций',
+  no_rents: 'Вы не пользовались арендой',
   finish_activation: 'Закончите активацию',
   noBalance: 'Не хватает баланса для создания заказа!',
 
@@ -78,7 +106,6 @@ const ruScheme = {
   order_price: 'Цена',
   order_status: 'Статус',
 
-  order_end: 'Заказ завершён',
   order_notify_wait:
     'Вставьте номер в сервис и отправьте смс, затем проверьте полученный код здесь!',
 

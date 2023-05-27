@@ -15,9 +15,13 @@
 <script lang="ts" setup>
 import CopyButton from 'components/other/CopyButton.vue';
 
-defineProps({
-  item: String,
+withDefaults(defineProps<OrderCodeProps>(), {
+  item: '',
 });
+
+interface OrderCodeProps {
+  item: string;
+}
 </script>
 
 <style lang="scss" scoped></style>

@@ -20,6 +20,12 @@ const status_text: Record<number, string> = {
   17: 'The account is blocked',
 };
 
+const rent_status: Record<number, string> = {
+  4: 'Waiting for SMS',
+  9: 'Rent cancelled',
+  10: 'The lease is approved',
+};
+
 const enScheme = {
   price: 'Price',
   cost: 'from',
@@ -30,6 +36,7 @@ const enScheme = {
   multiService: 'Multiservice',
   profile: 'Profile',
   rent: 'Rent',
+  rents: 'Rents',
 
   select_country: 'Select country',
   select_service: 'Select service',
@@ -52,7 +59,26 @@ const enScheme = {
   arrangement: 'Arrangement',
   buy: 'Buy',
 
-  selected_operator: 'Selected operator',
+  rent_status: rent_status,
+  success_rent_confirm: 'The lease has been successfully confirmed',
+  success_rent_cancel: 'The lease has been successfully cancelled',
+  success_rent_continue: 'The lease has been successfully extended',
+  active_orders_rent: 'There are unfinished leases',
+  active_orders_activations: 'There are unfinished activations',
+  active_rent_activations: 'There are unfinished activations and leases',
+  button_rent: 'Rent',
+  rent_period: 'Rental period (hours)',
+  rent_continue: 'Lease extension',
+  active_rent: 'Active leases',
+  date_end: 'Expires',
+  prolong_rent: 'Extend the lease',
+  prolong_price: 'Renewal price',
+  rent_continue_prolong: 'Extension period (hours)',
+  rent_confirm: 'Confirm the lease',
+  rent_cancel: 'Cancel the lease',
+  rent_cancel_warning:
+    'You can cancel the rental only for the first 20 minutes after purchase. After 20 minutes, the money will NOT be returned.',
+
   selected_country: 'Selected country',
   selected_service: 'Selected service',
 
@@ -67,9 +93,11 @@ const enScheme = {
   create_order: 'Create order',
   activations_warning: 'There is an unfinished activation',
   activations_notify: 'Unfinished activations',
+  rent_notify: 'Unfinished rents',
   no_activations: "You don't have any activations yet",
+  no_rents: "You didn't use the rental",
   finish_activation: 'Finish activation',
-  noBalance: 'There is not enough balance to create an order!',
+  noBalance: 'There is not enough balance to create an dialogs!',
 
   order_time: 'Date',
   order_service: 'Service',
@@ -78,7 +106,6 @@ const enScheme = {
   order_price: 'Price',
   order_status: 'Status',
 
-  order_end: 'Order completed',
   order_notify_wait:
     'Insert the number into the service and send an SMS, then check the received code here!',
 

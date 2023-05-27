@@ -7,21 +7,19 @@
         size="md"
         color="primary"
         icon="close"
-        @click="data.services.selectedValue = null" />
+        @click="nullify" />
     </q-item-section>
 
     <q-item-section avatar>
       <q-img
         class="rounded-10"
-        :src="data.selectedService.image"
+        :src="image"
         spinner-color="primary"
         style="height: 24px; width: 24px" />
     </q-item-section>
 
     <q-item-section>
-      <q-item-label class="text-subtitle1">
-        {{ data.selectedService?.longName }}
-      </q-item-label>
+      <q-item-label class="text-subtitle1">{{ label }}</q-item-label>
     </q-item-section>
 
     <q-badge
@@ -29,18 +27,33 @@
       floating
       color="primary"
       text-color="white"
-      :label="lang.selected_service" />
+      :label="lang.selected_country" />
   </q-item>
 </template>
 
 <script lang="ts" setup>
 import { computed } from 'vue';
-import { useLang } from 'src/utils/use/useLang';
+
+import namesCountry from 'src/utils/names/contries';
 
 import { useDataStore } from 'stores/data/dataStore';
 
+import { useLang } from 'src/utils/use/useLang';
+
 const data = useDataStore();
 const lang = computed(() => useLang());
+
+const label = computed(() =>
+  data.user.language === 'ru'
+    ? namesCountry[data.countries.selectedRent?.id ?? '']
+    : data.countries.selectedRent?.title_eng ?? ''
+);
+
+const image = computed(() => data.countries.selectedRent?.image ?? '');
+
+const nullify = () => {
+  data.countries.selectedRent = null;
+};
 </script>
 
 <style lang="scss" scoped></style>

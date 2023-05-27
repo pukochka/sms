@@ -11,6 +11,7 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
 import { copyToClipboard } from 'quasar';
+
 import { useNotify } from 'src/utils/use/useNotify';
 import { useLang } from 'src/utils/use/useLang';
 

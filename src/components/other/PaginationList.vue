@@ -81,7 +81,7 @@ import { useLang } from 'src/utils/use/useLang';
 const lang = computed(() => useLang());
 const quasar = useQuasar();
 
-const props = withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<PaginationListProps>(), {
   currentItems: () => [],
   search: () => '',
   visibleItems: () => 7,
@@ -179,7 +179,7 @@ const slide = (side: 'prev' | 'next') => {
     panels.value === '0' ? (panels.value = '1') : (panels.value = '0');
 };
 
-interface Props {
+interface PaginationListProps {
   currentItems: any[];
   search: string;
   visibleItems?: number;

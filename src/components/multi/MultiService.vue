@@ -50,15 +50,14 @@ const props = withDefaults(defineProps<MultiServiceProps>(), {
 const data = useDataStore();
 const lang = computed(() => useLang());
 
+const label = computed(() => products[props.item.name]);
+const price = computed(() => props.item.cost.comma());
+
 const selected = computed(() =>
-  data.multiSelectedValue
+  data.selectedMultiServices
     .map((service) => service.name)
     .includes(props.item.name)
 );
-
-const price = computed(() => (props.item.cost / 100).toFixed(2) + ' ₽');
-
-const label = computed(() => products[props.item.name]);
 
 interface MultiServiceProps {
   item: SMSMultiService;

@@ -10,7 +10,7 @@ import { useNotify } from 'src/utils/use/useNotify';
 import { useColor } from 'src/utils/use/useColor';
 import { useLang } from 'src/utils/use/useLang';
 
-export async function fetchSMS<Q extends SMSQueries>(
+export async function fetchSMS<Q extends keyof SMSQueries>(
   query: Q,
   params?: SMSParams<Q>,
   open?: boolean
@@ -33,14 +33,14 @@ export async function fetchSMS<Q extends SMSQueries>(
       } else if (query === 'countries') {
         /** */
 
-        data.setCountries(response.data.data);
+        data.countries.value = response.data.data;
         if (open) states.loadings.init = false;
 
         /** */
       } else if (query === 'getCountries') {
         /** */
 
-        data.multiCountriesValue = response.data.data;
+        data.countries.multi = response.data.data ?? [];
 
         /** */
       } else if (query === 'getServices') {
@@ -70,7 +70,7 @@ export async function fetchSMS<Q extends SMSQueries>(
       } else if (query === 'setLanguage') {
         /** */
 
-        data.setUser(response.data.data);
+        data.userValue = response.data.data;
 
         /** */
       } else if (query === 'createOrder') {
@@ -82,10 +82,15 @@ export async function fetchSMS<Q extends SMSQueries>(
         /** */
       } else if (query === 'orders') {
         /** */
-
-        data.setOrders(response.data.data);
+        data.orders.value = response.data.data;
 
         if (open) useNotify('', true);
+
+        /** */
+      } else if (query === 'getRentOrders') {
+        /** */
+
+        data.orders.rent = response.data.data ?? [];
 
         /** */
       } else if (
@@ -114,7 +119,7 @@ export async function fetchSMS<Q extends SMSQueries>(
       } else if (query === 'getUser') {
         /** */
 
-        data.setUser(response.data.data);
+        data.userValue = response.data.data;
 
         startApp(data.user.id, data.systemUser.secret_user_key).then(
           () => (states.loadings.init = false)
@@ -136,6 +141,60 @@ export async function fetchSMS<Q extends SMSQueries>(
         );
 
         /** */
+      } else if (query === 'getRentCountries') {
+        /** */
+
+        data.countries.rent = response.data.data ?? [];
+
+        /** */
+      } else if (query === 'getRentServices') {
+        /** */
+
+        data.setRentServices(response.data.data ?? []);
+
+        /** */
+      } else if (query === 'getRentOrder') {
+        /** */
+
+        data.orders.selectedRent = response.data.data;
+        if (open) states.openDialog('rent_view');
+
+        /** */
+      } else if (query === 'getContinuePrice') {
+        /** */
+
+        data.prolongPrice = response.data.data;
+        states.openDialog('rent_continue');
+
+        /** */
+      } else if (query === 'createRentOrder') {
+        /** */
+
+        data.orders.selectedRent = response.data.data;
+        states.openDialog('rent_view');
+
+        /** */
+      } else if (query === 'continueRent') {
+        /** */
+
+        data.orders.selectedRent = response.data.data;
+        useNotify(lang.success_rent_continue);
+
+        /** */
+      } else if (query === 'confirmRentOrder') {
+        /** */
+
+        data.orders.selectedRent = response.data.data;
+        useNotify(lang.success_rent_confirm);
+
+        /** */
+      } else if (query === 'closeRentOrder') {
+        /** */
+
+        data.orders.selectedRent = response.data.data;
+        useNotify(lang.success_rent_cancel);
+
+        /** */
       }
     });
   } catch (e) {}
@@ -151,7 +210,7 @@ export async function fetchUser() {
         userData: getHash(),
       },
     }).then((response) => {
-      data.setSystemUser(response.data.data);
+      data.systemUserValue = response.data.data;
 
       fetchSMS('getUser', {
         user_id: response.data.data.user.telegram_id,
@@ -176,5 +235,14 @@ async function startApp(id: number, secret: string) {
       },
       true
     ),
+    fetchSMS('getRentOrders', {
+      user_id: id,
+      user_secret_key: secret,
+      public_key: config.public_key,
+    }),
+    fetchSMS('getRentServices', {
+      country: '0',
+      public_key: config.public_key,
+    }),
   ]);
 }

@@ -25,7 +25,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref, withDefaults } from 'vue';
+import { computed, ref } from 'vue';
 
 import { defaultServiceItem } from 'stores/content/defaults';
 
@@ -41,7 +41,7 @@ const data = useDataStore();
 
 const loading = ref(false);
 
-const name = computed(() => props.item?.longName);
+const name = computed(() => props.item?.longName ?? '');
 
 const select = () => {
   loading.value = true;
@@ -50,9 +50,7 @@ const select = () => {
     service: props.item.name,
     user_id: data.user.id,
     user_secret_key: data.systemUser.secret_user_key,
-  }).then(() => {
-    loading.value = false;
-  });
+  }).then(() => (loading.value = false));
 };
 
 interface Props {
@@ -62,8 +60,4 @@ interface Props {
 }
 </script>
 
-<style lang="scss" scoped>
-.top-animation {
-  transition: 0.3s top;
-}
-</style>
+<style lang="scss" scoped></style>

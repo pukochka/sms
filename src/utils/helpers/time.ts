@@ -1,23 +1,21 @@
-import config from 'src/config';
-
-export function toUnixSeconds(time: number | undefined): number {
+export function toSeconds(time: number | undefined): number {
   if (time === undefined) return 0;
+
   return time.toString().length === 13 ? +time.toString().slice(0, 10) : time;
 }
 
-export function toTimeEnd(time: number | undefined): number {
-  return (
-    (toUnixSeconds(Date.now()) - toUnixSeconds(time)) / config.time_to_order_end
-  );
+export function toTimeEnd(time: number, endTime: number): number {
+  return (toSeconds(Date.now()) - toSeconds(time)) / endTime;
 }
 
-export function toCurrentTime(time: number): string {
-  const end = config.time_to_order_end - time * config.time_to_order_end;
+export function formatTime(time: number, endTime: number): string {
+  const end = endTime - time * endTime;
 
   const end_seconds =
     end % 60 < 10
       ? '0' + (end % 60).toFixed()
       : (end % 60).toFixed().toString();
+
   const end_minutes =
     end < 60
       ? '00'
