@@ -43,16 +43,12 @@ import { useLang } from 'src/utils/use/useLang';
 const data = useDataStore();
 const lang = computed(() => useLang());
 
-const label = computed(() =>
-  data.user.language === 'ru'
-    ? namesCountry[data.countries.selectedRent?.id ?? '']
-    : data.countries.selectedRent?.title_eng ?? ''
-);
+const label = computed(() => data.countries.selectedValue?.name_en);
 
-const image = computed(() => data.countries.selectedRent?.image ?? '');
+const image = computed(() => data.countries.selectedValue?.image ?? '');
 
 const nullify = () => {
-  data.countries.selectedRent = null;
+  data.countries.selectedValue = null;
 };
 </script>
 

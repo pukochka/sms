@@ -1,5 +1,6 @@
 import namesCountry from 'src/utils/names/contries';
 import { useDataStore } from 'stores/data/dataStore';
+import { findCountryName, findServiceName } from 'src/utils/names/find';
 
 export {};
 
@@ -40,26 +41,14 @@ Array.prototype.serviceFilter = function (search: string, price?: boolean) {
   const compareFn = price ? compare : notCompare;
 
   return this.filter((service) =>
-    service.longName?.toString()?.short(search)
+    findServiceName(service?.name ?? '')
+      ?.toString()
+      ?.short(search)
   ).sort(compareFn);
 };
 
-Array.prototype.countryFilter = function (
-  search: string,
-  multi?: boolean,
-  price?: boolean
-) {
-  const data = useDataStore();
-
-  const compareFn = price ? compare : notCompare;
-
-  // Проблема с однообразием данных с сервера
-  const keys = multi ? props.multi : props.default;
-
+Array.prototype.countryFilter = function (search: string, multi?: boolean) {
   return this.filter((country) =>
-    (data.user.language === 'eng'
-      ? country[keys.name]
-      : namesCountry[country[keys.id]]
-    )?.short(search)
-  ).sort(compareFn);
+    findCountryName(country?.org_id ?? '')?.short(search)
+  );
 };

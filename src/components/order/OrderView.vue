@@ -66,12 +66,12 @@
       </div>
 
       <div class="">
-        <div v-if="codes.length > 0">
+        <div v-if="codes?.length > 0">
           {{ lang.order_codes }}
         </div>
 
         <pagination-list
-          v-if="codes.length > 0"
+          v-if="codes?.length > 0"
           search=""
           stable-height
           :el-height="36"
@@ -84,7 +84,7 @@
         </pagination-list>
 
         <div
-          v-if="codes.length === 0 && orderEnd === false"
+          v-if="codes?.length === 0 && orderEnd === false"
           class="text-center rounded-10 q-pa-sm bg-item">
           <q-icon name="info" color="primary" size="32px" />
 
@@ -122,7 +122,12 @@
           color="primary"
           :label="lang.button_repeat"
           :loading="loadings.second"
-          v-if="codes.length > 0 && status !== 3 && status !== 1"
+          v-if="
+            codes?.length > 0 &&
+            status !== 3 &&
+            status !== 1 &&
+            status !== 'secondWaitCode'
+          "
           @click="secondSms" />
 
         <q-btn
@@ -130,19 +135,8 @@
           no-caps
           class="rounded-10 col-12"
           size="md"
-          color="primary"
-          v-if="codes.length > 0"
-          :label="lang.button_confirm"
-          :loading="loadings.confirm"
-          @click="confirmOrder" />
-
-        <q-btn
-          unelevated
-          no-caps
-          class="rounded-10 col-12"
-          size="md"
           color="red"
-          v-if="codes.length === 0"
+          v-if="codes?.length === 0"
           :label="lang.button_cancel"
           :loading="loadings.cancel"
           @click="cancelOrder" />
@@ -184,30 +178,16 @@ const time = computed(() =>
   date.formatDate((data.createdOrder?.time ?? 0) * 1000, 'DD.MM.YYYY HH:mm')
 );
 
-const status = computed(() => data.createdOrder?.status ?? 8);
+const status = computed((): number | string => data.createdOrder?.status ?? 8);
 
-const codes = computed(() => {
-  let mass;
-
-  if (data.createdOrder?.codes === null) {
-    mass = [];
-  } else {
-    mass = JSON.parse(data.createdOrder?.codes ?? '');
-  }
-
-  mass.map((item: string) => {
-    if (item?.includes('Code:')) return item.slice(5);
-    return item;
-  });
-
-  return mass;
-});
+const codes = computed(() => data.createdOrder?.codes ?? []);
 
 const country = computed(() => findCountryName(data.createdOrder?.country));
 const service = computed(() => findServiceName(data.createdOrder?.service));
 
 const orderEnd = computed(
-  () => [0, 6, 8, 9, 10].includes(status.value) || timer.isEnd
+  () =>
+    [0, 6, 8, 9, 10, 'cancel', 'finish'].includes(status.value) || timer.isEnd
 );
 
 const secondSms = () => {
@@ -236,21 +216,6 @@ const cancelOrder = () => {
   }).then(() => {
     timer.stop();
     loadings.value.cancel = false;
-  });
-};
-
-const confirmOrder = () => {
-  if (loadings.value.confirm) return;
-  loadings.value.confirm = true;
-
-  fetchSMS('confirmOrder', {
-    user_id: data.user.id,
-    order_id: data.createdOrder?.id ?? 0,
-    public_key: config.public_key,
-    user_secret_key: data.systemUser.secret_user_key,
-  }).then(() => {
-    timer.stop();
-    loadings.value.confirm = false;
   });
 };
 

@@ -1,4 +1,4 @@
-const status_text: Record<number, string> = {
+const status_text: Record<number | string, string> = {
   0: 'Отмена активации',
   1: 'Готовность принять СМС',
   2: 'Нет свободных номеров',
@@ -18,6 +18,11 @@ const status_text: Record<number, string> = {
   15: 'Неверный API ключ доступа',
   16: 'Некорректное действие',
   17: 'Аккаунт заблокирован',
+
+  waitCode: 'Ожидание смс',
+  secondWaitCode: 'Ожидание уточнения',
+  cancel: 'Активация отменена',
+  finish: 'Активация успешно активирована',
 };
 
 const rent_status: Record<number, string> = {
@@ -43,7 +48,7 @@ const ruScheme = {
   select_services: 'Выбрать сервисы',
   select_operator: 'Выбрать оператора',
 
-  max_selecting: 'Можно выбрать от 2 до 5 сервисов',
+  max_selecting: 'Можно выбрать только 2 сервиса',
   multi_success: 'Успешно активировано: ',
 
   adds: 'Веб-приложение создано в сервисе',

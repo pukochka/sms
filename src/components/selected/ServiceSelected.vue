@@ -15,7 +15,15 @@
         class="rounded-10"
         :src="data.selectedService.image"
         spinner-color="primary"
-        style="height: 24px; width: 24px" />
+        style="height: 24px; width: 24px">
+        <template v-slot:error>
+          <q-img
+            class="rounded-10"
+            src="src/assets/default.png"
+            spinner-color="primary"
+            style="height: 24px; width: 10px" />
+        </template>
+      </q-img>
     </q-item-section>
 
     <q-item-section>

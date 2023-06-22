@@ -1,9 +1,9 @@
 <template>
   <q-item
     clickable
-    @click="data.selectCountry(props.item)"
+    @click="selectCountry"
     style="height: 52px"
-    class="relative-position country-item">
+    class="relative-position">
     <q-item-section avatar>
       <q-img
         class="rounded-10"
@@ -18,28 +18,9 @@
       </q-item-label>
     </q-item-section>
 
-    <q-item-section side class="">
-      <q-item-label class="text-center text-weight-bold text-color">
-        {{ price }}
-      </q-item-label>
-
-      <q-item-label class="text-primary text-weight-bold" caption>
-        {{ item.count }} {{ lang.items }}
-      </q-item-label>
-    </q-item-section>
-
-    <transition name="button">
-      <q-btn
-        class="absolute-right border-left-10 q-px-lg country-item"
-        v-if="selected"
-        unelevated
-        square
-        size="md"
-        color="primary"
-        :label="lang.buy"
-        :loading="loading"
-        @click="createOrder" />
-    </transition>
+    <q-inner-loading :showing="loading" class="bg-page">
+      <q-spinner size="36px" color="primary" />
+    </q-inner-loading>
   </q-item>
 </template>
 
@@ -47,46 +28,39 @@
 import config from 'src/config';
 
 import { computed, ref } from 'vue';
-import { defaultCountryItem } from 'stores/content/defaults';
+import { defaultMultiCountry } from 'stores/content/defaults';
 import { findCountryName } from 'src/utils/names/find';
 
 import { useDataStore } from 'stores/data/dataStore';
-import { useLang } from 'src/utils/use/useLang';
 
 import { fetchSMS } from 'boot/queries';
 
 const props = withDefaults(defineProps<Props>(), {
-  item: () => defaultCountryItem,
+  item: () => defaultMultiCountry,
 });
 
 const data = useDataStore();
-const lang = computed(() => useLang());
 
 const loading = ref(false);
 
-const title = computed(() => findCountryName(props.item?.id));
-const price = computed(() => props.item.cost.comma(lang.value.fromAt + ' '));
+const title = computed(() => findCountryName(props.item.org_id));
 
-const selected = computed(() => data.selectedCountry?.id === props.item.id);
-
-const createOrder = () => {
+const selectCountry = () => {
   loading.value = true;
 
-  fetchSMS('createOrder', {
-    country: props.item.id,
-    user_id: data.user?.id ?? 0,
+  fetchSMS('services', {
+    country: props.item.org_id,
     public_key: config.public_key,
-    user_secret_key: data.systemUserValue?.secret_user_key ?? '',
   }).then(() => {
     loading.value = false;
-
+    data.countries.selectedValue = props.item;
     data.search.countries = '';
     data.search.services = '';
   });
 };
 
 interface Props {
-  item?: SMSCountry;
+  item?: SMSMultiCountry;
 }
 </script>
 

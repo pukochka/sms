@@ -50,6 +50,9 @@ declare interface SMSUser {
 declare interface SMSCountry {
   /**
    * Уникальный идентификатор */
+  org_id?: string;
+  /**
+   * Уникальный идентификатор */
   id: string;
   /**
    * Название страны в соответствии с выбранным языком

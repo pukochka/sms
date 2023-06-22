@@ -221,10 +221,14 @@ export async function fetchUser() {
 
 async function startApp(id: number, secret: string) {
   return await Promise.all([
-    fetchSMS('services', { public_key: config.public_key }, true),
+    fetchSMS(
+      'services',
+      { public_key: config.public_key, country: 'ru' },
+      true
+    ),
     fetchSMS('countries', {
-      user_id: id,
       public_key: config.public_key,
+      user_id: 1,
     }),
     fetchSMS(
       'orders',
@@ -235,14 +239,14 @@ async function startApp(id: number, secret: string) {
       },
       true
     ),
-    fetchSMS('getRentOrders', {
-      user_id: id,
-      user_secret_key: secret,
-      public_key: config.public_key,
-    }),
-    fetchSMS('getRentServices', {
-      country: '0',
-      public_key: config.public_key,
-    }),
+    // fetchSMS('getRentOrders', {
+    //   user_id: id,
+    //   user_secret_key: secret,
+    //   public_key: config.public_key,
+    // }),
+    // fetchSMS('getRentServices', {
+    //   country: '0',
+    //   public_key: config.public_key,
+    // }),
   ]);
 }

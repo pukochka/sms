@@ -15,7 +15,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue';
-import { serviceStages, multiStages, rentStages } from 'components/stages';
+import { serviceStages, multiStages } from 'components/stages';
 
 import { useStatesStore } from 'stores/states/statesStore';
 
@@ -32,10 +32,10 @@ const panels = computed((): Panels[] => [
     name: 'multi-service',
     stages: multiStages.value,
   },
-  {
-    name: 'rent',
-    stages: rentStages.value,
-  },
+  // {
+  //   name: 'rent',
+  //   stages: rentStages.value,
+  // },
 ]);
 
 interface Panels {

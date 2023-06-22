@@ -12,7 +12,7 @@ declare interface SMSServiceQueries {
   /**
    * Возвращает сервисы, которые можно выбрать для заказа
    * */
-  services: PublicKey;
+  services: PublicKey & SMSCountryParam;
 
   /**
    * Получаем заказы пользователя
@@ -22,7 +22,10 @@ declare interface SMSServiceQueries {
   /**
    * Создаем заказ
    * */
-  createOrder: SMSCountryParam & SMSUserIdParam & SMSCommonParams;
+  createOrder: SMSCountryParam &
+    SMSServiceParam &
+    SMSUserIdParam &
+    SMSCommonParams;
 
   /**
    * Задать страну ( для заказа )

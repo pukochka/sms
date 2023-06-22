@@ -15,7 +15,15 @@
         class="rounded-10"
         :src="image"
         spinner-color="primary"
-        style="height: 24px; width: 24px" />
+        style="height: 24px; width: 24px">
+        <template v-slot:error>
+          <q-img
+            class="rounded-10"
+            src="src/assets/default.png"
+            spinner-color="primary"
+            style="height: 24px; width: 10px" />
+        </template>
+      </q-img>
     </q-item-section>
 
     <q-item-section>
@@ -39,14 +47,13 @@ import namesCountry from 'src/utils/names/contries';
 import { useDataStore } from 'stores/data/dataStore';
 
 import { useLang } from 'src/utils/use/useLang';
+import { findCountryName } from 'src/utils/names/find';
 
 const data = useDataStore();
 const lang = computed(() => useLang());
 
 const label = computed(() =>
-  data.user.language === 'ru'
-    ? namesCountry[data.countries.selectedMulti?.org_id ?? '']
-    : data.countries.selectedMulti?.name_en ?? ''
+  findCountryName(data.countries.selectedMulti?.org_id ?? '')
 );
 
 const image = computed(() => data.countries.selectedMulti?.image ?? '');

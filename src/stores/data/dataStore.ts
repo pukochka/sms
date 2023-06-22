@@ -78,30 +78,29 @@ export const useDataStore = defineStore('data', {
     systemUser: (state): SystemUser => state.systemUserValue,
     /** */
     servicesValue: (state): SMSServices[] =>
-      state.services.value.serviceFilter(state.search.services),
+      state.services.value.serviceFilter(
+        state.search.services,
+        state.price.services
+      ),
     multiServices: (state): SMSMultiService[] =>
       state.services.multi.serviceFilter(
         state.search.multiServices,
         state.price.multi
       ),
     rentServices: (state): SMSRentService[] =>
-      state.services.rent.serviceFilter(
+      state.services.rent /**.serviceFilter(
         state.search.rentService,
         state.price.rent
-      ),
+      )*/,
     /** */
     countriesValue: (state): SMSCountry[] =>
-      state.countries.value.countryFilter(
-        state.search.countries,
-        false,
-        state.price.services
-      ),
+      state.countries.value.countryFilter(state.search.countries),
     multiCountries: (state): SMSMultiCountry[] =>
-      state.countries.multi.countryFilter(state.search.multiCountry, true),
+      state.countries.multi.countryFilter(state.search.multiCountry),
     rentCountries: (state): SMSRentCountry[] =>
       state.countries.rent.countryFilter(state.search.rentCountry),
     /** */
-    selectedCountry: (state): SMSCountry | null =>
+    selectedCountry: (state): SMSMultiCountry | null =>
       state.countries.selectedValue,
     selectedService: (state): SMSServices | null =>
       state.services.selectedValue,
@@ -110,7 +109,9 @@ export const useDataStore = defineStore('data', {
       const states = useStatesStore();
 
       return (
-        state.selectedMultiServices.length > 1 && states.tab === 'multi-service'
+        state.selectedMultiServices.length > 1 &&
+        state.selectedMultiServices.length < 3 &&
+        states.tab === 'multi-service'
       );
     },
 
@@ -122,7 +123,7 @@ export const useDataStore = defineStore('data', {
 
     activeOrders: (state): SMSOrder[] =>
       state.orders.value.filter(
-        (order) => ![0, 6, 8, 9, 10].includes(order.status)
+        (order) => ![0, 6, 8, 9, 10, 'cancel', 'finish'].includes(order.status)
       ),
     activeRents: (state): SMSRentOrder[] =>
       state.orders.rent.filter((order) => ![9, 10].includes(order.status)),
@@ -137,8 +138,6 @@ export const useDataStore = defineStore('data', {
 
     setServices(value: SMSServices[], init?: boolean) {
       this.services.value = mapServiceTitle(value);
-
-      if (init) this.selectService();
     },
     setMultiServices(value: SMSMultiService[]) {
       this.services.multi = mapServiceTitle(value);
@@ -173,7 +172,7 @@ export const useDataStore = defineStore('data', {
           (service) => service.name === this.user?.service
         ) ?? null;
     },
-    selectCountry(value: SMSCountry) {
+    selectCountry(value: SMSMultiCountry) {
       this.countries.selectedValue = value;
     },
 
@@ -187,7 +186,7 @@ export const useDataStore = defineStore('data', {
         return;
       }
 
-      if (this.selectedMultiServices.length >= 5) {
+      if (this.selectedMultiServices.length >= 2) {
         const lang = useLang();
         useNotify(lang.max_selecting);
 

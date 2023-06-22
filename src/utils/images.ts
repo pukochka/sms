@@ -2,12 +2,13 @@ import config from 'src/config';
 
 import { h } from 'vue';
 import { QImg } from 'quasar';
+import { findCountryImage, findServiceImage } from 'src/utils/names/find';
 
-const CountryImage = (country_id?: string) => {
+const CountryImage = (country?: string) => {
   return h(QImg, {
     class: ' rounded-10 q-list--bordered',
     style: 'height:24px; width:24px',
-    src: (config.activate_country_url + country_id ?? '0') + '.svg',
+    src: findCountryImage(country),
   });
 };
 
@@ -15,7 +16,7 @@ const ServiceImage = (name?: string) => {
   return h(QImg, {
     class: ' rounded-10 q-list--bordered',
     style: 'height:24px; width:24px',
-    src: (config.activate_service_url + name ?? 'ot') + '0.webp',
+    src: findServiceImage(name),
   });
 };
 

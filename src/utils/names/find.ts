@@ -13,7 +13,23 @@ export function findServiceName(name?: string) {
 export function findCountryName(name?: string) {
   const data = useDataStore();
 
-  return data.user.language === 'ru'
-    ? namesCountry[name ?? '0']
-    : data.countries.value.find((item) => item.id === (name ?? '0'))?.title_eng;
+  return data.user.language === 'eng'
+    ? namesCountry[name ?? 'ru'].name_en
+    : namesCountry[name ?? 'ru'].name_ru;
+}
+
+export function findCountryImage(name?: string) {
+  const data = useDataStore();
+
+  return (
+    data.countries.value.find((country) => country.org_id === name)?.image ?? ''
+  );
+}
+
+export function findServiceImage(name?: string) {
+  const data = useDataStore();
+
+  return (
+    data.services.value.find((country) => country.name === name)?.image ?? ''
+  );
 }

@@ -73,7 +73,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref, watch, withDefaults } from 'vue';
+import { computed, ref, watch } from 'vue';
 
 import { useQuasar } from 'quasar';
 import { useLang } from 'src/utils/use/useLang';

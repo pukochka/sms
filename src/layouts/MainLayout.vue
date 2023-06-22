@@ -74,15 +74,15 @@
 
     <order-dialog></order-dialog>
 
-    <rent-dialog></rent-dialog>
+<!--    <rent-dialog></rent-dialog>-->
 
-    <rent-view></rent-view>
+<!--    <rent-view></rent-view>-->
 
-    <rent-build></rent-build>
+<!--    <rent-build></rent-build>-->
 
-    <rent-continue></rent-continue>
+<!--    <rent-continue></rent-continue>-->
 
-    <replenish-dialog></replenish-dialog>
+<!--    <replenish-dialog></replenish-dialog>-->
   </q-layout>
 </template>
 
@@ -97,23 +97,23 @@ import OrderView from 'components/order/OrderView.vue';
 import OrderDialog from 'components/order/OrderDialog.vue';
 import DrawerTemplate from 'layouts/DrawerTemplate.vue';
 import CreateOrderButton from 'components/other/CreateOrderButton.vue';
-import ReplenishDialog from 'components/other/ReplenishDialog.vue';
-import RentDialog from 'components/rent/dialogs/RentOrders.vue';
-import RentView from 'components/rent/dialogs/RentView.vue';
-import RentBuild from 'components/rent/dialogs/RentBuild.vue';
-import RentContinue from 'components/rent/dialogs/RentContinue.vue';
+// import ReplenishDialog from 'components/other/ReplenishDialog.vue';
+// import RentDialog from 'components/rent/dialogs/RentOrders.vue';
+// import RentView from 'components/rent/dialogs/RentView.vue';
+// import RentBuild from 'components/rent/dialogs/RentBuild.vue';
+// import RentContinue from 'components/rent/dialogs/RentContinue.vue';
 
 import {
   mdiMessage,
   mdiAnimation,
-  mdiLabelPercent,
+  // mdiLabelPercent,
 } from '@quasar/extras/mdi-v7';
 
 const states = useStatesStore();
 const data = useDataStore();
 const lang = computed(() => useLang());
 
-const country = computed(() => data.selectedCountry ?? {});
+const country = computed(() => data.selectedService ?? {});
 
 const clickOutside = (e: any) => {
   if (
@@ -122,7 +122,7 @@ const clickOutside = (e: any) => {
     ) === -1 &&
     Array.from(e?.target?.classList)?.indexOf('country-item') === -1
   ) {
-    data.countries.selectedValue = null;
+    data.services.selectedValue = null;
   }
 };
 
@@ -143,11 +143,11 @@ const tabs = computed(() => [
     icon: mdiAnimation,
     action: () => states.toggleTab('multi-service'),
   },
-  {
-    label: lang.value.rent,
-    icon: mdiLabelPercent,
-    action: () => states.toggleTab('rent'),
-  },
+  // {
+  //   label: lang.value.rent,
+  //   icon: mdiLabelPercent,
+  //   action: () => states.toggleTab('rent'),
+  // },
 ]);
 
 const titles = computed(() => [
@@ -159,9 +159,9 @@ const titles = computed(() => [
     name: 'multi-service',
     label: lang.value.multiService,
   },
-  {
-    name: 'rent',
-    label: lang.value.rent,
-  },
+  // {
+  //   name: 'rent',
+  //   label: lang.value.rent,
+  // },
 ]);
 </script>

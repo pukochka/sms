@@ -92,24 +92,24 @@
         </div>
       </div>
 
-      <div class="">
-        <div class="" v-if="timer.isEnd || orderEnd"></div>
+      <div
+        class=""
+        v-if="
+          orderEnd === false && timer.isEnd === false && codes.length === 0
+        ">
+        <div class="text-center text-caption">
+          {{ lang.order_remained }} {{ timer.format }}
+        </div>
 
-        <div class="" v-else>
-          <div class="text-center text-caption">
-            {{ lang.order_remained }} {{ timer.format }}
-          </div>
+        <q-linear-progress
+          stripe
+          rounded
+          size="20px"
+          :value="timer.percent"
+          color="primary" />
 
-          <q-linear-progress
-            stripe
-            rounded
-            size="20px"
-            :value="timer.percent"
-            color="primary" />
-
-          <div class="text-center text-caption q-pt-sm">
-            {{ lang.rent_cancel_warning }}
-          </div>
+        <div class="text-center text-caption q-pt-sm">
+          {{ lang.rent_cancel_warning }}
         </div>
       </div>
 

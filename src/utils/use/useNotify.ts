@@ -8,6 +8,13 @@ export function useNotify(message: string, activations?: boolean) {
   const states = useStatesStore();
   const lang = useLang();
 
+  if (
+    activations &&
+    data.activeOrders.length === 0 &&
+    data.activeRents.length === 0
+  )
+    return;
+
   const serviceMessage = `<div class="q-mx-lg">${lang.activations_notify} : ${data.activeOrders.length}</div>`;
   const rentMessage = `<div class="q-mx-lg">${lang.rent_notify} : ${data.activeRents.length}</div>`;
 
@@ -44,13 +51,6 @@ export function useNotify(message: string, activations?: boolean) {
       : data.activeRents.length
       ? rentMessage
       : '';
-
-  if (
-    activations &&
-    data.activeOrders.length === 0 &&
-    data.activeRents.length === 0
-  )
-    return;
 
   Notify.create({
     message: activations ? msg : message,

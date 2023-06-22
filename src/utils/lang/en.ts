@@ -1,4 +1,4 @@
-const status_text: Record<number, string> = {
+const status_text: Record<number | string, string> = {
   0: 'Cancellation of activation',
   1: 'Willingness to accept SMS',
   2: 'There are no available numbers',
@@ -18,6 +18,11 @@ const status_text: Record<number, string> = {
   15: 'Invalid API access key',
   16: 'Incorrect action',
   17: 'The account is blocked',
+
+  waitCode: 'Waiting for SMS',
+  secondWaitCode: 'Waiting for a repeated SMS',
+  cancel: 'Cancellation of activation',
+  finish: 'Activation successfully activated',
 };
 
 const rent_status: Record<number, string> = {
@@ -43,7 +48,7 @@ const enScheme = {
   select_services: 'Select services',
   select_operator: 'Select operator',
 
-  max_selecting: 'You can choose from 2 to 5 services',
+  max_selecting: 'You can choose only 2 services',
   multi_success: 'Successfully activated:',
 
   adds: 'The web application was created in the service',

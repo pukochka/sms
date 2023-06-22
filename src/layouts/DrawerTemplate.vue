@@ -123,8 +123,8 @@ const setLanguage = (lang: 'ru' | 'eng') => {
   });
 };
 
-const ImageCountryRUS = () => CountryImage('0');
-const ImageCountryENG = () => CountryImage('12');
+const ImageCountryRUS = () => CountryImage('ru');
+const ImageCountryENG = () => CountryImage('gb');
 
 const openOrders = () => {
   states.toggleDrawer();
@@ -132,17 +132,17 @@ const openOrders = () => {
   states.openDialog('orders_view');
 };
 
-const openRent = () => {
-  states.toggleDrawer();
-
-  states.openDialog('rent');
-};
-
-const openReplenish = () => {
-  states.toggleDrawer();
-
-  states.openDialog('replenish');
-};
+// const openRent = () => {
+//   states.toggleDrawer();
+//
+//   states.openDialog('rent');
+// };
+//
+// const openReplenish = () => {
+//   states.toggleDrawer();
+//
+//   states.openDialog('replenish');
+// };
 
 const content = computed((): Content[] => [
   {
@@ -158,13 +158,13 @@ const content = computed((): Content[] => [
     class: data.activeOrders.length > 0 ? ' bg-orange rounded-10 q-pa-xs' : '',
     action: openOrders,
   },
-  {
-    label: lang.value.rents,
-    icon: mdiLabelPercent,
-    value: data.rentsValue.length,
-    class: data.activeRents.length > 0 ? ' bg-orange rounded-10 q-pa-xs' : '',
-    action: openRent,
-  },
+  // {
+  //   label: lang.value.rents,
+  //   icon: mdiLabelPercent,
+  //   value: data.rentsValue.length,
+  //   class: data.activeRents.length > 0 ? ' bg-orange rounded-10 q-pa-xs' : '',
+  //   action: openRent,
+  // },
   {
     label: lang.value.change_language,
     icon: 'language',

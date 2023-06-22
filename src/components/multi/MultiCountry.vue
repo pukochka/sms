@@ -5,7 +5,15 @@
         class="rounded-10"
         :src="props.item.image"
         spinner-color="primary"
-        style="height: 24px; width: 24px" />
+        style="height: 24px; width: 24px">
+        <template v-slot:error>
+          <q-img
+            class="rounded-10"
+            src="src/assets/default.png"
+            spinner-color="primary"
+            style="height: 24px; width: 10px" />
+        </template>
+      </q-img>
     </q-item-section>
 
     <q-item-section>
@@ -27,6 +35,7 @@ import namesCountry from 'src/utils/names/contries';
 
 import { useDataStore } from 'stores/data/dataStore';
 import { fetchSMS } from 'boot/queries';
+import { findCountryName } from 'src/utils/names/find';
 
 const props = withDefaults(defineProps<MultiCountryProps>(), {
   item: () => defaultMultiCountry,
@@ -35,11 +44,7 @@ const props = withDefaults(defineProps<MultiCountryProps>(), {
 const data = useDataStore();
 const loading = ref(false);
 
-const label = computed(() =>
-  data.user.language === 'ru'
-    ? namesCountry[props.item.org_id]
-    : props.item.name_en
-);
+const label = computed(() => findCountryName(props.item.org_id));
 
 const select = () => {
   loading.value = true;

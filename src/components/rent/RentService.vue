@@ -2,7 +2,7 @@
   <q-item
     clickable
     style="height: 52px"
-    class="relative-position country-item"
+    class="relative-position"
     @click="data.services.selectedRent = item">
     <q-item-section avatar>
       <q-img
@@ -30,7 +30,7 @@
 
     <transition name="button">
       <q-btn
-        class="absolute-right border-left-10 q-px-lg country-item"
+        class="absolute-right border-left-10 q-px-lg"
         v-if="selected"
         unelevated
         square

@@ -17,7 +17,7 @@ export interface DataStore {
     multi: SMSMultiCountry[];
     rent: SMSRentCountry[];
 
-    selectedValue: SMSCountry | null;
+    selectedValue: SMSMultiCountry | null;
     selectedMulti: SMSMultiCountry | null;
     selectedRent: SMSRentCountry | null;
   };

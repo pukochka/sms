@@ -12,7 +12,15 @@
           class="rounded-10"
           :src="props.item.image"
           spinner-color="primary"
-          style="height: 24px; width: 24px" />
+          style="height: 24px; width: 24px">
+          <template v-slot:error>
+            <q-img
+              class="rounded-10"
+              src="src/assets/default.png"
+              spinner-color="primary"
+              style="height: 24px; width: 10px" />
+          </template>
+        </q-img>
 
         <div class="absolute-full"></div>
       </div>
