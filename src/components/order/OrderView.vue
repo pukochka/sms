@@ -65,26 +65,13 @@
         </q-list>
       </div>
 
-      <div class="">
-        <div v-if="codes?.length > 0">
-          {{ lang.order_codes }}
-        </div>
-
-        <pagination-list
-          v-if="codes?.length > 0"
-          search=""
-          stable-height
-          :el-height="36"
-          :hidden-buttons="true"
-          :current-items="codes"
-          :visible-items="2">
-          <template v-slot="{ item }">
-            <order-code :item="item"></order-code>
-          </template>
-        </pagination-list>
+      <div class="" v-if="code">
+        <order-code
+          :item="code"
+          class="rounded-10 overflow-hidden q-list--bordered"></order-code>
 
         <div
-          v-if="codes?.length === 0 && orderEnd === false"
+          v-if="!code && orderEnd === false"
           class="text-center rounded-10 q-pa-sm bg-item">
           <q-icon name="info" color="primary" size="32px" />
 
@@ -122,12 +109,7 @@
           color="primary"
           :label="lang.button_repeat"
           :loading="loadings.second"
-          v-if="
-            codes?.length > 0 &&
-            status !== 3 &&
-            status !== 1 &&
-            status !== 'secondWaitCode'
-          "
+          v-if="code && status !== 3 && status !== 1 && status !== 5"
           @click="secondSms" />
 
         <q-btn
@@ -136,10 +118,21 @@
           class="rounded-10 col-12"
           size="md"
           color="red"
-          v-if="codes?.length === 0"
+          v-if="!code"
           :label="lang.button_cancel"
           :loading="loadings.cancel"
           @click="cancelOrder" />
+
+        <q-btn
+          unelevated
+          no-caps
+          class="rounded-10 col-12"
+          size="md"
+          color="primary"
+          v-if="code"
+          :label="lang.button_confirm"
+          :loading="loadings.confirm"
+          @click="confirmOrder" />
       </div>
     </q-card>
   </q-dialog>
@@ -180,7 +173,7 @@ const time = computed(() =>
 
 const status = computed((): number | string => data.createdOrder?.status ?? 8);
 
-const codes = computed(() => data.createdOrder?.codes ?? []);
+const code = computed(() => data.createdOrder?.codes);
 
 const country = computed(() => findCountryName(data.createdOrder?.country));
 const service = computed(() => findServiceName(data.createdOrder?.service));
@@ -216,6 +209,21 @@ const cancelOrder = () => {
   }).then(() => {
     timer.stop();
     loadings.value.cancel = false;
+  });
+};
+
+const confirmOrder = () => {
+  if (loadings.value.confirm) return;
+  loadings.value.confirm = true;
+
+  fetchSMS('confirmOrder', {
+    user_id: data.user.id,
+    order_id: data.createdOrder?.id ?? 0,
+    public_key: config.public_key,
+    user_secret_key: data.systemUser.secret_user_key,
+  }).then(() => {
+    timer.stop();
+    loadings.value.confirm = false;
   });
 };
 

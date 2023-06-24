@@ -14,15 +14,16 @@ export function findCountryName(name?: string) {
   const data = useDataStore();
 
   return data.user.language === 'eng'
-    ? namesCountry[name ?? 'ru'].name_en
-    : namesCountry[name ?? 'ru'].name_ru;
+    ? namesCountry[name ?? 'ru']?.name_en
+    : namesCountry[name ?? 'ru']?.name_ru;
 }
 
 export function findCountryImage(name?: string) {
   const data = useDataStore();
 
   return (
-    data.countries.value.find((country) => country.org_id === name)?.image ?? ''
+    data.countries.value.find((country) => country.org_id === Number(name))
+      ?.image ?? ''
   );
 }
 

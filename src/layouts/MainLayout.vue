@@ -25,23 +25,6 @@
             color="orange"
             text-color="white" />
         </q-btn>
-
-        <q-tab-panels
-          v-model="states.tab"
-          animated
-          class="col-grow bg-page"
-          transition-next="slide-up"
-          transition-prev="slide-down">
-          <q-tab-panel
-            v-for="(title, index) in titles"
-            :name="title.name"
-            :key="index"
-            class="q-pa-sm">
-            <div class="text-h6 text-weight-bold text-center text-color">
-              {{ title.label }}
-            </div>
-          </q-tab-panel>
-        </q-tab-panels>
       </q-toolbar>
     </q-header>
 
@@ -53,36 +36,19 @@
       <router-view />
     </q-page-container>
 
-    <create-order-button></create-order-button>
-
-    <q-footer class="bg-page row no-wrap" bordered>
-      <q-btn
-        v-for="(tab, index) in tabs"
-        :key="index"
-        flat
-        no-caps
-        square
-        stack
-        color="primary"
-        class="col text-weight-bold"
-        :icon="tab.icon"
-        :label="tab.label"
-        @click="tab.action" />
-    </q-footer>
-
     <order-view></order-view>
 
     <order-dialog></order-dialog>
 
-<!--    <rent-dialog></rent-dialog>-->
+    <!--    <rent-dialog></rent-dialog>-->
 
-<!--    <rent-view></rent-view>-->
+    <!--    <rent-view></rent-view>-->
 
-<!--    <rent-build></rent-build>-->
+    <!--    <rent-build></rent-build>-->
 
-<!--    <rent-continue></rent-continue>-->
+    <!--    <rent-continue></rent-continue>-->
 
-<!--    <replenish-dialog></replenish-dialog>-->
+    <!--    <replenish-dialog></replenish-dialog>-->
   </q-layout>
 </template>
 

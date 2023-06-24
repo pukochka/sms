@@ -96,7 +96,7 @@ export const useDataStore = defineStore('data', {
     countriesValue: (state): SMSCountry[] =>
       state.countries.value.countryFilter(state.search.countries),
     multiCountries: (state): SMSMultiCountry[] =>
-      state.countries.multi.countryFilter(state.search.multiCountry),
+      state.countries.multi /**.countryFilter(state.search.multiCountry)*/,
     rentCountries: (state): SMSRentCountry[] =>
       state.countries.rent.countryFilter(state.search.rentCountry),
     /** */

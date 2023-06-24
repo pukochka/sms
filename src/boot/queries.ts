@@ -228,7 +228,7 @@ async function startApp(id: number, secret: string) {
     ),
     fetchSMS('countries', {
       public_key: config.public_key,
-      user_id: 1,
+      user_id: id,
     }),
     fetchSMS(
       'orders',
@@ -239,14 +239,5 @@ async function startApp(id: number, secret: string) {
       },
       true
     ),
-    // fetchSMS('getRentOrders', {
-    //   user_id: id,
-    //   user_secret_key: secret,
-    //   public_key: config.public_key,
-    // }),
-    // fetchSMS('getRentServices', {
-    //   country: '0',
-    //   public_key: config.public_key,
-    // }),
   ]);
 }

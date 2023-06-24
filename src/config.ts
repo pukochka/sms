@@ -29,7 +29,7 @@
 import { getQueryParam } from 'src/utils/helpers/string';
 
 const config = {
-  domain: 'https://smsvakback.bot-t.com/',
+  domain: 'https://smshubback.bot-t.com/',
   domain_bott: 'https://api.bot-t.com/v1/',
 
   bot_id: getQueryParam('bot_id') ?? 0,
