@@ -33,7 +33,7 @@
       @click="data.usePrice(props.price)" />
   </div>
 
-  <pagination-list v-if="condition" :search="search" :current-items="list">
+  <pagination-list v-if="condition" :search="input" :current-items="list">
     <template v-slot="{ item }">
       <component :is="itemComponent" :item="item"></component>
     </template>

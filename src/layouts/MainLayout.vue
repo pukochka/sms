@@ -4,7 +4,8 @@
       :showing="states.loadings.init || states.loadings.error"
       transition-show="none"
       transition-hide="fade"
-      class="z-max bg-page">
+      class="z-max bg-page"
+      style="position: fixed">
       <q-spinner-facebook size="80px" color="primary" />
     </q-inner-loading>
 
@@ -74,15 +75,15 @@
 
     <order-dialog></order-dialog>
 
-<!--    <rent-dialog></rent-dialog>-->
+    <!--    <rent-dialog></rent-dialog>-->
 
-<!--    <rent-view></rent-view>-->
+    <!--    <rent-view></rent-view>-->
 
-<!--    <rent-build></rent-build>-->
+    <!--    <rent-build></rent-build>-->
 
-<!--    <rent-continue></rent-continue>-->
+    <!--    <rent-continue></rent-continue>-->
 
-<!--    <replenish-dialog></replenish-dialog>-->
+    <!--    <replenish-dialog></replenish-dialog>-->
   </q-layout>
 </template>
 

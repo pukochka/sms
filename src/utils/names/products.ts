@@ -607,7 +607,7 @@ export function mapServiceTitle<
       item.longName = products[item.name]?.toString() ?? item.name;
       return item;
     })
-    .filter((item) => !(item.name.length > 2));
+    .filter((item) => !(item.name.includes('_')));
 }
 
 export { products };
