@@ -35,7 +35,7 @@ const config = {
 
   request_interval: 5000,
 
-  is_dark: window.Telegram.WebApp.colorScheme === 'dark',
+  dark: window.Telegram.WebApp.colorScheme === 'dark',
 
   activate_country_url:
     'https://smsactivate.s3.eu-central-1.amazonaws.com/assets/ico/country/',
