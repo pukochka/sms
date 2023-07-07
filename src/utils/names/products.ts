@@ -1,6 +1,3 @@
-import { useDataStore } from 'stores/data/dataStore';
-import namesCountry from 'src/utils/names/contries';
-
 const products: Record<string, string> = {
   tg: 'Telegram',
   fb: 'facebook',

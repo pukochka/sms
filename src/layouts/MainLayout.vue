@@ -4,7 +4,8 @@
       :showing="states.loadings.init || states.loadings.error"
       transition-show="none"
       transition-hide="fade"
-      class="z-max bg-page">
+      class="z-max bg-page"
+      style="position: fixed">
       <q-spinner-facebook size="80px" color="primary" />
     </q-inner-loading>
 

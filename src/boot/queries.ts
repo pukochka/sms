@@ -64,7 +64,12 @@ export async function fetchSMS<Q extends keyof SMSQueries>(
       } else if (query === 'setService') {
         /** */
 
-        data.selectService(response.data.data);
+        fetchSMS('countries', {
+          public_key: config.public_key,
+          user_id: data.user.id,
+        }).then(() => {
+          data.selectService(response.data.data);
+        });
 
         /** */
       } else if (query === 'setLanguage') {
