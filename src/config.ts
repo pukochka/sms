@@ -40,7 +40,7 @@ const config = {
 
   request_interval: 5000,
 
-  is_dark: window.Telegram.WebApp.colorScheme === 'dark',
+  dark: window.Telegram.WebApp.colorScheme === 'dark',
 };
 
 export default config;
