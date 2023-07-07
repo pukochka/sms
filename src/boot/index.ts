@@ -6,6 +6,7 @@ import { createPinia } from 'pinia';
 import { Dark } from 'quasar';
 
 import { fetchSMS, fetchUser } from 'boot/queries';
+import { useLocalColor } from 'src/utils/use/useColor';
 
 export default boot(({ app }) => {
   console.log('[ இ௰இ ]');
@@ -13,7 +14,9 @@ export default boot(({ app }) => {
   const pinia = createPinia();
   app.use(pinia);
 
-  Dark.set(config.is_dark);
+  Dark.set(config.dark);
+
+  useLocalColor();
 
   window.Telegram.WebApp.enableClosingConfirmation();
 
