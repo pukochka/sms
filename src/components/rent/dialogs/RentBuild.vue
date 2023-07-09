@@ -41,17 +41,17 @@
       <div>
         <div class="text-center q-pb-sm">{{ lang.rent_period }}</div>
 
-        <q-tabs
+        <q-select
+          outlined
           dense
+          behavior="dialog"
+          class="sms-input"
+          transition-show="slide-down"
+          transition-hide="slide-up"
+          :loading="loading.price"
           v-model="selected"
-          class="select-rent bg-primary rounded-10 overflow-hidden text-white">
-          <q-tab
-            v-for="item in time"
-            :key="item"
-            :name="item"
-            :label="item"
-            class="col rounded-10" />
-        </q-tabs>
+          :options="timeValues"
+          @update:model-value="updateValue" />
       </div>
 
       <div class="row q-my-sm q-gutter-y-sm">
@@ -61,7 +61,8 @@
           class="rounded-10 col-12"
           size="md"
           color="primary"
-          :loading="loading"
+          :disable="loading.price"
+          :loading="loading.create"
           :label="lang.create_order"
           @click="createOrder" />
       </div>
@@ -72,7 +73,6 @@
 <script lang="ts" setup>
 import config from 'src/config';
 import { computed, ref } from 'vue';
-import namesCountry from 'src/utils/names/contries';
 
 import { useLang } from 'src/utils/use/useLang';
 import { useStatesStore } from 'stores/states/statesStore';
@@ -88,11 +88,25 @@ const data = useDataStore();
 const lang = computed(() => useLang());
 
 const selected = ref(4);
-const loading = ref(false);
+const loading = ref({
+  create: false,
+  price: false,
+});
 
 // Полифилы)
 const price = computed(() =>
-  data?.services.selectedRent?.cost.comma(lang.value.fromAt + ' ')
+  data.rentPrice === -1
+    ? data?.services.selectedRent?.cost.comma()
+    : data.rentPrice.comma()
+);
+
+const timeValues = computed(() =>
+  Object.entries(lang.value.rentTime).map(([key, value]) => {
+    return {
+      label: value,
+      value: key,
+    };
+  })
 );
 
 const country = computed(() =>
@@ -103,7 +117,7 @@ const service = computed(() =>
 );
 
 const createOrder = () => {
-  loading.value = true;
+  loading.value.create = true;
 
   fetchSMS('createRentOrder', {
     public_key: config.public_key,
@@ -113,7 +127,7 @@ const createOrder = () => {
     country: data.countries.selectedRent?.id ?? '',
     time: selected.value,
   }).then(() => {
-    loading.value = false;
+    loading.value.create = false;
     states.closeDialog('rent_build');
   });
 };
@@ -121,9 +135,24 @@ const createOrder = () => {
 const ImageCountry = () => CountryImage(data.countries?.selectedRent?.id);
 const ImageService = () => ServiceImage(data?.services.selectedRent?.name);
 
-const time = [4, 12, 24, 48, 72];
+const update = () => {
+  data.rentPrice = -1;
+  selected.value = 4;
+};
 
-const update = () => (selected.value = 4);
+const updateValue = (value: { value: number }) => {
+  loading.value.price = true;
+
+  fetchSMS('getTimePrice', {
+    public_key: config.public_key,
+    user_secret_key: data.systemUser.secret_user_key,
+    service: data.services.selectedRent?.name ?? '',
+    country: data.countries.selectedRent?.id ?? '',
+    time: value?.value ?? 4,
+  }).then(() => {
+    loading.value.price = false;
+  });
+};
 
 const order = computed(() => [
   {

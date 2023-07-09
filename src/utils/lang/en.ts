@@ -20,6 +20,41 @@ const status_text: Record<number, string> = {
   17: 'The account is blocked',
 };
 
+const rentTime = {
+  '4': '4 hours',
+  '12': '12 hours',
+  '24': '1 day',
+  '48': '2 days',
+  '72': '3 days',
+  '96': '4 days',
+  '120': '5 days',
+  '144': '6 days',
+  '168': '7 days',
+  '192': '8 days',
+  '216': '9 days',
+  '240': '10 days',
+  '264': '11 days',
+  '288': '12 days',
+  '312': '13 days',
+  '336': '14 days',
+  '360': '15 days',
+  '384': '16 days',
+  '408': '17 days',
+  '432': '18 days',
+  '456': '19 days',
+  '480': '20 days',
+  '504': '21 days',
+  '528': '22 days',
+  '552': '23 days',
+  '576': '24 days',
+  '600': '25 days',
+  '624': '26 days',
+  '648': '27 days',
+  '672': '28 days',
+  '696': '29 days',
+  '720': '30 days',
+};
+
 const rent_status: Record<number, string> = {
   4: 'Waiting for SMS',
   9: 'Rent cancelled',
@@ -127,6 +162,8 @@ const enScheme = {
 
   cancel: 'Cancel',
   confirm: 'Confirm',
+
+  rentTime: rentTime,
 
   errors: {
     undefined_message:

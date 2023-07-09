@@ -18,7 +18,7 @@
       </q-item-label>
     </q-item-section>
 
-    <q-item-section side class="">
+    <q-item-section side class="no-wrap">
       <q-item-label class="text-center text-weight-bold text-color">
         {{ price }}
       </q-item-label>

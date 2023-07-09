@@ -200,6 +200,12 @@ export async function fetchSMS<Q extends keyof SMSQueries>(
         useNotify(lang.success_rent_cancel);
 
         /** */
+      } else if (query === 'getTimePrice') {
+        /** */
+
+        data.rentPrice = response.data.data;
+
+        /** */
       }
     });
   } catch (e) {}

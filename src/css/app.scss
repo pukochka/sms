@@ -104,6 +104,14 @@ body.body--light {
   border-start-start-radius: 10px;
 }
 
+.sms-input .q-field__control {
+  border-radius: 10px;
+}
+
+.q-select__dialog {
+  border-radius: 10px !important;
+}
+
 .select-rent .q-tab__indicator {
   height: calc(100% - 0.22em);
   background: transparent;

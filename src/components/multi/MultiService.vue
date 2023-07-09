@@ -22,7 +22,7 @@
       <q-item-label class="text-subtitle1">{{ label }}</q-item-label>
     </q-item-section>
 
-    <q-item-section side>
+    <q-item-section side class="no-wrap">
       <q-item-label class="text-color text-weight-bold">
         {{ lang.fromAt }} {{ price }}
       </q-item-label>

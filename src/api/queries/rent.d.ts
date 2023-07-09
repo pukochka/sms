@@ -72,4 +72,12 @@ declare interface SMSRentQueries {
    * Продлеваем аренду на указанное время
    * */
   continueRent: SMSContinueRentParams;
+
+  /**
+   * Цена
+   * */
+  getTimePrice: SMSCommonParams &
+    SMSCountryParam &
+    SMSServiceParam &
+    SMSRentTimeParam;
 }

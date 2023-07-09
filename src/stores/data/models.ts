@@ -37,6 +37,7 @@ export interface DataStore {
   price: Record<PriceNames, boolean>;
 
   prolongPrice: number;
+  rentPrice: number;
 }
 
 export type PriceNames = 'services' | 'multi' | 'rent';

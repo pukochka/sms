@@ -71,6 +71,7 @@ export const useDataStore = defineStore('data', {
       selectedMultiServices: [],
 
       prolongPrice: 0,
+      rentPrice: -1,
     } as DataStore),
   getters: {
     /** */
