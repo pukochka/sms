@@ -1,6 +1,3 @@
-import { useDataStore } from 'stores/data/dataStore';
-import namesCountry from 'src/utils/names/contries';
-
 const products: Record<string, string> = {
   lb: 'Mailru Group',
   vk: 'Вконтакте',
@@ -652,9 +649,9 @@ const products: Record<string, string> = {
   ot: 'Любой другой',
 };
 
-export function mapServiceTitle<
-  T extends SMSServices | SMSRentService | SMSMultiService
->(value: Array<T>): Array<T> {
+export function mapServiceTitle<T extends SMSServices>(
+  value: Array<T>
+): Array<T> {
   return value
     .map((item) => {
       item.longName = products[item.name]?.toString() ?? item.name;

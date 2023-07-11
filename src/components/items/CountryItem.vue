@@ -36,39 +36,42 @@
 import config from 'src/config';
 
 import { computed, ref } from 'vue';
-import { defaultMultiCountry } from 'stores/content/defaults';
+import { defaultCountry } from 'stores/content/defaults';
 import { findCountryName } from 'src/utils/names/find';
 
 import { useDataStore } from 'stores/data/dataStore';
 
 import { fetchSMS } from 'boot/queries';
+import { LocalStorage } from 'quasar';
 
 const props = withDefaults(defineProps<Props>(), {
-  item: () => defaultMultiCountry,
+  item: () => defaultCountry,
 });
 
 const data = useDataStore();
 
 const loading = ref(false);
 
-const title = computed(() => findCountryName(props.item.org_id));
+const title = computed(() => findCountryName(props.item.org_id.toString()));
 
 const selectCountry = () => {
   loading.value = true;
+  LocalStorage.set('last-country', props.item.org_id);
 
   fetchSMS('services', {
-    country: props.item.org_id,
+    country: props.item.org_id.toString(),
     public_key: config.public_key,
   }).then(() => {
     loading.value = false;
     data.countries.selectedValue = props.item;
+
     data.search.countries = '';
     data.search.services = '';
   });
 };
 
 interface Props {
-  item?: SMSMultiCountry;
+  item?: SMSCountry;
 }
 </script>
 

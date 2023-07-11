@@ -13,19 +13,8 @@ export interface StatesStore {
   };
 }
 
-export type DialogNames =
-  | 'order'
-  | 'orders_view'
-  | 'rent'
-  | 'replenish'
-  | 'rent_view'
-  | 'rent_continue'
-  | 'rent_build';
+export type DialogNames = 'order' | 'orders_view' | 'replenish';
 
-export type LoadingNames =
-  | 'init'
-  | 'error'
-  | 'getCountries'
-  | 'getRentCountries';
+export type LoadingNames = 'init' | 'error';
 
-export type TabNames = 'service' | 'multi-service' | 'rent';
+export type TabNames = 'service';

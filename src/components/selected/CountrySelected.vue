@@ -42,16 +42,16 @@
 <script lang="ts" setup>
 import { computed } from 'vue';
 
-import namesCountry from 'src/utils/names/contries';
-
 import { useDataStore } from 'stores/data/dataStore';
-
 import { useLang } from 'src/utils/use/useLang';
+import { findCountryName } from 'src/utils/names/find';
 
 const data = useDataStore();
 const lang = computed(() => useLang());
 
-const label = computed(() => data.countries.selectedValue?.name_en);
+const label = computed(() =>
+  findCountryName(data.countries.selectedValue?.org_id?.toString())
+);
 
 const image = computed(() => data.countries.selectedValue?.image ?? '');
 

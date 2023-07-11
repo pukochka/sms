@@ -1,33 +1,18 @@
-import config from 'src/config';
 import { defineStore } from 'pinia';
 
-import {
-  DialogNames,
-  LoadingNames,
-  StatesStore,
-  TabNames,
-} from 'stores/states/models';
-
-import { fetchSMS } from 'boot/queries';
-import { useDataStore } from 'stores/data/dataStore';
+import { DialogNames, LoadingNames, StatesStore } from 'stores/states/models';
 
 export const useStatesStore = defineStore('states', {
   state: () =>
     ({
       dialogs: {
         order: false,
-        rent: false,
-        rent_view: false,
-        rent_build: false,
-        rent_continue: false,
+
         orders_view: false,
         replenish: false,
       },
 
       loadings: {
-        getCountries: false,
-        getRentCountries: false,
-
         init: true,
         error: false,
       },
@@ -56,25 +41,6 @@ export const useStatesStore = defineStore('states', {
 
     load(section: LoadingNames, value?: boolean) {
       this.loadings[section] = value ?? false;
-    },
-
-    toggleTab(name: TabNames) {
-      const data = useDataStore();
-      if (
-        this.tab !== 'multi-service' &&
-        name === 'multi-service' &&
-        data.countries.multi.length === 0
-      ) {
-        fetchSMS('getCountries', { public_key: config.public_key });
-      } else if (
-        this.tab !== 'rent' &&
-        name === 'rent' &&
-        data.countries.rent.length === 0
-      ) {
-        fetchSMS('getRentCountries', { public_key: config.public_key });
-      }
-
-      this.tab = name;
     },
   },
 });

@@ -54,7 +54,7 @@
 <script lang="ts" setup>
 import { computed, ref } from 'vue';
 
-import { defaultServiceItem } from 'stores/content/defaults';
+import { defaultService } from 'stores/content/defaults';
 
 import { useDataStore } from 'stores/data/dataStore';
 
@@ -63,7 +63,7 @@ import config from 'src/config';
 import { useLang } from 'src/utils/use/useLang';
 
 const props = withDefaults(defineProps<Props>(), {
-  item: () => defaultServiceItem,
+  item: () => defaultService,
 });
 
 const data = useDataStore();
@@ -81,7 +81,7 @@ const createOrder = () => {
 
   fetchSMS('createOrder', {
     service: props.item.name,
-    country: data.selectedCountry?.org_id ?? '',
+    country: data.selectedCountry?.org_id.toString() ?? '',
     user_id: data.user?.id ?? 0,
     public_key: config.public_key,
     user_secret_key: data.systemUserValue?.secret_user_key ?? '',

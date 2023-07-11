@@ -53,10 +53,6 @@
           </q-item-section>
 
           <q-item-section class="text-center"> Русский </q-item-section>
-
-          <q-item-section avatar>
-            <ImageCountryRUS />
-          </q-item-section>
         </q-item>
 
         <q-item clickable v-ripple @click="setLanguage('eng')">
@@ -70,10 +66,6 @@
           </q-item-section>
 
           <q-item-section class="text-center"> English </q-item-section>
-
-          <q-item-section avatar>
-            <ImageCountryENG />
-          </q-item-section>
         </q-item>
       </q-list>
     </q-menu>
@@ -90,11 +82,7 @@ import { useStatesStore } from 'stores/states/statesStore';
 import { CountryImage } from 'src/utils/images';
 
 import { fetchSMS } from 'boot/queries';
-import {
-  mdiOrderBoolAscending,
-  mdiWallet,
-  mdiLabelPercent,
-} from '@quasar/extras/mdi-v7';
+import { mdiOrderBoolAscending, mdiWallet } from '@quasar/extras/mdi-v7';
 
 const data = useDataStore();
 const states = useStatesStore();
@@ -106,13 +94,7 @@ const languageText = computed(() =>
 );
 
 const hint = computed(() =>
-  data.activeRents.length && data.activeOrders.length
-    ? lang.value.active_rent_activations
-    : data.activeOrders.length
-    ? lang.value.active_orders_activations
-    : data.activeRents.length
-    ? lang.value.active_orders_rent
-    : ''
+  data.activeOrders.length ? lang.value.active_orders_activations : ''
 );
 
 const setLanguage = (lang: 'ru' | 'eng') => {
@@ -123,26 +105,11 @@ const setLanguage = (lang: 'ru' | 'eng') => {
   });
 };
 
-const ImageCountryRUS = () => CountryImage('ru');
-const ImageCountryENG = () => CountryImage('gb');
-
 const openOrders = () => {
   states.toggleDrawer();
 
   states.openDialog('orders_view');
 };
-
-// const openRent = () => {
-//   states.toggleDrawer();
-//
-//   states.openDialog('rent');
-// };
-//
-// const openReplenish = () => {
-//   states.toggleDrawer();
-//
-//   states.openDialog('replenish');
-// };
 
 const content = computed((): Content[] => [
   {
@@ -158,13 +125,6 @@ const content = computed((): Content[] => [
     class: data.activeOrders.length > 0 ? ' bg-orange rounded-10 q-pa-xs' : '',
     action: openOrders,
   },
-  // {
-  //   label: lang.value.rents,
-  //   icon: mdiLabelPercent,
-  //   value: data.rentsValue.length,
-  //   class: data.activeRents.length > 0 ? ' bg-orange rounded-10 q-pa-xs' : '',
-  //   action: openRent,
-  // },
   {
     label: lang.value.change_language,
     icon: 'language',

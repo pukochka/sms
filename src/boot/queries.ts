@@ -8,7 +8,7 @@ import { useStatesStore } from 'stores/states/statesStore';
 
 import { useNotify } from 'src/utils/use/useNotify';
 import { useColor } from 'src/utils/use/useColor';
-import { useLang } from 'src/utils/use/useLang';
+import { LocalStorage } from 'quasar';
 
 export async function fetchSMS<Q extends keyof SMSQueries>(
   query: Q,
@@ -17,7 +17,6 @@ export async function fetchSMS<Q extends keyof SMSQueries>(
 ) {
   const data = useDataStore();
   const states = useStatesStore();
-  const lang = useLang();
 
   try {
     return await sms({
@@ -27,44 +26,20 @@ export async function fetchSMS<Q extends keyof SMSQueries>(
       if (query === 'services') {
         /** */
 
-        data.setServices(response.data.data, true);
+        data.setServices(response.data.data);
 
         /** */
       } else if (query === 'countries') {
         /** */
 
         data.countries.value = response.data.data;
-        if (open) states.loadings.init = false;
-
-        /** */
-      } else if (query === 'getCountries') {
-        /** */
-
-        data.countries.multi = response.data.data ?? [];
-
-        /** */
-      } else if (query === 'getServices') {
-        /** */
-
-        data.setMultiServices(response.data.data);
-
-        /** */
-      } else if (query === 'setCountry') {
-        /** */
-
-        data.selectCountry(response.data.data);
+        data.setLastCountry();
 
         /** */
       } else if (query === 'getSettings') {
         /** */
 
         useColor(response.data.data ?? 1);
-
-        /** */
-      } else if (query === 'setService') {
-        /** */
-
-        data.selectService(response.data.data);
 
         /** */
       } else if (query === 'setLanguage') {
@@ -85,12 +60,6 @@ export async function fetchSMS<Q extends keyof SMSQueries>(
         data.orders.value = response.data.data;
 
         if (open) useNotify('', true);
-
-        /** */
-      } else if (query === 'getRentOrders') {
-        /** */
-
-        data.orders.rent = response.data.data ?? [];
 
         /** */
       } else if (
@@ -126,75 +95,6 @@ export async function fetchSMS<Q extends keyof SMSQueries>(
         );
 
         /** */
-      } else if (query === 'createMulti') {
-        /** */
-
-        useNotify(lang.multi_success + response.data?.data?.length ?? 0);
-        fetchSMS(
-          'orders',
-          {
-            user_id: data.user.id,
-            user_secret_key: data.systemUser.secret_user_key,
-            public_key: config.public_key,
-          },
-          true
-        );
-
-        /** */
-      } else if (query === 'getRentCountries') {
-        /** */
-
-        data.countries.rent = response.data.data ?? [];
-
-        /** */
-      } else if (query === 'getRentServices') {
-        /** */
-
-        data.setRentServices(response.data.data ?? []);
-
-        /** */
-      } else if (query === 'getRentOrder') {
-        /** */
-
-        data.orders.selectedRent = response.data.data;
-        if (open) states.openDialog('rent_view');
-
-        /** */
-      } else if (query === 'getContinuePrice') {
-        /** */
-
-        data.prolongPrice = response.data.data;
-        states.openDialog('rent_continue');
-
-        /** */
-      } else if (query === 'createRentOrder') {
-        /** */
-
-        data.orders.selectedRent = response.data.data;
-        states.openDialog('rent_view');
-
-        /** */
-      } else if (query === 'continueRent') {
-        /** */
-
-        data.orders.selectedRent = response.data.data;
-        useNotify(lang.success_rent_continue);
-
-        /** */
-      } else if (query === 'confirmRentOrder') {
-        /** */
-
-        data.orders.selectedRent = response.data.data;
-        useNotify(lang.success_rent_confirm);
-
-        /** */
-      } else if (query === 'closeRentOrder') {
-        /** */
-
-        data.orders.selectedRent = response.data.data;
-        useNotify(lang.success_rent_cancel);
-
-        /** */
       }
     });
   } catch (e) {}
@@ -223,7 +123,10 @@ async function startApp(id: number, secret: string) {
   return await Promise.all([
     fetchSMS(
       'services',
-      { public_key: config.public_key, country: 'ru' },
+      {
+        public_key: config.public_key,
+        country: LocalStorage.getItem('last-country') ?? 'ru',
+      },
       true
     ),
     fetchSMS('countries', {

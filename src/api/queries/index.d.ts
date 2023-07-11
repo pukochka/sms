@@ -9,9 +9,6 @@
 // |                                                                    |
 // ----------------------------------------------------------------------
 
-declare type SMSQueries = SMSCommonQueries &
-  SMSMultiQueries &
-  SMSRentQueries &
-  SMSServiceQueries;
+declare type SMSQueries = SMSCommonQueries & SMSServiceQueries;
 
 declare type SMSParams<P extends keyof SMSQueries> = SMSQueries[P];

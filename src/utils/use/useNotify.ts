@@ -8,15 +8,9 @@ export function useNotify(message: string, activations?: boolean) {
   const states = useStatesStore();
   const lang = useLang();
 
-  if (
-    activations &&
-    data.activeOrders.length === 0 &&
-    data.activeRents.length === 0
-  )
-    return;
+  if (activations && data.activeOrders.length === 0) return;
 
   const serviceMessage = `<div class="q-mx-lg">${lang.activations_notify} : ${data.activeOrders.length}</div>`;
-  const rentMessage = `<div class="q-mx-lg">${lang.rent_notify} : ${data.activeRents.length}</div>`;
 
   const activationButtons = [
     {
@@ -34,8 +28,6 @@ export function useNotify(message: string, activations?: boolean) {
       unelevated: true,
       handler() {
         if (data.activeOrders.length > 1) states.openDialog('orders_view');
-        else if (data.activeRents.length > 1) states.openDialog('rent');
-        else if (data.activeRents.length) data.setRent(data.activeRents[0]);
         else if (data.activeOrders.length) data.setOrder(data.activeOrders[0]);
       },
     },
@@ -43,14 +35,7 @@ export function useNotify(message: string, activations?: boolean) {
 
   const buttons = activations ? activationButtons : [];
 
-  const msg =
-    data.activeRents.length && data.activeOrders.length
-      ? serviceMessage + rentMessage
-      : data.activeOrders.length
-      ? serviceMessage
-      : data.activeRents.length
-      ? rentMessage
-      : '';
+  const msg = data.activeOrders.length ? serviceMessage : '';
 
   Notify.create({
     message: activations ? msg : message,
