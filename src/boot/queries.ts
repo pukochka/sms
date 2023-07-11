@@ -9,6 +9,7 @@ import { useStatesStore } from 'stores/states/statesStore';
 import { useNotify } from 'src/utils/use/useNotify';
 import { useColor } from 'src/utils/use/useColor';
 import { useLang } from 'src/utils/use/useLang';
+import { LocalStorage } from 'quasar';
 
 export async function fetchSMS<Q extends keyof SMSQueries>(
   query: Q,
@@ -27,20 +28,27 @@ export async function fetchSMS<Q extends keyof SMSQueries>(
       if (query === 'services') {
         /** */
 
-        data.setServices(response.data.data, true);
+        data.setServices(response.data.data);
 
         /** */
       } else if (query === 'countries') {
         /** */
 
         data.countries.value = response.data.data;
-        if (open) states.loadings.init = false;
+        data.setLastCountry(
+          LocalStorage.getItem('last-country') ?? '',
+          'value'
+        );
 
         /** */
       } else if (query === 'getCountries') {
         /** */
 
         data.countries.multi = response.data.data ?? [];
+        data.setLastCountry(
+          LocalStorage.getItem('last-multi-country') ?? '',
+          'multi'
+        );
 
         /** */
       } else if (query === 'getServices') {
@@ -87,12 +95,6 @@ export async function fetchSMS<Q extends keyof SMSQueries>(
         if (open) useNotify('', true);
 
         /** */
-      } else if (query === 'getRentOrders') {
-        /** */
-
-        data.orders.rent = response.data.data ?? [];
-
-        /** */
       } else if (
         query === 'closeOrder' ||
         query === 'confirmOrder' ||
@@ -121,9 +123,9 @@ export async function fetchSMS<Q extends keyof SMSQueries>(
 
         data.userValue = response.data.data;
 
-        startApp(data.user.id, data.systemUser.secret_user_key).then(
-          () => (states.loadings.init = false)
-        );
+        startApp().then(() => {
+          states.loadings.init = false;
+        });
 
         /** */
       } else if (query === 'createMulti') {
@@ -139,60 +141,6 @@ export async function fetchSMS<Q extends keyof SMSQueries>(
           },
           true
         );
-
-        /** */
-      } else if (query === 'getRentCountries') {
-        /** */
-
-        data.countries.rent = response.data.data ?? [];
-
-        /** */
-      } else if (query === 'getRentServices') {
-        /** */
-
-        data.setRentServices(response.data.data ?? []);
-
-        /** */
-      } else if (query === 'getRentOrder') {
-        /** */
-
-        data.orders.selectedRent = response.data.data;
-        if (open) states.openDialog('rent_view');
-
-        /** */
-      } else if (query === 'getContinuePrice') {
-        /** */
-
-        data.prolongPrice = response.data.data;
-        states.openDialog('rent_continue');
-
-        /** */
-      } else if (query === 'createRentOrder') {
-        /** */
-
-        data.orders.selectedRent = response.data.data;
-        states.openDialog('rent_view');
-
-        /** */
-      } else if (query === 'continueRent') {
-        /** */
-
-        data.orders.selectedRent = response.data.data;
-        useNotify(lang.success_rent_continue);
-
-        /** */
-      } else if (query === 'confirmRentOrder') {
-        /** */
-
-        data.orders.selectedRent = response.data.data;
-        useNotify(lang.success_rent_confirm);
-
-        /** */
-      } else if (query === 'closeRentOrder') {
-        /** */
-
-        data.orders.selectedRent = response.data.data;
-        useNotify(lang.success_rent_cancel);
 
         /** */
       }
@@ -213,40 +161,36 @@ export async function fetchUser() {
       data.systemUserValue = response.data.data;
 
       fetchSMS('getUser', {
-        user_id: response.data.data.user.telegram_id,
+        user_id: data.systemUser.user.telegram_id,
       });
     });
   } catch (e) {}
 }
 
-async function startApp(id: number, secret: string) {
+async function startApp() {
+  const data = useDataStore();
+
   return await Promise.all([
     fetchSMS(
       'services',
-      { public_key: config.public_key, country: 'ru' },
+      {
+        public_key: config.public_key,
+        country: LocalStorage.getItem('last-country') ?? 'ru',
+      },
       true
     ),
     fetchSMS('countries', {
       public_key: config.public_key,
-      user_id: 1,
+      user_id: data.systemUser.user.telegram_id,
     }),
     fetchSMS(
       'orders',
       {
-        user_id: id,
-        user_secret_key: secret,
+        user_id: data.systemUser.user.telegram_id,
+        user_secret_key: data.systemUser.secret_user_key,
         public_key: config.public_key,
       },
       true
     ),
-    // fetchSMS('getRentOrders', {
-    //   user_id: id,
-    //   user_secret_key: secret,
-    //   public_key: config.public_key,
-    // }),
-    // fetchSMS('getRentServices', {
-    //   country: '0',
-    //   public_key: config.public_key,
-    // }),
   ]);
 }

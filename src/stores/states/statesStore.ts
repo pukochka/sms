@@ -16,17 +16,13 @@ export const useStatesStore = defineStore('states', {
     ({
       dialogs: {
         order: false,
-        rent: false,
-        rent_view: false,
-        rent_build: false,
-        rent_continue: false,
+
         orders_view: false,
         replenish: false,
       },
 
       loadings: {
         getCountries: false,
-        getRentCountries: false,
 
         init: true,
         error: false,
@@ -65,13 +61,7 @@ export const useStatesStore = defineStore('states', {
         name === 'multi-service' &&
         data.countries.multi.length === 0
       ) {
-        fetchSMS('getCountries', { public_key: config.public_key });
-      } else if (
-        this.tab !== 'rent' &&
-        name === 'rent' &&
-        data.countries.rent.length === 0
-      ) {
-        fetchSMS('getRentCountries', { public_key: config.public_key });
+        fetchSMS('getCountries', { public_key: config.public_key }).then();
       }
 
       this.tab = name;

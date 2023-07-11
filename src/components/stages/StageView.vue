@@ -21,10 +21,8 @@
         :price="stage.price"></stage-item>
 
       <q-inner-loading
-        :showing="
-          states.loadings.getCountries || states.loadings.getRentCountries
-        "
-        class="bg-page">
+        :showing="states.loadings.getCountries"
+        class="bg-page q-mt-none">
         <q-spinner size="50px" color="primary" />
       </q-inner-loading>
     </div>

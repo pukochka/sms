@@ -50,8 +50,9 @@
 </template>
 
 <script lang="ts" setup>
-import { useStatesStore } from 'stores/states/statesStore';
 import { computed, ref } from 'vue';
+
+import { useStatesStore } from 'stores/states/statesStore';
 import { useLang } from 'src/utils/use/useLang';
 
 const states = useStatesStore();

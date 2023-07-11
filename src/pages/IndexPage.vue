@@ -32,10 +32,6 @@ const panels = computed((): Panels[] => [
     name: 'multi-service',
     stages: multiStages.value,
   },
-  // {
-  //   name: 'rent',
-  //   stages: rentStages.value,
-  // },
 ]);
 
 interface Panels {

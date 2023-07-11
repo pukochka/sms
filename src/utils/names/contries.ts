@@ -1,5 +1,3 @@
-import { useDataStore } from 'stores/data/dataStore';
-
 const namesCountry: Record<string, Record<string, string>> = {
   af: {
     name_en: 'Afghanistan',

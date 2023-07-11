@@ -4,14 +4,11 @@ import { useLang } from 'src/utils/use/useLang';
 
 import CountrySelected from 'components/selected/CountrySelected.vue';
 import MultiCountrySelected from 'components/selected/MultiCountrySelected.vue';
-// import ServiceSelected from 'components/selected/ServiceSelected.vue';
 
 import ServiceItem from 'components/items/ServiceItem.vue';
 import CountryItem from 'components/items/CountryItem.vue';
 import MultiCountry from 'components/multi/MultiCountry.vue';
 import MultiService from 'components/multi/MultiService.vue';
-// import RentService from 'components/rent/RentService.vue';
-// import RentCountry from 'components/rent/RentCountry.vue';
 
 import { useDataStore } from 'stores/data/dataStore';
 
@@ -59,25 +56,3 @@ export const multiStages = computed((): Stages[] => [
     price: 'multi',
   },
 ]);
-
-// export const rentStages = computed((): Stages[] => [
-//   {
-//     label: useLang().select_country,
-//     search: 'rentCountry',
-//     selected: useDataStore().countries.selectedRent,
-//     condition: useDataStore().countries.selectedRent === null,
-//     list: useDataStore().rentCountries,
-//     selectedComponent: CountrySelected,
-//     itemComponent: RentCountry,
-//   },
-//   {
-//     label: useLang().select_service,
-//     search: 'rentService',
-//     selected: useDataStore().countries.selectedRent,
-//     condition: useDataStore().countries.selectedRent !== null,
-//     list: useDataStore().rentServices,
-//     text: useLang().select_notify_country,
-//     itemComponent: RentService,
-//     price: 'rent',
-//   },
-// ]);

@@ -106,13 +106,7 @@ const languageText = computed(() =>
 );
 
 const hint = computed(() =>
-  data.activeRents.length && data.activeOrders.length
-    ? lang.value.active_rent_activations
-    : data.activeOrders.length
-    ? lang.value.active_orders_activations
-    : data.activeRents.length
-    ? lang.value.active_orders_rent
-    : ''
+  data.activeOrders.length ? lang.value.active_orders_activations : ''
 );
 
 const setLanguage = (lang: 'ru' | 'eng') => {
@@ -132,18 +126,6 @@ const openOrders = () => {
   states.openDialog('orders_view');
 };
 
-// const openRent = () => {
-//   states.toggleDrawer();
-//
-//   states.openDialog('rent');
-// };
-//
-// const openReplenish = () => {
-//   states.toggleDrawer();
-//
-//   states.openDialog('replenish');
-// };
-
 const content = computed((): Content[] => [
   {
     label: lang.value.balance,
@@ -158,13 +140,6 @@ const content = computed((): Content[] => [
     class: data.activeOrders.length > 0 ? ' bg-orange rounded-10 q-pa-xs' : '',
     action: openOrders,
   },
-  // {
-  //   label: lang.value.rents,
-  //   icon: mdiLabelPercent,
-  //   value: data.rentsValue.length,
-  //   class: data.activeRents.length > 0 ? ' bg-orange rounded-10 q-pa-xs' : '',
-  //   action: openRent,
-  // },
   {
     label: lang.value.change_language,
     icon: 'language',

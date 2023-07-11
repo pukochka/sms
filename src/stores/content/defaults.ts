@@ -1,42 +1,28 @@
-const defaultServiceItem: SMSServices = {
+export const defaultServiceItem: SMSServices = {
   image: null,
   name: '',
   longName: '',
 };
 
-const defaultCountryItem: SMSCountry = {
-  id: '-1',
-  image: null,
-  title_eng: '',
-  title_ru: '',
-  title: '',
-  cost: 1,
-  count: 1,
-};
-
-const defaultMultiCountry: SMSMultiCountry = {
+export const defaultMultiCountry: SMSMultiCountry = {
   org_id: '0',
   image: '',
   name_ru: '',
   name_en: '',
 };
 
-const defaultRentCountry: SMSRentCountry = {
-  id: '0',
-  image: '',
+export const defaultCountry: SMSCountry = {
+  org_id: '',
+  id: '',
+  title: '',
   title_ru: '',
   title_eng: '',
-};
-
-const defaultRentService: SMSRentService = {
-  name: '',
-  count: 0,
-  cost: '',
   image: '',
-  longName: '',
+  count: 0,
+  cost: 0,
 };
 
-const defaultMultiService: SMSMultiService = {
+export const defaultMultiService: SMSMultiService = {
   cost: 0,
   count: 0,
   name: '',
@@ -44,7 +30,7 @@ const defaultMultiService: SMSMultiService = {
   image: '',
 };
 
-const defaultSystemUser: SystemUser = {
+export const defaultSystemUser: SystemUser = {
   id: 0,
   bot_id: 0,
   user: {
@@ -64,13 +50,13 @@ const defaultSystemUser: SystemUser = {
   secret_user_key: '',
 };
 
-const defaultUser: SMSUser = {
+export const defaultUser: SMSUser = {
   id: 0,
   language: '',
   service: '',
 };
 
-const defaultOrder: SMSOrder = {
+export const defaultOrder: SMSOrder = {
   id: 0,
   phone: '79963811573',
   time: 0,
@@ -79,29 +65,4 @@ const defaultOrder: SMSOrder = {
   country: '',
   cost: 0,
   status: 8,
-};
-
-const defaultRentOrder: SMSRentOrder = {
-  id: 0,
-  phone: '79963811573',
-  start_time: '0',
-  end_time: '0',
-  codes: '',
-  service: '',
-  country: '',
-  cost: 0,
-  status: 8,
-};
-
-export {
-  defaultServiceItem,
-  defaultCountryItem,
-  defaultSystemUser,
-  defaultMultiCountry,
-  defaultMultiService,
-  defaultRentCountry,
-  defaultRentService,
-  defaultRentOrder,
-  defaultUser,
-  defaultOrder,
 };

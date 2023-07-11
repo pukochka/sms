@@ -50,7 +50,7 @@ declare interface SMSUser {
 declare interface SMSCountry {
   /**
    * Уникальный идентификатор */
-  org_id?: string;
+  org_id: string;
   /**
    * Уникальный идентификатор */
   id: string;
@@ -78,66 +78,6 @@ declare interface SMSCountry {
    * цена номера с учетом наценки от создателя бота
    * */
   cost: number;
-}
-
-/**
- * Сущность страны для выбора
- * */
-declare interface SMSRentCountry {
-  /**
-   * Уникальный идентификатор */
-  id: string;
-  /**
-   * Название страны
-   * */
-  title_ru: string;
-  /**
-   * Название страны
-   * */
-  title_eng: string;
-  /**
-   * Флаг страны(Если нет, то null)
-   * */
-  image: string | null;
-}
-
-/**
- * Сущность страны для выбора
- * */
-declare interface SMSRentService {
-  /**
-   *
-   * */
-  name: string;
-  /**
-   *
-   * */
-  count: number;
-  /**
-   *
-   * */
-  cost: string;
-  /**
-   *
-   * */
-  image: string;
-  /**
-   *
-   * */
-  longName: string;
-}
-
-/**
- * Сущность оператора для выбора
- * */
-declare interface SMSOperator {
-  /**
-   * Уникальный идентификатор */
-  id: number;
-  /**
-   * Уникальный идентификатор
-   * */
-  title: string;
 }
 
 /**
@@ -244,66 +184,18 @@ declare interface SMSOrder {
   status: 0 | 1 | 3 | 4 | 5 | 6 | 8 | 9 | 10;
 }
 
-/**
- * Сущность заказа
- * */
-declare interface SMSRentOrder {
-  /**
-   * Уникальный идентификатор заказа
-   * */
-  id: number;
-  /**
-   * номер телефона
-   * */
-  phone: string;
-  /**
-   * Коды
-   * */
-  codes: string | null;
-  /**
-   * Время в unix формате
-   * */
-  start_time: string;
-  /**
-   * Время в unix формате
-   * */
-  end_time: string;
-  /**
-   *
-   * */
-  service: string;
-  /**
-   *
-   * */
-  country: string;
-  /**
-   *
-   * */
-  cost: number;
-  /**
-   * Статус
-   */
-  status: 0 | 1 | 3 | 4 | 5 | 6 | 8 | 9 | 10;
-}
-
 declare interface Stages {
   label: string;
 
   caption?: string;
 
-  search:
-    | 'services'
-    | 'operators'
-    | 'countries'
-    | 'multiServices'
-    | 'multiCountry'
-    | 'rentCountry'
-    | 'rentService';
+  search: 'services' | 'countries' | 'multiServices' | 'multiCountry';
+
   condition: boolean;
   list: Array<any>;
   selected: any | null;
   itemComponent: any;
-  price?: 'services' | 'multi' | 'rent';
+  price?: 'services' | 'multi';
   text?: string;
   selectedComponent?: any;
 }

@@ -31,11 +31,11 @@ import config from 'src/config';
 import { computed, ref } from 'vue';
 
 import { defaultMultiCountry } from 'stores/content/defaults';
-import namesCountry from 'src/utils/names/contries';
 
 import { useDataStore } from 'stores/data/dataStore';
 import { fetchSMS } from 'boot/queries';
 import { findCountryName } from 'src/utils/names/find';
+import { LocalStorage } from 'quasar';
 
 const props = withDefaults(defineProps<MultiCountryProps>(), {
   item: () => defaultMultiCountry,
@@ -48,6 +48,7 @@ const label = computed(() => findCountryName(props.item.org_id));
 
 const select = () => {
   loading.value = true;
+  LocalStorage.set('last-multi-country', props.item.org_id);
 
   fetchSMS('getServices', {
     country: props.item.org_id,

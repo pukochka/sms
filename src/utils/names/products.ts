@@ -599,15 +599,15 @@ const products: Record<string, string> = {
   yr: 'ЯRUS',
 };
 
-export function mapServiceTitle<
-  T extends SMSServices | SMSRentService | SMSMultiService
->(value: Array<T>): Array<T> {
+export function mapServiceTitle<T extends SMSServices | SMSMultiService>(
+  value: Array<T>
+): Array<T> {
   return value
     .map((item) => {
       item.longName = products[item.name]?.toString() ?? item.name;
       return item;
     })
-    .filter((item) => !(item.name.includes('_')));
+    .filter((item) => !item.name.includes('_'));
 }
 
 export { products };
