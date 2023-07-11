@@ -1,13 +1,11 @@
 import namesCountry from 'src/utils/names/contries';
 import { useDataStore } from 'stores/data/dataStore';
+import { products } from 'src/utils/names/products';
 
 export function findServiceName(name?: string) {
   const data = useDataStore();
 
-  return (
-    data.services.value.find((service) => service.name === (name ?? ''))
-      ?.longName ?? name
-  );
+  return products[name ?? ''] ?? name;
 }
 
 export function findCountryName(name?: string) {

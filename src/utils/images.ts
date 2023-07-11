@@ -1,5 +1,3 @@
-import config from 'src/config';
-
 import { h } from 'vue';
 import { QImg } from 'quasar';
 import { findCountryImage, findServiceImage } from 'src/utils/names/find';

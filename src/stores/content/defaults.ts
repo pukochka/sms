@@ -1,5 +1,7 @@
-export const defaultServiceItem: SMSServices = {
-  image: null,
+export const defaultService: SMSServices = {
+  cost: 0,
+  count: 0,
+  image: '',
   name: '',
   longName: '',
 };
@@ -12,14 +14,10 @@ export const defaultMultiCountry: SMSMultiCountry = {
 };
 
 export const defaultCountry: SMSCountry = {
-  org_id: '',
-  id: '',
-  title: '',
-  title_ru: '',
-  title_eng: '',
   image: '',
-  count: 0,
-  cost: 0,
+  name_en: '',
+  name_ru: '',
+  org_id: '',
 };
 
 export const defaultMultiService: SMSMultiService = {

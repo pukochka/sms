@@ -49,53 +49,44 @@ declare interface SMSUser {
  * */
 declare interface SMSCountry {
   /**
-   * Уникальный идентификатор */
+   *
+   * */
+  image: string;
+  /**
+   *
+   * */
+  name_en: string;
+  /**
+   *
+   * */
+  name_ru: string;
+  /**
+   *
+   * */
   org_id: string;
-  /**
-   * Уникальный идентификатор */
-  id: string;
-  /**
-   * Название страны в соответствии с выбранным языком
-   * */
-  title: string;
-  /**
-   * Название страны
-   * */
-  title_ru: string;
-  /**
-   * Название страны
-   * */
-  title_eng: string;
-  /**
-   * Флаг страны(Если нет, то null)
-   * */
-  image: string | null;
-  /**
-   * доступное количество к заказу
-   * */
-  count: number;
-  /**
-   * цена номера с учетом наценки от создателя бота
-   * */
-  cost: number;
 }
 
 /**
  * Сущность сервисов для покупки
  * */
 declare interface SMSServices {
-  /**
-   * название сервиса
-   * */
-  name: string;
-  /**
-   * название сервиса
-   * */
   longName: string;
   /**
-   * картинка сервиса (Или null)
+   *
    * */
-  image: string | null;
+  cost: number;
+  /**
+   *
+   * */
+  count: number;
+  /**
+   *
+   * */
+  image: string;
+  /**
+   *
+   * */
+  name: string;
 }
 
 /**
