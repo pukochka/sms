@@ -1,7 +1,7 @@
 import { Dialog } from 'quasar';
 import { useLang } from './useLang';
 
-export function useDialog(message: string, error?: boolean) {
+export function useDialog(message: string, error?: boolean, codes?: boolean) {
   const lang = useLang();
 
   const buttons = error
@@ -32,8 +32,9 @@ export function useDialog(message: string, error?: boolean) {
       };
 
   return Dialog.create({
-    title: lang.errors.titles.notify,
+    title: codes ? '' : lang.errors.titles.notify,
     message: message,
+    style: { whiteSpace: 'pre-wrap' },
     class: 'rounded-10',
     html: true,
     ...buttons,
