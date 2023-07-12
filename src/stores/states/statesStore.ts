@@ -65,13 +65,13 @@ export const useStatesStore = defineStore('states', {
         name === 'multi-service' &&
         data.countries.multi.length === 0
       ) {
-        fetchSMS('getCountries', { public_key: config.public_key });
+        fetchSMS('getCountries', { public_key: config.public_key }).then();
       } else if (
         this.tab !== 'rent' &&
         name === 'rent' &&
         data.countries.rent.length === 0
       ) {
-        fetchSMS('getRentCountries', { public_key: config.public_key });
+        fetchSMS('getRentCountries', { public_key: config.public_key }).then();
       }
 
       this.tab = name;

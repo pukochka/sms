@@ -9,6 +9,7 @@ import { useStatesStore } from 'stores/states/statesStore';
 import { useNotify } from 'src/utils/use/useNotify';
 import { useColor } from 'src/utils/use/useColor';
 import { useLang } from 'src/utils/use/useLang';
+import { LocalStorage } from 'quasar';
 
 export async function fetchSMS<Q extends keyof SMSQueries>(
   query: Q,
@@ -41,6 +42,11 @@ export async function fetchSMS<Q extends keyof SMSQueries>(
         /** */
 
         data.countries.multi = response.data.data ?? [];
+        data.setLastCountry('multi');
+        fetchSMS('getServices', {
+          public_key: config.public_key,
+          country: LocalStorage.getItem('last-multi-country') ?? '1',
+        });
 
         /** */
       } else if (query === 'getServices') {
@@ -150,6 +156,11 @@ export async function fetchSMS<Q extends keyof SMSQueries>(
         /** */
 
         data.countries.rent = response.data.data ?? [];
+        data.setLastCountry('rent');
+        fetchSMS('getRentServices', {
+          public_key: config.public_key,
+          country: LocalStorage.getItem('last-rent-country') ?? '1',
+        });
 
         /** */
       } else if (query === 'getRentServices') {
@@ -249,10 +260,6 @@ async function startApp(id: number, secret: string) {
     fetchSMS('getRentOrders', {
       user_id: id,
       user_secret_key: secret,
-      public_key: config.public_key,
-    }),
-    fetchSMS('getRentServices', {
-      country: '0',
       public_key: config.public_key,
     }),
   ]);

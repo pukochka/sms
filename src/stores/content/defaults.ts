@@ -1,12 +1,12 @@
-const defaultServiceItem: SMSServices = {
+export const defaultServiceItem: SMSServices = {
   image: null,
   name: '',
   longName: '',
 };
 
-const defaultCountryItem: SMSCountry = {
+export const defaultCountryItem: SMSCountry = {
   id: '-1',
-  image: null,
+  image: '',
   title_eng: '',
   title_ru: '',
   title: '',
@@ -14,21 +14,21 @@ const defaultCountryItem: SMSCountry = {
   count: 1,
 };
 
-const defaultMultiCountry: SMSMultiCountry = {
+export const defaultMultiCountry: SMSMultiCountry = {
   org_id: '0',
   image: '',
   name_ru: '',
   name_en: '',
 };
 
-const defaultRentCountry: SMSRentCountry = {
+export const defaultRentCountry: SMSRentCountry = {
   id: '0',
   image: '',
   title_ru: '',
   title_eng: '',
 };
 
-const defaultRentService: SMSRentService = {
+export const defaultRentService: SMSRentService = {
   name: '',
   count: 0,
   cost: '',
@@ -36,7 +36,7 @@ const defaultRentService: SMSRentService = {
   longName: '',
 };
 
-const defaultMultiService: SMSMultiService = {
+export const defaultMultiService: SMSMultiService = {
   cost: 0,
   count: 0,
   name: '',
@@ -44,7 +44,7 @@ const defaultMultiService: SMSMultiService = {
   image: '',
 };
 
-const defaultSystemUser: SystemUser = {
+export const defaultSystemUser: SystemUser = {
   id: 0,
   bot_id: 0,
   user: {
@@ -64,13 +64,13 @@ const defaultSystemUser: SystemUser = {
   secret_user_key: '',
 };
 
-const defaultUser: SMSUser = {
+export const defaultUser: SMSUser = {
   id: 0,
   language: '',
   service: '',
 };
 
-const defaultOrder: SMSOrder = {
+export const defaultOrder: SMSOrder = {
   id: 0,
   phone: '79963811573',
   time: 0,
@@ -81,7 +81,7 @@ const defaultOrder: SMSOrder = {
   status: 8,
 };
 
-const defaultRentOrder: SMSRentOrder = {
+export const defaultRentOrder: SMSRentOrder = {
   id: 0,
   phone: '79963811573',
   start_time: '0',
@@ -91,17 +91,4 @@ const defaultRentOrder: SMSRentOrder = {
   country: '',
   cost: 0,
   status: 8,
-};
-
-export {
-  defaultServiceItem,
-  defaultCountryItem,
-  defaultSystemUser,
-  defaultMultiCountry,
-  defaultMultiService,
-  defaultRentCountry,
-  defaultRentService,
-  defaultRentOrder,
-  defaultUser,
-  defaultOrder,
 };

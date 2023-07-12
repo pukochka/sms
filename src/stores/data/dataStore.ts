@@ -16,6 +16,7 @@ import { useLang } from 'src/utils/use/useLang';
 import 'src/utils/helpers/polyfills';
 
 import { DataStore, PriceNames, SearchNames } from 'stores/data/models';
+import { LocalStorage } from 'quasar';
 
 export const useDataStore = defineStore('data', {
   state: () =>
@@ -176,6 +177,23 @@ export const useDataStore = defineStore('data', {
     },
     selectCountry(value: SMSCountry) {
       this.countries.selectedValue = value;
+    },
+    setLastCountry(section: 'multi' | 'rent') {
+      const rentCountry = LocalStorage.getItem('last-rent-country');
+      const multiCountry = LocalStorage.getItem('last-multi-country');
+
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      const country = this.countries[section].find((item: any) =>
+        section === 'multi'
+          ? item.org_id === multiCountry
+          : item.id === rentCountry
+      );
+
+      if (!country) return;
+
+      if (section === 'rent') this.countries.selectedRent = country;
+      else if (section === 'multi') this.countries.selectedMulti = country;
     },
 
     selectMultiService(value: SMSMultiService) {

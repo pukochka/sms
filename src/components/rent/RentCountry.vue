@@ -27,6 +27,7 @@ import namesCountry from 'src/utils/names/contries';
 
 import { useDataStore } from 'stores/data/dataStore';
 import { fetchSMS } from 'boot/queries';
+import { LocalStorage } from 'quasar';
 
 const props = withDefaults(defineProps<RentCountryProps>(), {
   item: () => defaultRentCountry,
@@ -43,6 +44,7 @@ const label = computed(() =>
 
 const select = () => {
   loading.value = true;
+  LocalStorage.set('last-rent-country', props.item.id);
 
   fetchSMS('getRentServices', {
     country: props.item.id,

@@ -27,6 +27,7 @@ import namesCountry from 'src/utils/names/contries';
 
 import { useDataStore } from 'stores/data/dataStore';
 import { fetchSMS } from 'boot/queries';
+import { LocalStorage } from 'quasar';
 
 const props = withDefaults(defineProps<MultiCountryProps>(), {
   item: () => defaultMultiCountry,
@@ -43,6 +44,7 @@ const label = computed(() =>
 
 const select = () => {
   loading.value = true;
+  LocalStorage.set('last-multi-country', props.item.org_id);
 
   fetchSMS('getServices', {
     country: props.item.org_id,
