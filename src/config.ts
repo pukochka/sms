@@ -32,6 +32,7 @@ const config = {
 
   time_to_order_end: 1200,
   time_to_cancel: 1200,
+  time_over: 180,
 
   request_interval: 5000,
 

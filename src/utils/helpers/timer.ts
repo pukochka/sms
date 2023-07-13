@@ -19,6 +19,9 @@ export const useTimer = defineStore('timer', {
       formatTime(state._percent, config.time_to_cancel),
     isEnd: (state): boolean => state._percent >= 1,
     percent: (state): number => state._percent,
+
+    cancel: (state): boolean =>
+      toTimeEnd(state.timestamp, config.time_over) >= 1,
   },
   actions: {
     start(callback: any, timestamp: string, period: number) {

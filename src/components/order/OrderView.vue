@@ -168,6 +168,7 @@ import { fetchSMS } from 'boot/queries';
 import PaginationList from 'components/other/PaginationList.vue';
 import CopyButton from 'components/other/CopyButton.vue';
 import OrderCode from 'components/other/OrderCode.vue';
+import { useNotify } from 'src/utils/use/useNotify';
 
 const states = useStatesStore();
 const data = useDataStore();
@@ -225,6 +226,12 @@ const secondSms = () => {
 };
 
 const cancelOrder = () => {
+  if (!timer.cancel) {
+    useNotify(lang.value.cancel_notify);
+
+    return;
+  }
+
   if (loadings.value.cancel) return;
   loadings.value.cancel = true;
 

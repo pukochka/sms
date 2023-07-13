@@ -133,6 +133,8 @@ const enScheme = {
   no_rents: "You didn't use the rental",
   finish_activation: 'Finish activation',
   noBalance: 'There is not enough balance to create an dialogs!',
+  cancel_notify:
+    'You can cancel activation only after the 3rd minute of activation',
 
   order_time: 'Date',
   order_service: 'Service',
