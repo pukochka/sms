@@ -220,8 +220,6 @@ const cancelOrder = () => {
 };
 
 const show = () => {
-  if (orderEnd.value) return;
-
   timer.start(
     () =>
       fetchSMS('getOrder', {
