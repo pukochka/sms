@@ -34,21 +34,21 @@
         </q-badge>
       </div>
 
-      <div class="row no-wrap q-gutter-x-sm q-pt-sm">
-        <q-btn
-          dense
-          no-caps
-          unelevated
-          class="rounded-10 col"
-          color="primary"
-          label="Повторить"
-          @click="openRepeat" />
+      <div class="row no-wrap justify-end q-gutter-x-sm q-pt-sm">
+        <!--        <q-btn-->
+        <!--          dense-->
+        <!--          no-caps-->
+        <!--          unelevated-->
+        <!--          class="rounded-10 col"-->
+        <!--          color="primary"-->
+        <!--          label="Повторить"-->
+        <!--          @click="openRepeat" />-->
 
         <q-btn
           dense
           unelevated
           no-caps
-          class="rounded-10 col"
+          class="rounded-10 col-6"
           color="primary"
           :label="lang.details"
           :loading="loading"
