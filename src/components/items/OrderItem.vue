@@ -1,39 +1,53 @@
 <template>
   <q-item :style="{ height: elHeight + 'px' }">
-    <q-item-section>
-      <q-item-label caption v-if="minHeight">
-        {{ lang.order }} №{{ item.id }}
-      </q-item-label>
+    <q-item-section class="no-wrap">
+      <div class="row items-center no-wrap">
+        <div class="">
+          <q-item-label caption v-if="minHeight">
+            {{ lang.order }} №{{ item.id }}
+          </q-item-label>
 
-      <q-item-label class="row items-center q-gutter-x-sm" v-if="minHeight">
-        <ImageCountry />
+          <q-item-label class="row items-center q-gutter-x-sm" v-if="minHeight">
+            <ImageCountry />
 
-        <div class="">{{ country }}</div>
-      </q-item-label>
+            <div class="">{{ country }}</div>
+          </q-item-label>
 
-      <q-item-label class="row items-center q-gutter-x-sm">
-        <ImageService />
+          <q-item-label class="row items-center q-gutter-x-sm">
+            <ImageService />
 
-        <div class="">{{ service }}</div>
-      </q-item-label>
-    </q-item-section>
+            <div class="">{{ service }}</div>
+          </q-item-label>
+        </div>
 
-    <q-item-section side class="q-gutter-y-sm items-end">
-      <q-badge
-        class="q-pa-sm rounded-10"
-        color="orange-7"
-        text-color="white"
-        :label="lang.order_status_text[item.status]" />
+        <q-badge
+          class="q-pa-sm rounded-10 ellipsis"
+          color="orange-7"
+          text-color="white">
+          <div class="ellipsis">{{ lang.order_status_text[item.status] }}</div>
+        </q-badge>
+      </div>
 
-      <q-btn
-        flat
-        no-caps
-        class="rounded-10"
-        size="md"
-        color="primary"
-        :label="lang.details"
-        :loading="loading"
-        @click="openOrder" />
+      <div class="row no-wrap q-gutter-x-sm q-pt-sm">
+        <q-btn
+          dense
+          no-caps
+          unelevated
+          class="rounded-10 col"
+          color="primary"
+          :label="lang.repeat"
+          @click="openRepeat" />
+
+        <q-btn
+          dense
+          unelevated
+          no-caps
+          class="rounded-10 col"
+          color="primary"
+          :label="lang.details"
+          :loading="loading"
+          @click="openOrder" />
+      </div>
     </q-item-section>
   </q-item>
 </template>
@@ -52,6 +66,7 @@ import { findCountryName, findServiceName } from 'src/utils/names/find';
 import { CountryImage, ServiceImage } from 'src/utils/images';
 
 import { fetchSMS } from 'boot/queries';
+import { useStatesStore } from 'stores/states/statesStore';
 
 const props = withDefaults(defineProps<OrderItemProps>(), {
   item: () => defaultOrder,
@@ -59,6 +74,7 @@ const props = withDefaults(defineProps<OrderItemProps>(), {
 
 const quasar = useQuasar();
 const data = useDataStore();
+const states = useStatesStore();
 const lang = computed(() => useLang());
 
 const loading = ref(false);
@@ -82,6 +98,12 @@ const openOrder = () => {
     },
     true
   ).then(() => (loading.value = false));
+};
+
+const openRepeat = () => {
+  data.orders.repeat = props.item;
+
+  states.openDialog('repeat_order');
 };
 
 const ImageCountry = () => CountryImage(props.item.country);

@@ -25,6 +25,8 @@ export interface DataStore {
 
     selectedOrder: SMSOrder;
     selectedMulti: SMSOrder;
+
+    repeat: SMSOrder;
   };
 
   search: Record<SearchNames, string>;

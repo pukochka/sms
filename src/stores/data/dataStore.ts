@@ -45,6 +45,8 @@ export const useDataStore = defineStore('data', {
 
         selectedOrder: defaultOrder,
         selectedMulti: defaultOrder,
+
+        repeat: defaultOrder,
       },
 
       search: {
@@ -100,6 +102,7 @@ export const useDataStore = defineStore('data', {
     createdOrder: (state): SMSOrder | null => state.orders.selectedOrder,
 
     ordersValue: (state): SMSOrder[] => state.orders.value.reverse(),
+    repeatOrder: (state): SMSOrder => state.orders.repeat,
 
     activeOrders: (state): SMSOrder[] =>
       state.orders.value.filter(
