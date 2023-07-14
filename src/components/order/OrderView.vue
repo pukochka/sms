@@ -65,8 +65,9 @@
         </q-list>
       </div>
 
-      <div class="" v-if="code">
+      <div class="">
         <order-code
+          v-if="code"
           :item="code"
           class="rounded-10 overflow-hidden q-list--bordered"></order-code>
 
