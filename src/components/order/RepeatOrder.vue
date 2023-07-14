@@ -108,7 +108,7 @@ const order = computed(() => [
   },
   {
     label: lang.value.order_price,
-    value: data.repeatOrder?.cost.comma(),
+    value: data.repeatOrder?.cost?.toFixed(2) + ' ₽',
     image: '',
   },
 ]);

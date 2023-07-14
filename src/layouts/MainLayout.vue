@@ -74,6 +74,8 @@
     <order-view></order-view>
 
     <order-dialog></order-dialog>
+
+    <repeat-order></repeat-order>
   </q-layout>
 </template>
 
@@ -90,6 +92,7 @@ import DrawerTemplate from 'layouts/DrawerTemplate.vue';
 import CreateOrderButton from 'components/other/CreateOrderButton.vue';
 
 import { mdiMessage, mdiAnimation } from '@quasar/extras/mdi-v7';
+import RepeatOrder from 'components/order/RepeatOrder.vue';
 
 const states = useStatesStore();
 const data = useDataStore();

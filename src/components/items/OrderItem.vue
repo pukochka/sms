@@ -7,18 +7,24 @@
             {{ lang.order }} №{{ item.id }}
           </q-item-label>
 
-          <q-item-label class="row items-center q-gutter-x-sm" v-if="minHeight">
+          <q-item-label
+            class="row no-wrap items-center q-gutter-x-sm"
+            v-if="minHeight">
             <ImageCountry />
 
             <div class="">{{ country }}</div>
           </q-item-label>
 
-          <q-item-label class="row items-center q-gutter-x-sm">
-            <ImageService />
+          <q-item-label class="row no-wrap items-center q-gutter-x-sm">
+            <div class="">
+              <ImageService />
+            </div>
 
             <div class="">{{ service }}</div>
           </q-item-label>
         </div>
+
+        <q-space></q-space>
 
         <q-badge
           class="q-pa-sm rounded-10 ellipsis"
