@@ -1,43 +1,47 @@
 <template>
   <q-item :style="{ height: elHeight + 'px' }">
-    <q-item-section>
-      <q-item-label caption v-if="minHeight">
-        {{ lang.order }} №{{ item.id }}
-      </q-item-label>
+    <q-item-section class="no-wrap">
+      <div class="row no-wrap items-center">
+        <div class="">
+          <q-item-label caption>
+            <div class="">{{ lang.date_end }} {{ endDate }}</div>
+          </q-item-label>
 
-      <q-item-label caption>
-        <div class="">{{ lang.date_end }} {{ endDate }}</div>
-      </q-item-label>
+          <q-item-label class="row items-center q-gutter-x-sm" v-if="minHeight">
+            <ImageCountry />
 
-      <q-item-label class="row items-center q-gutter-x-sm" v-if="minHeight">
-        <ImageCountry />
+            <div class="">{{ country }}</div>
+          </q-item-label>
 
-        <div class="">{{ country }}</div>
-      </q-item-label>
+          <q-item-label class="row items-center q-gutter-x-sm">
+            <ImageService />
 
-      <q-item-label class="row items-center q-gutter-x-sm">
-        <ImageService />
+            <div class="">{{ service }}</div>
+          </q-item-label>
+        </div>
 
-        <div class="">{{ service }}</div>
-      </q-item-label>
-    </q-item-section>
+        <q-space></q-space>
 
-    <q-item-section side class="q-gutter-y-sm items-end">
-      <q-badge
-        class="q-pa-sm rounded-10"
-        color="orange-7"
-        text-color="white"
-        :label="lang.rent_status[status]" />
+        <q-badge
+          class="q-pa-sm rounded-10 ellipsis"
+          color="orange-7"
+          text-color="white">
+          <div class="ellipsis">{{ lang.rent_status[status] }}</div>
+        </q-badge>
+      </div>
 
-      <q-btn
-        flat
-        no-caps
-        class="rounded-10"
-        size="md"
-        color="primary"
-        :label="lang.details"
-        :loading="loading"
-        @click="openRent" />
+      <div class="row justify-end">
+        <q-btn
+          dense
+          unelevated
+          no-caps
+          class="rounded-10 col-6"
+          size="md"
+          color="primary"
+          :label="lang.details"
+          :loading="loading"
+          @click="openRent" />
+      </div>
     </q-item-section>
   </q-item>
 </template>

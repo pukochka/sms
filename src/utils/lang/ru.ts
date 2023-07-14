@@ -155,6 +155,8 @@ const ruScheme = {
   button_confirm: 'Подтвердить активацию',
   button_cancel: 'Отменить активацию',
   button_report: 'Подтвердить готовность',
+  button_order: 'Повторить заказ',
+  repeat: 'Повторить',
 
   button_dismiss: 'Пропустить',
   button_open: 'Открыть',

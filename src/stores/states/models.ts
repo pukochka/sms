@@ -15,6 +15,7 @@ export interface StatesStore {
 
 export type DialogNames =
   | 'order'
+  | 'repeat_order'
   | 'orders_view'
   | 'rent'
   | 'replenish'

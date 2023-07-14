@@ -84,6 +84,8 @@
     <rent-continue></rent-continue>
 
     <replenish-dialog></replenish-dialog>
+
+    <repeat-order></repeat-order>
   </q-layout>
 </template>
 
@@ -103,6 +105,7 @@ import RentDialog from 'components/rent/dialogs/RentOrders.vue';
 import RentView from 'components/rent/dialogs/RentView.vue';
 import RentBuild from 'components/rent/dialogs/RentBuild.vue';
 import RentContinue from 'components/rent/dialogs/RentContinue.vue';
+import RepeatOrder from 'components/order/RepeatOrder.vue';
 
 import {
   mdiMessage,

@@ -156,6 +156,8 @@ const enScheme = {
   button_confirm: 'Confirm activation',
   button_cancel: 'Cancel activation',
   button_report: 'Confirm readiness',
+  button_order: 'Repeat order',
+  repeat: 'Repeat',
 
   button_dismiss: 'Dismiss',
   button_open: 'Open',

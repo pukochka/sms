@@ -16,6 +16,7 @@ export const useStatesStore = defineStore('states', {
     ({
       dialogs: {
         order: false,
+        repeat_order: false,
         rent: false,
         rent_view: false,
         rent_build: false,

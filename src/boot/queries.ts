@@ -14,7 +14,8 @@ import { LocalStorage } from 'quasar';
 export async function fetchSMS<Q extends keyof SMSQueries>(
   query: Q,
   params?: SMSParams<Q>,
-  open?: boolean
+  open?: boolean,
+  callback?: () => void
 ) {
   const data = useDataStore();
   const states = useStatesStore();
@@ -74,6 +75,7 @@ export async function fetchSMS<Q extends keyof SMSQueries>(
           public_key: config.public_key,
           user_id: data.user.id,
         }).then(() => {
+          if (callback) callback();
           data.selectService(response.data.data);
         });
 
