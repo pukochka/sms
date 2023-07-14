@@ -18,6 +18,8 @@ export interface DataStore {
     value: SMSOrder[];
 
     selectedOrder: SMSOrder;
+
+    repeat: SMSOrder;
   };
 
   search: Record<SearchNames, string>;

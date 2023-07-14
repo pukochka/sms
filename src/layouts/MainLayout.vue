@@ -40,6 +40,8 @@
     <order-view></order-view>
 
     <order-dialog></order-dialog>
+
+    <repeat-order></repeat-order>
   </q-layout>
 </template>
 
@@ -52,6 +54,7 @@ import { useDataStore } from 'stores/data/dataStore';
 import OrderView from 'components/order/OrderView.vue';
 import OrderDialog from 'components/order/OrderDialog.vue';
 import DrawerTemplate from 'layouts/DrawerTemplate.vue';
+import RepeatOrder from 'components/order/RepeatOrder.vue';
 
 const states = useStatesStore();
 const data = useDataStore();

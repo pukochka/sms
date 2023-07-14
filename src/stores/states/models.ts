@@ -13,7 +13,11 @@ export interface StatesStore {
   };
 }
 
-export type DialogNames = 'order' | 'orders_view' | 'replenish';
+export type DialogNames =
+  | 'order'
+  | 'orders_view'
+  | 'replenish'
+  | 'repeat_order';
 
 export type LoadingNames = 'init' | 'error';
 
