@@ -65,7 +65,7 @@ const lang = computed(() => useLang());
 const loading = ref(false);
 
 const title = computed(() => findCountryName(props.item?.id));
-const price = computed(() => props.item.cost.comma(lang.value.fromAt + ' '));
+const price = computed(() => props.item.cost.comma());
 
 const selected = computed(() => data.selectedCountry?.id === props.item.id);
 
