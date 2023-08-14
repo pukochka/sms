@@ -48,8 +48,8 @@ const namesCountry: Record<string, Record<string, string>> = {
     name_ru: 'Кыргызстан',
   },
   '12': {
-    name_en: 'USA',
-    name_ru: 'США',
+    name_en: 'USA (virtual)',
+    name_ru: 'США (виртуальные)',
   },
   '13': {
     name_en: 'Israel',
