@@ -12,7 +12,7 @@
 
     <q-item-section>
       <q-item-label class="font-size-16 text-weight-bold text-center">
-        {{ item }}
+        {{ decode }}
       </q-item-label>
     </q-item-section>
 
@@ -32,6 +32,8 @@ const props = withDefaults(defineProps<OrderCodeProps>(), {
 });
 
 const visibility = computed(() => props.item.length >= 15);
+
+const decode = computed(() => decodeURI(props.item));
 
 const openView = () => {
   useDialog(props.item, true, true);
