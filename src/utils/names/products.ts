@@ -115,7 +115,7 @@ const products: Record<string, string> = {
   li: 'Baidu',
   dz: 'Dominos Pizza',
   xz: 'paycell',
-  rd: 'Lenta',
+  rd: 'Лента',
   qb: 'Payberry',
   hz: 'Drom',
   gl: 'GlobalTel',
@@ -646,6 +646,7 @@ const products: Record<string, string> = {
   ze: 'Shpock',
   zp: 'Pinduoduo',
   aaa: 'Nubank',
+  abm: 'Утконос',
   ot: 'Любой другой',
 };
 
@@ -657,7 +658,7 @@ export function mapServiceTitle<T extends SMSServices>(
       item.longName = products[item.name]?.toString() ?? item.name;
       return item;
     })
-    .filter((item) => !(item.name.length > 2));
+    .filter((item) => !(item.name.length > 2) || item.name === 'abm');
 }
 
 export { products };

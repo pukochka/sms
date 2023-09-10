@@ -1,5 +1,3 @@
-import namesCountry from 'src/utils/names/contries';
-import { useDataStore } from 'stores/data/dataStore';
 import { findCountryName, findServiceName } from 'src/utils/names/find';
 
 export {};

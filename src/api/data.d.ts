@@ -81,11 +81,11 @@ declare interface SMSServices {
   /**
    *
    * */
-  image: '';
+  image: string;
   /**
    *
    * */
-  name: '';
+  name: string;
 }
 
 /**
