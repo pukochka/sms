@@ -27,16 +27,18 @@ import { useDialog } from 'src/utils/use/useDialog';
 
 import CopyButton from 'components/other/CopyButton.vue';
 
+import { decodeURIWithoutSlash } from 'src/utils/helpers/string';
+
 const props = withDefaults(defineProps<OrderCodeProps>(), {
   item: '',
 });
 
 const visibility = computed(() => props.item.length >= 15);
 
-const decode = computed(() => decodeURI(props.item));
+const decode = computed(() => decodeURIWithoutSlash(props.item));
 
 const openView = () => {
-  useDialog(props.item, true, true);
+  useDialog(decode.value, true, true);
 };
 
 interface OrderCodeProps {

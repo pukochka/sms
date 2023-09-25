@@ -33,7 +33,7 @@ export function useDialog(message: string, error?: boolean, codes?: boolean) {
 
   return Dialog.create({
     title: codes ? '' : lang.errors.titles.notify,
-    message: decodeURI(message),
+    message: message,
     class: 'rounded-10',
     style: { whiteSpace: 'pre-wrap' },
     html: true,

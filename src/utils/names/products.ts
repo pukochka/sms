@@ -509,6 +509,7 @@ const products: Record<string, string> = {
   zv: 'Digikala',
   zy: 'Nttgame',
   zz: 'Dent',
+  md: 'Банки',
 };
 
 export function mapServiceTitle<
