@@ -21,14 +21,27 @@ const props = withDefaults(defineProps<Props>(), {
 
 const state = ref(false);
 
+function handleCopyTextFromParagraph() {
+  const body = document.querySelector('body');
+  const area = document.createElement('textarea');
+  body?.appendChild(area);
+
+  area.value = props.text;
+  area.select();
+  document.execCommand('copy');
+
+  body?.removeChild(area);
+}
+
 const copy = () => {
   state.value = true;
   const lang = useLang();
 
+  navigator.clipboard.writeText(props.text);
   copyToClipboard(props.text);
+  handleCopyTextFromParagraph();
 
   useNotify(lang.copied);
-
   setTimeout(() => (state.value = false), 2000);
 };
 
