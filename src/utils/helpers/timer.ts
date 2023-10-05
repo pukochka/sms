@@ -11,6 +11,7 @@ export const useTimer = defineStore('timer', {
 
       callback: '',
       _percent: 1,
+      _percentToCancel: 1,
       period: 0,
       timestamp: 0,
     } as Timer),
@@ -20,8 +21,7 @@ export const useTimer = defineStore('timer', {
     isEnd: (state): boolean => state._percent >= 1,
     percent: (state): number => state._percent,
 
-    cancel: (state): boolean =>
-      toTimeEnd(state.timestamp, config.time_over) >= 1,
+    cancel: (state): boolean => state._percentToCancel >= 1,
   },
   actions: {
     start(callback: any, timestamp: string, period: number) {
@@ -47,6 +47,7 @@ export const useTimer = defineStore('timer', {
 
     useCounter() {
       this._percent = toTimeEnd(this.timestamp, this.period);
+      this._percentToCancel = toTimeEnd(this.timestamp, config.time_over);
 
       if (this.isEnd) this.stopCounter();
     },
@@ -60,5 +61,6 @@ interface Timer {
   callback: (() => void) | string;
   period: number;
   _percent: number;
+  _percentToCancel: number;
   timestamp: number;
 }

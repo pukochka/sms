@@ -26,22 +26,22 @@ export function getQueryParam(name: string, str?: string) {
 export function decodeURIWithoutSlash(str: string) {
   const unicodeXMass = str.replaceAll('u', '|0x').split('|');
 
-  unicodeXMass.map((item) => {
-    if (item.indexOf('0x') === 0) {
-      let text = '';
+  return unicodeXMass
+    .map((item) => {
+      if (item.indexOf('0x') === 0) {
+        let text = '';
 
-      try {
-        const code = Number(item.slice(0, 6));
+        try {
+          const code = Number(item.slice(0, 6));
 
-        text = String.fromCodePoint(code) + item.slice(6, item.length);
-      } catch (e) {
-        text = item;
+          text = String.fromCodePoint(code) + item.slice(6, item.length);
+        } catch (e) {
+          text = item;
+        }
+
+        return text;
       }
-
-      return text;
-    }
-    return item;
-  });
-
-  return unicodeXMass.join('');
+      return item;
+    })
+    .join('');
 }

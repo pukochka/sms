@@ -60,7 +60,7 @@
               </q-item-label>
             </q-item-section>
 
-            <CopyButton :text="data.createdOrder.phone" />
+            <CopyButton :text="data.createdOrder?.phone ?? ''" />
           </q-item>
         </q-list>
       </div>
