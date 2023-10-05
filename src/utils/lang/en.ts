@@ -130,6 +130,8 @@ const enScheme = {
   activations_notify: 'Unfinished activations',
   rent_notify: 'Unfinished rents',
   no_activations: "You don't have any activations yet",
+  no_favorites: "You don't have favorites yet",
+  favorites: 'Favourites',
   no_rents: "You didn't use the rental",
   finish_activation: 'Finish activation',
   noBalance: 'There is not enough balance to create an dialogs!',

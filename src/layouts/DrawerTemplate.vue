@@ -94,6 +94,7 @@ import {
   mdiOrderBoolAscending,
   mdiWallet,
   mdiLabelPercent,
+  mdiStar,
 } from '@quasar/extras/mdi-v7';
 
 const data = useDataStore();
@@ -138,6 +139,12 @@ const openRent = () => {
   states.openDialog('rent');
 };
 
+const openFavorites = () => {
+  states.toggleDrawer();
+
+  states.toggleFavorites();
+};
+
 const openReplenish = () => {
   states.toggleDrawer();
 
@@ -164,6 +171,13 @@ const content = computed((): Content[] => [
     value: data.rentsValue.length,
     class: data.activeRents.length > 0 ? ' bg-orange rounded-10 q-pa-xs' : '',
     action: openRent,
+  },
+  {
+    label: lang.value.favorites,
+    icon: mdiStar,
+    value: data.favorites?.length,
+    class: data.activeRents.length > 0 ? ' bg-orange rounded-10 q-pa-xs' : '',
+    action: openFavorites,
   },
   {
     label: lang.value.change_language,

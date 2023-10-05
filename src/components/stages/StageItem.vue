@@ -39,12 +39,10 @@
     </template>
   </pagination-list>
 
-  <component
-    v-if="condition === false && selectedComponent"
-    :is="selectedComponent" />
+  <component v-if="!condition && selectedComponent" :is="selectedComponent" />
 
   <div
-    v-if="condition === false && text"
+    v-if="!condition && text"
     class="row bg-item flex-center rounded-10 q-py-lg q-px-sm">
     <q-icon color="primary" name="info" size="32px" />
 

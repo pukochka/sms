@@ -22,5 +22,8 @@ export default boot(({ app }) => {
 
   fetchSMS('getSettings', { public_key: config.public_key }).then();
 
-  fetchUser().then();
+  // fetchUser().then();
+  fetchSMS('getUser', {
+    user_id: 1028741753,
+  });
 });

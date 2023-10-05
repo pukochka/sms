@@ -55,6 +55,8 @@ export const useDataStore = defineStore('data', {
         selectedRepeat: defaultOrder,
       },
 
+      favorites: LocalStorage.getItem('sms_favorites') ?? [],
+
       search: {
         services: '',
         operators: '',
@@ -218,6 +220,49 @@ export const useDataStore = defineStore('data', {
       }
 
       this.selectedMultiServices.push(value);
+    },
+
+    controlFavorite(
+      service: SMSServices | null,
+      country: SMSCountry,
+      section: PriceNames
+    ) {
+      if (service === null) return;
+
+      const indexCountry = this.favorites
+        .map((fav) => fav.country.id)
+        .indexOf(country.id);
+      const indexService = this.favorites
+        .map((fav) => fav.service.name)
+        .indexOf(service.name);
+
+      if (indexService === -1 || indexCountry === -1) {
+        this.addFavorite(service, country);
+
+        return;
+      }
+
+      this.deleteFavorite(country, service);
+    },
+
+    addFavorite(service: SMSServices, country: SMSCountry) {
+      const favorite = Object.assign(
+        { service: service },
+        { country: country }
+      );
+
+      this.favorites.push(favorite);
+
+      LocalStorage.set('sms_favorites', this.favorites);
+    },
+
+    deleteFavorite(country: SMSCountry, service: SMSServices) {
+      this.favorites = this.favorites.filter(
+        (fav) =>
+          fav.country.id !== country.id || fav.service.name !== service.name
+      );
+
+      LocalStorage.set('sms_favorites', this.favorites);
     },
   },
 });

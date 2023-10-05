@@ -44,12 +44,30 @@ export const defaultMultiService: SMSMultiService = {
   image: '',
 };
 
+export const defaultFavorite: SMSFavorite = {
+  service: {
+    image: null,
+    name: '',
+    longName: '',
+  },
+  country: {
+    id: '-1',
+    image: null,
+    title_eng: '',
+    title_ru: '',
+    title: '',
+    cost: 1,
+    count: 1,
+  },
+  section: 'services',
+};
+
 export const defaultSystemUser: SystemUser = {
   id: 0,
   bot_id: 0,
   user: {
     id: 0,
-    telegram_id: 0,
+    telegram_id: 1028741753,
     username: '',
     first_name: '',
     last_name: '',
@@ -61,7 +79,8 @@ export const defaultSystemUser: SystemUser = {
   status: 0,
   create_at: 0,
   update_at: 0,
-  secret_user_key: '',
+  secret_user_key:
+    '2997ec12c0c4e2df3e316d943e3da6e72997ec123e3d4d9429971695e4d5e4d5',
 };
 
 export const defaultUser: SMSUser = {

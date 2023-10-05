@@ -50,15 +50,16 @@
 import config from 'src/config';
 import { computed, ref } from 'vue';
 import { date, useQuasar } from 'quasar';
-import { defaultRentOrder } from 'stores/content/defaults';
 
-import { CountryImage, ServiceImage } from 'src/utils/images';
-import { findCountryName, findServiceName } from 'src/utils/names/find';
-
+import { useStatesStore } from 'stores/states/statesStore';
 import { useDataStore } from 'stores/data/dataStore';
 import { useLang } from 'src/utils/use/useLang';
 
 import { fetchSMS } from 'boot/queries';
+import { CountryImage, ServiceImage } from 'src/utils/images';
+import { findCountryName, findServiceName } from 'src/utils/names/find';
+
+import { defaultRentOrder } from 'stores/content/defaults';
 
 const props = withDefaults(defineProps<RentItemProps>(), {
   item: () => defaultRentOrder,
@@ -66,6 +67,7 @@ const props = withDefaults(defineProps<RentItemProps>(), {
 
 const quasar = useQuasar();
 const data = useDataStore();
+const states = useStatesStore();
 const lang = computed(() => useLang());
 
 const loading = ref(false);
@@ -93,7 +95,7 @@ const openRent = () => {
       user_secret_key: data.systemUser.secret_user_key,
       public_key: config.public_key,
     },
-    true
+    () => states.openDialog('rent_view')
   ).then(() => (loading.value = false));
 };
 

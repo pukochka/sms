@@ -130,6 +130,8 @@ const ruScheme = {
   activations_notify: 'Неоконченные активации',
   rent_notify: 'Неоконченные аренды',
   no_activations: 'У вас пока нет активаций',
+  no_favorites: 'У вас пока нет избранного',
+  favorites: 'Избранное',
   no_rents: 'Вы не пользовались арендой',
   finish_activation: 'Закончите активацию',
   noBalance: 'Не хватает баланса для создания заказа!',

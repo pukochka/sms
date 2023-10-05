@@ -43,6 +43,15 @@
             </div>
           </q-tab-panel>
         </q-tab-panels>
+
+        <q-btn
+          flat
+          no-caps
+          class="rounded-10"
+          :icon="mdiStar"
+          color="orange"
+          @click="states.toggleFavorites">
+        </q-btn>
       </q-toolbar>
     </q-header>
 
@@ -70,6 +79,8 @@
         :label="tab.label"
         @click="tab.action" />
     </q-footer>
+
+    <favorites-template></favorites-template>
 
     <order-view></order-view>
 
@@ -111,7 +122,9 @@ import {
   mdiMessage,
   mdiAnimation,
   mdiLabelPercent,
+  mdiStar,
 } from '@quasar/extras/mdi-v7';
+import FavoritesTemplate from 'components/favorites/FavoritesTemplate.vue';
 
 const states = useStatesStore();
 const data = useDataStore();

@@ -14,8 +14,7 @@ import { LocalStorage } from 'quasar';
 export async function fetchSMS<Q extends keyof SMSQueries>(
   query: Q,
   params?: SMSParams<Q>,
-  open?: boolean,
-  callback?: () => void
+  callback?: (response?: any) => void
 ) {
   const data = useDataStore();
   const states = useStatesStore();
@@ -26,6 +25,8 @@ export async function fetchSMS<Q extends keyof SMSQueries>(
       url: query,
       params: params,
     }).then((response) => {
+      if (callback) callback(response);
+
       if (query === 'services') {
         /** */
 
@@ -36,7 +37,6 @@ export async function fetchSMS<Q extends keyof SMSQueries>(
         /** */
 
         data.countries.value = response.data.data;
-        if (open) states.loadings.init = false;
 
         /** */
       } else if (query === 'getCountries') {
@@ -70,15 +70,6 @@ export async function fetchSMS<Q extends keyof SMSQueries>(
         /** */
       } else if (query === 'setService') {
         /** */
-
-        fetchSMS('countries', {
-          public_key: config.public_key,
-          user_id: data.user.id,
-        }).then(() => {
-          if (callback) callback();
-          data.selectService(response.data.data);
-        });
-
         /** */
       } else if (query === 'setLanguage') {
         /** */
@@ -95,9 +86,8 @@ export async function fetchSMS<Q extends keyof SMSQueries>(
         /** */
       } else if (query === 'orders') {
         /** */
-        data.orders.value = response.data.data;
 
-        if (open) useNotify('', true);
+        data.orders.value = response.data.data;
 
         /** */
       } else if (query === 'getRentOrders') {
@@ -126,7 +116,6 @@ export async function fetchSMS<Q extends keyof SMSQueries>(
         /** */
 
         data.updateOrder(response.data.data);
-        if (open) states.openDialog('order');
 
         /** */
       } else if (query === 'getUser') {
@@ -150,7 +139,7 @@ export async function fetchSMS<Q extends keyof SMSQueries>(
             user_secret_key: data.systemUser.secret_user_key,
             public_key: config.public_key,
           },
-          true
+          () => useNotify('', true)
         );
 
         /** */
@@ -175,7 +164,6 @@ export async function fetchSMS<Q extends keyof SMSQueries>(
         /** */
 
         data.orders.selectedRent = response.data.data;
-        if (open) states.openDialog('rent_view');
 
         /** */
       } else if (query === 'getContinuePrice') {
@@ -245,7 +233,7 @@ export async function fetchUser() {
 
 async function startApp(id: number, secret: string) {
   return await Promise.all([
-    fetchSMS('services', { public_key: config.public_key }, true),
+    fetchSMS('services', { public_key: config.public_key }),
     fetchSMS('countries', {
       user_id: id,
       public_key: config.public_key,
@@ -257,7 +245,7 @@ async function startApp(id: number, secret: string) {
         user_secret_key: secret,
         public_key: config.public_key,
       },
-      true
+      () => useNotify('', true)
     ),
     fetchSMS('getRentOrders', {
       user_id: id,

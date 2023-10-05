@@ -7,7 +7,7 @@
     <q-item-section avatar>
       <q-img
         class="rounded-10"
-        :src="props.item.image"
+        :src="props.item.image ?? ''"
         spinner-color="primary"
         style="height: 24px; width: 24px" />
     </q-item-section>
@@ -25,6 +25,7 @@
 </template>
 
 <script lang="ts" setup>
+import config from 'src/config';
 import { computed, ref } from 'vue';
 
 import { defaultServiceItem } from 'stores/content/defaults';
@@ -55,8 +56,19 @@ const select = () => {
       user_id: data.user.id,
       user_secret_key: data.systemUser.secret_user_key,
     },
-    false,
-    () => (loading.value = false)
+    (response) => {
+      fetchSMS(
+        'countries',
+        {
+          public_key: config.public_key,
+          user_id: data.user.id,
+        },
+        () => {
+          loading.value = false;
+          data.selectService(response.data.data);
+        }
+      );
+    }
   ).then();
 };
 
