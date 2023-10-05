@@ -59,7 +59,6 @@ export const defaultFavorite: SMSFavorite = {
     cost: 1,
     count: 1,
   },
-  section: 'services',
 };
 
 export const defaultSystemUser: SystemUser = {
@@ -67,7 +66,7 @@ export const defaultSystemUser: SystemUser = {
   bot_id: 0,
   user: {
     id: 0,
-    telegram_id: 1028741753,
+    telegram_id: 0,
     username: '',
     first_name: '',
     last_name: '',
