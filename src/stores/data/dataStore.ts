@@ -222,11 +222,7 @@ export const useDataStore = defineStore('data', {
       this.selectedMultiServices.push(value);
     },
 
-    controlFavorite(
-      service: SMSServices | null,
-      country: SMSCountry,
-      section: PriceNames
-    ) {
+    controlFavorite(service: SMSServices | null, country: SMSCountry) {
       if (service === null) return;
 
       const indexCountry = this.favorites
@@ -236,7 +232,7 @@ export const useDataStore = defineStore('data', {
         .map((fav) => fav.service.name)
         .indexOf(service.name);
 
-      if (indexService === -1 || indexCountry === -1) {
+      if (indexService === -1 && indexCountry === -1) {
         this.addFavorite(service, country);
 
         return;

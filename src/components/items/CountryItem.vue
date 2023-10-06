@@ -45,9 +45,7 @@
           square
           unelevated
           color="orange"
-          @click="
-            data.controlFavorite(data.selectedService, props.item, 'services')
-          ">
+          @click="data.controlFavorite(data.selectedService, props.item)">
           <q-icon
             :name="favorite ? mdiStar : mdiStarOutline"
             color="white"

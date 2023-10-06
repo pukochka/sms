@@ -78,7 +78,7 @@ const updateDeleted = (favorite: SMSFavorite) => {
     .map((item) => item.service.name)
     .indexOf(favorite.service.name);
 
-  if (indexService === -1 || indexCountry === -1) {
+  if (indexService === -1 && indexCountry === -1) {
     deleted.value.push(favorite);
 
     return;
