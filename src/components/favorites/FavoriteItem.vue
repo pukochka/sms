@@ -77,7 +77,7 @@ const lang = computed(() => useLang());
 
 const loading = ref(false);
 
-const elHeight = computed(() => quasar.screen.height / 6);
+const elHeight = computed(() => quasar.screen.height / 4.3);
 
 const countryTitle = computed(() => findCountryName(props.item?.country.id));
 const serviceTitle = computed(

@@ -35,7 +35,7 @@
           :current-items="data.favorites"
           :el-height="elHeight"
           :searching="false"
-          :visible-items="4">
+          :visible-items="3">
           <template v-slot="{ item }">
             <favorite-item
               :item="item"
@@ -67,18 +67,16 @@ const lang = computed(() => useLang());
 
 const deleted = ref<Array<SMSFavorite>>([]);
 
-const elHeight = computed(() => quasar.screen.height / 6);
+const elHeight = computed(() => quasar.screen.height / 4.3);
 
 const updateDeleted = (favorite: SMSFavorite) => {
-  const indexCountry = deleted.value
-    .map((item) => item.country.id)
-    .indexOf(favorite.country.id);
+  const isFav = data.favorites.find(
+    (fav) =>
+      fav.country.id === favorite.country.id &&
+      fav.service.name === favorite.service.name
+  );
 
-  const indexService = deleted.value
-    .map((item) => item.service.name)
-    .indexOf(favorite.service.name);
-
-  if (indexService === -1 && indexCountry === -1) {
+  if (isFav) {
     deleted.value.push(favorite);
 
     return;

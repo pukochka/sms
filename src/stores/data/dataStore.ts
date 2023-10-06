@@ -225,14 +225,12 @@ export const useDataStore = defineStore('data', {
     controlFavorite(service: SMSServices | null, country: SMSCountry) {
       if (service === null) return;
 
-      const indexCountry = this.favorites
-        .map((fav) => fav.country.id)
-        .indexOf(country.id);
-      const indexService = this.favorites
-        .map((fav) => fav.service.name)
-        .indexOf(service.name);
+      const isFav = this.favorites.find(
+        (fav) =>
+          fav.country.id === country.id && fav.service.name === service.name
+      );
 
-      if (indexService === -1 && indexCountry === -1) {
+      if (!isFav) {
         this.addFavorite(service, country);
 
         return;
