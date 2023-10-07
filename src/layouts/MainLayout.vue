@@ -10,7 +10,7 @@
     </q-inner-loading>
 
     <q-header class="bg-page" bordered>
-      <q-toolbar>
+      <q-toolbar class="justify-between">
         <q-btn
           flat
           no-caps
@@ -26,6 +26,15 @@
             color="orange"
             text-color="white" />
         </q-btn>
+
+        <q-btn
+          flat
+          no-caps
+          class="rounded-10"
+          :icon="mdiStar"
+          color="orange"
+          @click="states.toggleFavorites">
+        </q-btn>
       </q-toolbar>
     </q-header>
 
@@ -36,6 +45,8 @@
     <q-page-container>
       <router-view />
     </q-page-container>
+
+    <favorites-template></favorites-template>
 
     <order-view></order-view>
 
@@ -55,6 +66,8 @@ import OrderView from 'components/order/OrderView.vue';
 import OrderDialog from 'components/order/OrderDialog.vue';
 import DrawerTemplate from 'layouts/DrawerTemplate.vue';
 import RepeatOrder from 'components/order/RepeatOrder.vue';
+import FavoritesTemplate from 'components/favorites/FavoritesTemplate.vue';
+import { mdiStar } from '@quasar/extras/mdi-v7';
 
 const states = useStatesStore();
 const data = useDataStore();

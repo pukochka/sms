@@ -6,6 +6,7 @@ export interface StatesStore {
   tab: TabNames;
 
   drawer: boolean;
+  favorites: boolean;
 
   notifyValue: {
     state: boolean;

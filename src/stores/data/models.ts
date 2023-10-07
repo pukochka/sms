@@ -22,6 +22,8 @@ export interface DataStore {
     repeat: SMSOrder;
   };
 
+  favorites: Array<SMSFavorite>;
+
   search: Record<SearchNames, string>;
   price: Record<PriceNames, boolean>;
 }

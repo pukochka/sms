@@ -49,3 +49,19 @@ export const defaultOrder: SMSOrder = {
   cost: 0,
   status: 8,
 };
+
+export const defaultFavorite: SMSFavorite = {
+  service: {
+    cost: 0,
+    count: 0,
+    image: '',
+    name: '',
+    longName: '',
+  },
+  country: {
+    image: '',
+    name_en: '',
+    name_ru: '',
+    org_id: 0,
+  },
+};

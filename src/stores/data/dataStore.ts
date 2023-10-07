@@ -41,6 +41,8 @@ export const useDataStore = defineStore('data', {
         repeat: defaultOrder,
       },
 
+      favorites: LocalStorage.getItem('sms_favorites_hub') ?? [],
+
       search: {
         services: '',
         countries: '',
@@ -105,17 +107,6 @@ export const useDataStore = defineStore('data', {
       this.orders.selectedOrder = value;
     },
 
-    selectService(value?: SMSUser) {
-      this.userValue = value ?? this.userValue;
-
-      this.services.selectedValue =
-        this.services.value.find(
-          (service) => service.name === this.user?.service
-        ) ?? null;
-    },
-    selectCountry(value: SMSCountry) {
-      this.countries.selectedValue = value;
-    },
     setLastCountry() {
       const last = LocalStorage.getItem('last-country') ?? '';
 
@@ -124,6 +115,45 @@ export const useDataStore = defineStore('data', {
       );
 
       if (country) this.countries.selectedValue = country;
+    },
+
+    controlFavorite(country: SMSCountry | null, service: SMSServices) {
+      if (country === null) return;
+
+      const isFav = this.favorites.find(
+        (fav) =>
+          fav.country.org_id === country.org_id &&
+          fav.service.name === service.name
+      );
+
+      if (!isFav) {
+        this.addFavorite(service, country);
+
+        return;
+      }
+
+      this.deleteFavorite(country, service);
+    },
+
+    addFavorite(service: SMSServices, country: SMSCountry) {
+      const favorite = Object.assign(
+        { service: service },
+        { country: country }
+      );
+
+      this.favorites.push(favorite);
+
+      LocalStorage.set('sms_favorites_hub', this.favorites);
+    },
+
+    deleteFavorite(country: SMSCountry, service: SMSServices) {
+      this.favorites = this.favorites.filter(
+        (fav) =>
+          fav.country.org_id !== country.org_id ||
+          fav.service.name !== service.name
+      );
+
+      LocalStorage.set('sms_favorites_hub', this.favorites);
     },
   },
 });

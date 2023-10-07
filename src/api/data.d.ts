@@ -126,6 +126,11 @@ declare interface SMSOrder {
   status: 0 | 1 | 3 | 4 | 5 | 6 | 8 | 9 | 10;
 }
 
+declare interface SMSFavorite {
+  service: SMSServices;
+  country: SMSCountry;
+}
+
 declare interface Stages {
   label: string;
 

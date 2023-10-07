@@ -84,6 +84,9 @@ const enScheme = {
   rent_cancel_warning:
     'You can cancel the rental only for the first 20 minutes after purchase. After 20 minutes, the money will NOT be returned.',
 
+  no_favorites: "You don't have favorites yet",
+  favorites: 'Favourites',
+
   selected_country: 'Selected country',
   selected_service: 'Selected service',
 

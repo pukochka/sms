@@ -79,10 +79,12 @@ import { useLang } from 'src/utils/use/useLang';
 import { useDataStore } from 'stores/data/dataStore';
 import { useStatesStore } from 'stores/states/statesStore';
 
-import { CountryImage } from 'src/utils/images';
-
 import { fetchSMS } from 'boot/queries';
-import { mdiOrderBoolAscending, mdiWallet } from '@quasar/extras/mdi-v7';
+import {
+  mdiOrderBoolAscending,
+  mdiStar,
+  mdiWallet,
+} from '@quasar/extras/mdi-v7';
 
 const data = useDataStore();
 const states = useStatesStore();
@@ -111,6 +113,12 @@ const openOrders = () => {
   states.openDialog('orders_view');
 };
 
+const openFavorites = () => {
+  states.toggleDrawer();
+
+  states.toggleFavorites();
+};
+
 const content = computed((): Content[] => [
   {
     label: lang.value.balance,
@@ -124,6 +132,13 @@ const content = computed((): Content[] => [
     value: data.ordersValue.length,
     class: data.activeOrders.length > 0 ? ' bg-orange rounded-10 q-pa-xs' : '',
     action: openOrders,
+  },
+  {
+    label: lang.value.favorites,
+    icon: mdiStar,
+    value: data.favorites?.length,
+    class: '',
+    action: openFavorites,
   },
   {
     label: lang.value.change_language,

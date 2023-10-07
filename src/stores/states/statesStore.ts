@@ -21,6 +21,7 @@ export const useStatesStore = defineStore('states', {
       tab: 'service',
 
       drawer: false,
+      favorites: false,
 
       notifyValue: {
         state: false,
@@ -38,6 +39,9 @@ export const useStatesStore = defineStore('states', {
 
     toggleDrawer() {
       this.drawer = !this.drawer;
+    },
+    toggleFavorites() {
+      this.favorites = !this.favorites;
     },
 
     load(section: LoadingNames, value?: boolean) {
