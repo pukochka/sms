@@ -43,6 +43,15 @@
             </div>
           </q-tab-panel>
         </q-tab-panels>
+
+        <q-btn
+          flat
+          no-caps
+          class="rounded-10"
+          :icon="mdiStar"
+          color="orange"
+          @click="states.toggleFavorites">
+        </q-btn>
       </q-toolbar>
     </q-header>
 
@@ -71,6 +80,8 @@
         @click="tab.action" />
     </q-footer>
 
+    <favorite-template></favorite-template>
+
     <order-view></order-view>
 
     <order-dialog></order-dialog>
@@ -90,9 +101,10 @@ import OrderView from 'components/order/OrderView.vue';
 import OrderDialog from 'components/order/OrderDialog.vue';
 import DrawerTemplate from 'layouts/DrawerTemplate.vue';
 import CreateOrderButton from 'components/other/CreateOrderButton.vue';
-
-import { mdiMessage, mdiAnimation } from '@quasar/extras/mdi-v7';
 import RepeatOrder from 'components/order/RepeatOrder.vue';
+import FavoriteTemplate from 'components/favorites/FavoriteTemplate.vue';
+
+import { mdiMessage, mdiAnimation, mdiStar } from '@quasar/extras/mdi-v7';
 
 const states = useStatesStore();
 const data = useDataStore();

@@ -137,6 +137,11 @@ declare interface SMSMultiCountry {
   name_en: string;
 }
 
+declare interface SMSFavorite {
+  service: SMSServices;
+  country: SMSCountry;
+}
+
 /**
  * Сущность заказа
  * */

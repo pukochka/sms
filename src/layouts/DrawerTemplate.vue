@@ -94,6 +94,7 @@ import {
   mdiOrderBoolAscending,
   mdiWallet,
   mdiLabelPercent,
+  mdiStar,
 } from '@quasar/extras/mdi-v7';
 
 const data = useDataStore();
@@ -126,6 +127,12 @@ const openOrders = () => {
   states.openDialog('orders_view');
 };
 
+const openFavorites = () => {
+  states.toggleDrawer();
+
+  states.toggleFavorites();
+};
+
 const content = computed((): Content[] => [
   {
     label: lang.value.balance,
@@ -139,6 +146,13 @@ const content = computed((): Content[] => [
     value: data.ordersValue.length,
     class: data.activeOrders.length > 0 ? ' bg-orange rounded-10 q-pa-xs' : '',
     action: openOrders,
+  },
+  {
+    label: lang.value.favorites,
+    icon: mdiStar,
+    value: data.favorites?.length,
+    class: '',
+    action: openFavorites,
   },
   {
     label: lang.value.change_language,

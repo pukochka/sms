@@ -14,7 +14,7 @@ import { LocalStorage } from 'quasar';
 export async function fetchSMS<Q extends keyof SMSQueries>(
   query: Q,
   params?: SMSParams<Q>,
-  open?: boolean
+  action?: () => void
 ) {
   const data = useDataStore();
   const states = useStatesStore();
@@ -25,6 +25,12 @@ export async function fetchSMS<Q extends keyof SMSQueries>(
       url: query,
       params: params,
     }).then((response) => {
+      /** */
+
+      if (action !== void 0) action();
+
+      /** */
+
       if (query === 'services') {
         /** */
 
@@ -90,9 +96,8 @@ export async function fetchSMS<Q extends keyof SMSQueries>(
         /** */
       } else if (query === 'orders') {
         /** */
-        data.orders.value = response.data.data;
 
-        if (open) useNotify('', true);
+        data.orders.value = response.data.data;
 
         /** */
       } else if (
@@ -115,7 +120,6 @@ export async function fetchSMS<Q extends keyof SMSQueries>(
         /** */
 
         data.updateOrder(response.data.data);
-        if (open) states.openDialog('order');
 
         /** */
       } else if (query === 'getUser') {
@@ -139,7 +143,7 @@ export async function fetchSMS<Q extends keyof SMSQueries>(
             user_secret_key: data.systemUser.secret_user_key,
             public_key: config.public_key,
           },
-          true
+          () => useNotify('', true)
         );
 
         /** */
@@ -171,14 +175,10 @@ async function startApp() {
   const data = useDataStore();
 
   return await Promise.all([
-    fetchSMS(
-      'services',
-      {
-        public_key: config.public_key,
-        country: LocalStorage.getItem('last-country') ?? 'ru',
-      },
-      true
-    ),
+    fetchSMS('services', {
+      public_key: config.public_key,
+      country: LocalStorage.getItem('last-country') ?? 'ru',
+    }),
     fetchSMS('countries', {
       public_key: config.public_key,
       user_id: data.systemUser.user.telegram_id,
@@ -190,7 +190,7 @@ async function startApp() {
         user_secret_key: data.systemUser.secret_user_key,
         public_key: config.public_key,
       },
-      true
+      () => useNotify('', true)
     ),
   ]);
 }

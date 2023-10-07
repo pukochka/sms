@@ -48,6 +48,22 @@ export const defaultSystemUser: SystemUser = {
   secret_user_key: '',
 };
 
+export const defaultFavorite: SMSFavorite = {
+  service: {
+    cost: 0,
+    count: 0,
+    image: '',
+    name: '',
+    longName: '',
+  },
+  country: {
+    org_id: '-1',
+    image: '',
+    name_ru: '',
+    name_en: '',
+  },
+};
+
 export const defaultUser: SMSUser = {
   id: 0,
   language: '',

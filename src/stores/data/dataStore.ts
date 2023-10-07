@@ -17,6 +17,7 @@ import 'src/utils/helpers/polyfills';
 import { DataStore, PriceNames, SearchNames } from 'stores/data/models';
 import config from 'src/config';
 import { fetchSMS } from 'boot/queries';
+import { LocalStorage } from 'quasar';
 
 export const useDataStore = defineStore('data', {
   state: () =>
@@ -60,6 +61,8 @@ export const useDataStore = defineStore('data', {
         services: false,
         multi: false,
       },
+
+      favorites: LocalStorage.getItem('sms_favorites_vak') ?? [],
 
       selectedMultiServices: [],
     } as DataStore),
@@ -188,6 +191,45 @@ export const useDataStore = defineStore('data', {
       }
 
       this.selectedMultiServices.push(value);
+    },
+
+    controlFavorite(country: SMSCountry | null, service: SMSServices) {
+      if (country === null) return;
+
+      const isFav = this.favorites.find(
+        (fav) =>
+          fav.country.org_id === country.org_id &&
+          fav.service.name === service.name
+      );
+
+      if (!isFav) {
+        this.addFavorite(service, country);
+
+        return;
+      }
+
+      this.deleteFavorite(country, service);
+    },
+
+    addFavorite(service: SMSServices, country: SMSCountry) {
+      const favorite = Object.assign(
+        { service: service },
+        { country: country }
+      );
+
+      this.favorites.push(favorite);
+
+      LocalStorage.set('sms_favorites_vak', this.favorites);
+    },
+
+    deleteFavorite(country: SMSCountry, service: SMSServices) {
+      this.favorites = this.favorites.filter(
+        (fav) =>
+          fav.country.org_id !== country.org_id ||
+          fav.service.name !== service.name
+      );
+
+      LocalStorage.set('sms_favorites_vak', this.favorites);
     },
   },
 });

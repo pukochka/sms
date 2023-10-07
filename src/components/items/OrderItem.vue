@@ -102,7 +102,7 @@ const openOrder = () => {
       public_key: config.public_key,
       user_secret_key: data.systemUser.secret_user_key,
     },
-    true
+    () => states.openDialog('order')
   ).then(() => (loading.value = false));
 };
 
