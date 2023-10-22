@@ -99,7 +99,7 @@ const createOrder = () => {
 
   fetchSMS('createOrder', {
     country: props.item.country.org_id + '',
-    service: data.selectedService?.name ?? '',
+    service: props.item.service?.name ?? '',
     user_id: data.user?.id ?? 0,
     public_key: config.public_key,
     user_secret_key: data.systemUserValue?.secret_user_key ?? '',
