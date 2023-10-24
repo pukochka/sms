@@ -14,7 +14,7 @@
 
     <q-item-section>
       <q-item-label class="text-subtitle1">
-        {{ name }}
+        <div class="" v-html="name"></div>
       </q-item-label>
     </q-item-section>
 

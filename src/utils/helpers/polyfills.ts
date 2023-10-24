@@ -1,5 +1,6 @@
 import namesCountry from 'src/utils/names/contries';
 import { useDataStore } from 'stores/data/dataStore';
+import { searchItems } from 'src/utils/names/products';
 
 export {};
 
@@ -39,9 +40,13 @@ Number.prototype.comma = function (value?: string) {
 Array.prototype.serviceFilter = function (search: string, price?: boolean) {
   const compareFn = price ? compare : notCompare;
 
-  return this.filter((service) =>
-    service.longName?.toString()?.short(search)
-  ).sort(compareFn);
+  const text = search.toString().toLowerCase().trim();
+
+  const mass = Object.entries(searchItems)
+    .map((item) => (item[1].includes(text) ? item[0] : false))
+    .filter((item) => item);
+
+  return this.filter((service) => mass.includes(service.name)).sort(compareFn);
 };
 
 Array.prototype.countryFilter = function (

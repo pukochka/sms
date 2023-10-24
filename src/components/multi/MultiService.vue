@@ -19,7 +19,9 @@
     </q-item-section>
 
     <q-item-section>
-      <q-item-label class="text-subtitle1">{{ label }}</q-item-label>
+      <q-item-label class="text-subtitle1">
+        <div v-html="label"></div>
+      </q-item-label>
     </q-item-section>
 
     <q-item-section side class="no-wrap">

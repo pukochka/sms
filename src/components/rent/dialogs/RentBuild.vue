@@ -87,7 +87,7 @@ const states = useStatesStore();
 const data = useDataStore();
 const lang = computed(() => useLang());
 
-const selected = ref(4);
+const selected = ref({ value: 4, label: lang.value.rentTime['4'] });
 const loading = ref({
   create: false,
   price: false,
@@ -125,7 +125,7 @@ const createOrder = () => {
     user_id: data.user.id,
     service: data.services.selectedRent?.name ?? '',
     country: data.countries.selectedRent?.id ?? '',
-    time: selected.value,
+    time: selected.value.value ?? 4,
   }).then(() => {
     loading.value.create = false;
     states.closeDialog('rent_build');
@@ -137,7 +137,7 @@ const ImageService = () => ServiceImage(data?.services.selectedRent?.name);
 
 const update = () => {
   data.rentPrice = -1;
-  selected.value = 4;
+  selected.value = { label: lang.value.rentTime['4'], value: 4 };
 };
 
 const updateValue = (value: { value: number }) => {
