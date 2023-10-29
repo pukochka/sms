@@ -1,4 +1,5 @@
 import { findCountryName, findServiceName } from 'src/utils/names/find';
+import { searchItems } from 'src/utils/names/products';
 
 export {};
 
@@ -38,10 +39,18 @@ Number.prototype.comma = function (value?: string) {
 Array.prototype.serviceFilter = function (search: string, price?: boolean) {
   const compareFn = price ? compare : notCompare;
 
-  return this.filter((service) =>
-    findServiceName(service?.name ?? '')
-      ?.toString()
-      ?.short(search)
+  const text = search.toString().toLowerCase().trim();
+
+  const mass = Object.entries(searchItems)
+    .map((item) => (item[1].includes(text) ? item[0] : false))
+    .filter((item) => item);
+
+  return this.filter(
+    (service) =>
+      mass.includes(service.name) ||
+      findServiceName(service?.name ?? '')
+        ?.toString()
+        ?.short(search)
   ).sort(compareFn);
 };
 

@@ -7,7 +7,7 @@
     <q-item-section avatar>
       <q-img
         class="rounded-10"
-        :src="props.item.image"
+        :src="image"
         spinner-color="primary"
         style="height: 24px; width: 24px">
         <template v-slot:error>
@@ -89,6 +89,9 @@ const loading = ref(false);
 
 const name = computed(() => props.item?.longName ?? '');
 const price = computed(() => props.item.cost.comma());
+const image = computed(() =>
+  props.item.name === 'be' ? '/megamarket.png' : props.item.image
+);
 
 const selected = computed(() => data.selectedService?.name === props.item.name);
 
