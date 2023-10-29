@@ -20,7 +20,7 @@
               <ImageService />
             </div>
 
-            <div class="">{{ service }}</div>
+            <div v-html="service"></div>
           </q-item-label>
         </div>
 

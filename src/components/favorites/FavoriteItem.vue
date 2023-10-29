@@ -18,7 +18,7 @@
           spinner-color="primary"
           style="height: 24px; width: 24px" />
 
-        <div class="q-pl-sm">{{ serviceTitle }}</div>
+        <div class="q-pl-sm" v-html="serviceTitle"></div>
       </div>
 
       <q-btn

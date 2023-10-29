@@ -36,7 +36,7 @@
 
             <ImageCountry v-else-if="item.image === 'country'" />
 
-            <div class="">{{ item.value }}</div>
+            <div class="" v-html="item.value"></div>
           </div>
         </div>
       </div>

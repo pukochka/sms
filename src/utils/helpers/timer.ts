@@ -24,7 +24,7 @@ export const useTimer = defineStore('timer', {
     cancel: (state): boolean => state._percentToCancel >= 1,
   },
   actions: {
-    start(callback: any, timestamp: string, period: number) {
+    start(callback: () => void, timestamp: string, period: number) {
       this.timestamp = Number(timestamp);
       this.period = period;
 

@@ -38,7 +38,7 @@
 
             <ImageCountry v-else-if="item.image === 'country'" />
 
-            <div class="">{{ item.value }}</div>
+            <div class="" v-html="item.value"></div>
           </div>
         </div>
       </div>
@@ -58,7 +58,7 @@
               </q-item-label>
             </q-item-section>
 
-            <copy-button :text="data.createdOrder.phone"></copy-button>
+            <copy-button :text="data.createdOrder?.phone ?? ''"></copy-button>
           </q-item>
         </q-list>
       </div>
@@ -93,9 +93,7 @@
       </div>
 
       <div class="">
-        <div class="" v-if="timer.isEnd || orderEnd"></div>
-
-        <div class="" v-else>
+        <div class="" v-if="!timer.isEnd && !orderEnd && codes.length === 0">
           <div class="text-center text-caption">
             {{ lang.order_remained }} {{ timer.format }}
           </div>
@@ -143,9 +141,7 @@
           @click="prolongRent" />
 
         <q-btn
-          v-if="
-            orderEnd === false && timer.isEnd === false && codes.length === 0
-          "
+          v-if="orderEnd === false && !timer.isEnd && codes.length === 0"
           unelevated
           no-caps
           class="rounded-10 col-12"
@@ -188,6 +184,20 @@ const loadings = ref({
   prolong: false,
   cancel: false,
 });
+
+let interval: any;
+
+const updateRent = () =>
+  (interval = setInterval(
+    () =>
+      fetchSMS('getRentOrder', {
+        user_id: data.user.id,
+        order_id: data.createdRent?.id ?? 0,
+        public_key: config.public_key,
+        user_secret_key: data.systemUser.secret_user_key,
+      }),
+    5000
+  ));
 
 const status = computed(() => data.createdRent?.status ?? 9);
 
@@ -249,14 +259,12 @@ const cancelRent = () => {
 };
 
 const show = () => {
+  if (orderEnd.value) return;
+
+  updateRent();
+
   timer.start(
-    () =>
-      fetchSMS('getRentOrder', {
-        user_id: data.user.id,
-        order_id: data.createdRent?.id ?? 0,
-        public_key: config.public_key,
-        user_secret_key: data.systemUser.secret_user_key,
-      }),
+    () => console.dir(),
     data.createdRent?.start_time ?? '',
     config.time_to_cancel
   );
@@ -264,6 +272,8 @@ const show = () => {
 
 const hide = () => {
   timer.stop();
+
+  clearInterval(interval);
 
   fetchSMS('getRentOrders', {
     user_id: data.user.id,

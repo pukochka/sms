@@ -16,7 +16,7 @@
           <q-item-label class="row items-center q-gutter-x-sm">
             <ImageService />
 
-            <div class="">{{ service }}</div>
+            <div v-html="service"></div>
           </q-item-label>
         </div>
 
