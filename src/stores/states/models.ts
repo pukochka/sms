@@ -1,27 +1,33 @@
 export interface StatesStore {
-  dialogs: Dialogs;
+  dialogs: Record<DialogNames, boolean>;
 
   loadings: Record<LoadingNames, boolean>;
 
   tab: TabNames;
 
   drawer: boolean;
+  favorites: boolean;
 
   notifyValue: {
     state: boolean;
     message: string;
   };
-
-  anyCountriesButtons: (SMSOrder | null)[];
-  reportedOrdersValue: number[];
 }
 
-export interface Dialogs {
-  order: boolean;
-  orders_view: boolean;
-}
+export type DialogNames =
+  | 'order'
+  | 'repeat_order'
+  | 'orders_view'
+  | 'rent'
+  | 'replenish'
+  | 'rent_view'
+  | 'rent_continue'
+  | 'rent_build';
 
-export type DialogNames = 'order' | 'orders_view';
-export type LoadingNames = 'init' | 'services' | 'countries' | 'operators';
+export type LoadingNames =
+  | 'init'
+  | 'error'
+  | 'getCountries'
+  | 'getRentCountries';
 
-export type TabNames = 'catalog' | 'countries' | 'operators' | 'profile';
+export type TabNames = 'service' | 'multi-service' | 'rent';

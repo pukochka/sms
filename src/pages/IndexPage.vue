@@ -1,21 +1,45 @@
 <template>
-  <q-page class="fit q-pa-md q-gutter-y-md" :class="[main.backgroundClass]">
-    <div
-      class="q-gutter-y-sm relative-position overflow-hidden"
-      :id="'stage-' + index"
-      v-for="(stage, index) in main.stages"
-      :key="index">
-      <div :class="[main.titleClasses]">{{ index + 1 }}. {{ stage.label }}</div>
-
-      <component :is="stage.component" />
-    </div>
+  <q-page class="fit">
+    <q-tab-panels v-model="states.tab" animated class="bg-transparent">
+      <q-tab-panel
+        :name="panel.name"
+        v-for="(panel, index) in panels"
+        :key="index">
+        <stage-view :stages="panel.stages"></stage-view>
+      </q-tab-panel>
+    </q-tab-panels>
 
     <div class="q-pt-lg"></div>
   </q-page>
 </template>
 
 <script setup lang="ts">
-import { useMainStore } from 'stores/main/mainStore';
+import { computed } from 'vue';
+import { serviceStages, multiStages, rentStages } from 'components/stages';
 
-const main = useMainStore();
+import { useStatesStore } from 'stores/states/statesStore';
+
+import StageView from 'components/stages/StageView.vue';
+
+const states = useStatesStore();
+
+const panels = computed((): Panels[] => [
+  {
+    name: 'service',
+    stages: serviceStages.value,
+  },
+  {
+    name: 'multi-service',
+    stages: multiStages.value,
+  },
+  {
+    name: 'rent',
+    stages: rentStages.value,
+  },
+]);
+
+interface Panels {
+  name: string;
+  stages: Stages[];
+}
 </script>

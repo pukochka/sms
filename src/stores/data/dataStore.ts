@@ -1,27 +1,22 @@
-import config from 'src/config';
-import { products } from 'src/utils/names/products';
-
 import { defineStore } from 'pinia';
 
-import { toCurrentTime, toTimeEnd } from 'src/utils/time';
-
-import 'src/utils/polyfills';
-
-import { useMainStore } from 'stores/main/mainStore';
 import { useStatesStore } from 'stores/states/statesStore';
 
-import { fetchSMS } from 'boot/queries';
+import { mapServiceTitle } from 'src/utils/names/products';
 
-import { DataStore, DataValues } from 'stores/data/models';
+import {
+  defaultOrder,
+  defaultRentOrder,
+  defaultSystemUser,
+  defaultUser,
+} from 'stores/content/defaults';
+import { useNotify } from 'src/utils/use/useNotify';
+import { useLang } from 'src/utils/use/useLang';
 
-import namesCountry from 'src/utils/names/contries';
+import 'src/utils/helpers/polyfills';
 
-import Timeout = NodeJS.Timeout;
-import { defaultOrder, defaultSystemUser, defaultUser } from 'stores/defaults';
-
-let time_interval: Timeout;
-let request_getOrder_interval: Timeout;
-let request_countries_interval: Timeout;
+import { DataStore, PriceNames, SearchNames } from 'stores/data/models';
+import { LocalStorage } from 'quasar';
 
 export const useDataStore = defineStore('data', {
   state: () =>
@@ -29,228 +24,239 @@ export const useDataStore = defineStore('data', {
       userValue: defaultUser,
       systemUserValue: defaultSystemUser,
 
-      countriesValue: [],
-      servicesValue: [],
-      operatorsValue: [],
+      services: {
+        value: [],
+        multi: [],
+        rent: [],
 
-      ordersValue: [],
+        selectedValue: null,
+        selectedMulti: null,
+        selectedRent: null,
+      },
 
-      selectedCountryValue: null,
-      selectedServiceValue: null,
-      selectedOperatorValue: null,
+      countries: {
+        value: [],
+        multi: [],
+        rent: [],
 
-      createdOrderValue: defaultOrder,
+        selectedValue: null,
+        selectedMulti: null,
+        selectedRent: null,
+      },
+
+      orders: {
+        value: [],
+        rent: [],
+
+        selectedOrder: defaultOrder,
+        selectedMulti: defaultOrder,
+        selectedRent: defaultRentOrder,
+
+        selectedRepeat: defaultOrder,
+      },
+
+      favorites: LocalStorage.getItem('sms_favorites') ?? [],
 
       search: {
         services: '',
         operators: '',
         countries: '',
+        multiServices: '',
+        multiCountry: '',
+        rentCountry: '',
+        rentService: '',
       },
 
-      timeToEnd: {
-        percent: 0,
-        full: '00:00',
-        isEnd: false,
+      price: {
+        services: false,
+        multi: false,
+        rent: false,
       },
 
-      price: false,
+      selectedMultiServices: [],
+
+      prolongPrice: 0,
+      rentPrice: -1,
     } as DataStore),
   getters: {
-    isAuth: (state): boolean => state.userValue !== null,
+    /** */
     user: (state): SMSUser => state.userValue,
     systemUser: (state): SystemUser => state.systemUserValue,
-
-    selectedCountry: (state): SMSCountry | null => state.selectedCountryValue,
-    selectedService: (state): SMSServices | null => state.selectedServiceValue,
-    selectedOperator: (state): SMSOperator | null =>
-      state.selectedOperatorValue,
-
-    createdOrder: (state): SMSOrder | null => state.createdOrderValue,
-
-    canPay: (state) => state.selectedServiceValue !== null,
-
-    services: (state): SMSServices[] =>
-      state.servicesValue.filter((service) =>
-        service.longName.toString()?.shortIncludes(state.search.services)
+    /** */
+    servicesValue: (state): SMSServices[] =>
+      state.services.value.serviceFilter(state.search.services),
+    multiServices: (state): SMSMultiService[] =>
+      state.services.multi.serviceFilter(
+        state.search.multiServices,
+        state.price.multi
       ),
-
-    operators: (state): SMSOperator[] =>
-      state.operatorsValue.filter((operators) =>
-        operators.title?.shortIncludes(state.search.operators)
+    rentServices: (state): SMSRentService[] =>
+      state.services.rent.serviceFilter(
+        state.search.rentService,
+        state.price.rent
       ),
-
-    countries: (state): SMSCountry[] =>
-      state.countriesValue
-        .map((country) => {
-          country.title =
-            state.userValue?.language === 'eng'
-              ? country.title_eng
-              : namesCountry[country.id];
-
-          return country;
-        })
-
-        .filter((country) =>
-          (state.userValue?.language === 'eng'
-            ? country.title
-            : namesCountry[country.id]
-          )?.shortIncludes(state.search.countries)
-        )
-
-        .sort(function (a, b) {
-          return state.price ? a.cost - b.cost : a.cost + b.cost;
-        }),
-
-    orders: (state): SMSOrder[] => state.ordersValue.reverse(),
-
-    active_order: (state): SMSOrder[] =>
-      state.ordersValue.filter(
-        (order) =>
-          order.status !== 8 &&
-          order.status !== 9 &&
-          order.status !== 6 &&
-          order.status !== 0 &&
-          order.status !== 10
+    /** */
+    countriesValue: (state): SMSCountry[] =>
+      state.countries.value.countryFilter(
+        state.search.countries,
+        false,
+        state.price.services
       ),
+    multiCountries: (state): SMSMultiCountry[] =>
+      state.countries.multi.countryFilter(state.search.multiCountry, true),
+    rentCountries: (state): SMSRentCountry[] =>
+      state.countries.rent.countryFilter(state.search.rentCountry),
+    /** */
+    selectedCountry: (state): SMSCountry | null =>
+      state.countries.selectedValue,
+    selectedService: (state): SMSServices | null =>
+      state.services.selectedValue,
+
+    multiSelected: (state): boolean => {
+      const states = useStatesStore();
+
+      return (
+        state.selectedMultiServices.length > 1 && states.tab === 'multi-service'
+      );
+    },
+
+    createdOrder: (state): SMSOrder | null => state.orders.selectedOrder,
+    createdRent: (state): SMSRentOrder | null => state.orders.selectedRent,
+
+    ordersValue: (state): SMSOrder[] => state.orders.value.reverse(),
+    rentsValue: (state): SMSRentOrder[] => state.orders.rent.reverse(),
+
+    repeatOrder: (state): SMSOrder => state.orders.selectedRepeat,
+
+    activeOrders: (state): SMSOrder[] =>
+      state.orders.value.filter(
+        (order) => ![0, 6, 8, 9, 10].includes(order.status)
+      ),
+    activeRents: (state): SMSRentOrder[] =>
+      state.orders.rent.filter((order) => ![9, 10].includes(order.status)),
   },
   actions: {
-    setUser(value: SMSUser) {
-      this.userValue = value;
+    modelValue(name: SearchNames, value: string) {
+      this.search[name] = value;
     },
-    setSystemUser(value: SystemUser) {
-      this.systemUserValue = value;
+    usePrice(name: PriceNames) {
+      this.price[name] = !this.price[name];
     },
+
     setServices(value: SMSServices[], init?: boolean) {
-      this.servicesValue = value
-        .map((service) => {
-          service.longName = products[service.name] ?? service.name;
-          return service;
-        })
-        .filter((service) => service?.name?.length <= 2);
+      this.services.value = mapServiceTitle(value);
 
       if (init) this.selectService();
     },
-    setCountries(value: SMSCountry[]) {
-      this.countriesValue = value.map((country) => {
-        country.title =
-          this.userValue?.language === 'eng'
-            ? country.title_eng
-            : country.title_ru;
-
-        return country;
-      });
+    setMultiServices(value: SMSMultiService[]) {
+      this.services.multi = mapServiceTitle(value);
     },
-
-    setOrders(value: SMSOrder[]) {
-      this.ordersValue = value;
+    setRentServices(value: SMSRentService[]) {
+      this.services.rent = mapServiceTitle(value);
     },
 
     setOrder(value: SMSOrder) {
       const states = useStatesStore();
 
-      this.createdOrderValue = value;
-
-      this.startGetOrder();
-      this.startCounter();
+      this.orders.selectedOrder = value;
 
       states.openDialog('order');
     },
+    setRent(value: SMSRentOrder) {
+      const states = useStatesStore();
+
+      this.orders.selectedRent = value;
+
+      states.openDialog('rent');
+    },
     updateOrder(value: SMSOrder) {
-      this.createdOrderValue = value;
+      this.orders.selectedOrder = value;
     },
 
     selectService(value?: SMSUser) {
-      const main = useMainStore();
-
       this.userValue = value ?? this.userValue;
 
-      this.selectedServiceValue =
-        this.servicesValue.find(
+      this.services.selectedValue =
+        this.services.value.find(
           (service) => service.name === this.user?.service
         ) ?? null;
-
-      if (this.selectedServiceValue !== null) main.useScroll(1);
-
-      this.checkCanPay();
     },
     selectCountry(value: SMSCountry) {
-      this.selectedCountryValue = value;
+      this.countries.selectedValue = value;
     },
-    selectOperator(value?: SMSUser) {
-      this.userValue = value ?? this.userValue;
+    setLastCountry(section: 'multi' | 'rent') {
+      const rentCountry = LocalStorage.getItem('last-rent-country');
+      const multiCountry = LocalStorage.getItem('last-multi-country');
+
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      const country = this.countries[section].find((item: any) =>
+        section === 'multi'
+          ? item.org_id === multiCountry
+          : item.id === rentCountry
+      );
+
+      if (!country) return;
+
+      if (section === 'rent') this.countries.selectedRent = country;
+      else if (section === 'multi') this.countries.selectedMulti = country;
     },
 
-    nullify() {
-      this.selectedServiceValue = null;
-      this.selectedCountryValue = null;
-      this.selectedOperatorValue = null;
-    },
+    selectMultiService(value: SMSMultiService) {
+      const names = this.selectedMultiServices.map((service) => service.name);
 
-    checkCanPay() {
-      if (this.canPay) {
-        fetchSMS('countries', {
-          user_id: this.userValue?.id ?? 0,
-          public_key: config.public_key,
-          interval: true,
-        });
-        this.startCountries();
+      if (names.includes(value.name)) {
+        this.selectedMultiServices = this.selectedMultiServices.filter(
+          (service) => service.name !== value.name
+        );
+        return;
       }
+
+      if (this.selectedMultiServices.length >= 5) {
+        const lang = useLang();
+        useNotify(lang.max_selecting);
+
+        return;
+      }
+
+      this.selectedMultiServices.push(value);
     },
 
-    startCounter() {
-      this.useCounter();
-      time_interval = setInterval(() => this.useCounter(), 1000);
-    },
-    endCounter() {
-      clearInterval(time_interval);
-    },
-    startGetOrder() {
-      request_getOrder_interval = setInterval(
-        () =>
-          fetchSMS('getOrder', {
-            order_id: this.createdOrder?.id ?? 0,
-            user_id: this.user?.id ?? 0,
-            public_key: config.public_key,
-            user_secret_key: this.systemUserValue?.secret_user_key ?? '',
-          }),
-        config.request_interval
+    controlFavorite(service: SMSServices | null, country: SMSCountry) {
+      if (service === null) return;
+
+      const isFav = this.favorites.find(
+        (fav) =>
+          fav.country.id === country.id && fav.service.name === service.name
       );
+
+      if (!isFav) {
+        this.addFavorite(service, country);
+
+        return;
+      }
+
+      this.deleteFavorite(country, service);
     },
-    endGetOrder() {
-      clearInterval(request_getOrder_interval);
-    },
-    startCountries() {
-      request_countries_interval = setInterval(
-        () =>
-          fetchSMS('countries', {
-            user_id: this.userValue?.id ?? 0,
-            public_key: config.public_key,
-          }),
-        config.request_countries_interval
+
+    addFavorite(service: SMSServices, country: SMSCountry) {
+      const favorite = Object.assign(
+        { service: service },
+        { country: country }
       );
-    },
-    endCountries() {
-      clearInterval(request_countries_interval);
-    },
 
-    modelValue(section: DataValues, text: string) {
-      this.search[section] = text;
+      this.favorites.push(favorite);
+
+      LocalStorage.set('sms_favorites', this.favorites);
     },
 
-    usePrice() {
-      this.price = !this.price;
-    },
+    deleteFavorite(country: SMSCountry, service: SMSServices) {
+      this.favorites = this.favorites.filter(
+        (fav) =>
+          fav.country.id !== country.id || fav.service.name !== service.name
+      );
 
-    useCounter() {
-      const time = toTimeEnd(this.createdOrder?.time);
-
-      this.timeToEnd.percent = time;
-
-      this.timeToEnd.isEnd = time >= 1;
-
-      this.timeToEnd.full = toCurrentTime(time);
-
-      if (time >= 1) this.endCounter();
+      LocalStorage.set('sms_favorites', this.favorites);
     },
   },
 });

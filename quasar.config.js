@@ -27,10 +27,10 @@ module.exports = configure(function (/* ctx */) {
     // app boot file (/src/boot)
     // --> boot files are part of "main.js"
     // https://v2.quasar.dev/quasar-cli-vite/boot-files
-    boot: ['index', 'instances', 'init'],
+    boot: ['instances', 'index'],
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#css
-    css: ['app.scss', 'fonts.css', 'icons/flags.scss', 'icons/products.scss'],
+    css: ['app.scss', 'fonts.css'],
 
     // https://github.com/quasarframework/quasar/tree/dev/extras
     extras: [
@@ -98,7 +98,7 @@ module.exports = configure(function (/* ctx */) {
       // directives: [],
 
       // Quasar plugins
-      plugins: ['Notify'],
+      plugins: ['Notify', 'Dialog'],
     },
 
     // animations: 'all', // --- includes all animations

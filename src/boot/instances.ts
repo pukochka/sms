@@ -1,7 +1,10 @@
 import axios from 'axios';
 import config from 'src/config';
+
 import { useStatesStore } from 'stores/states/statesStore';
-import { useMainStore } from 'stores/main/mainStore';
+import { useLang } from 'src/utils/use/useLang';
+import { useDialog } from 'src/utils/use/useDialog';
+import { LoadingNames } from 'stores/states/models';
 
 const sms = axios.create({
   baseURL: config.domain,
@@ -17,7 +20,7 @@ for (const instance of [sms, bott]) {
   instance.interceptors.request.use(function (config) {
     const states = useStatesStore();
 
-    states.startLoad(config.url ?? '', config.params ?? {});
+    states.load(<LoadingNames>config.url ?? '', true);
 
     return config;
   });
@@ -25,31 +28,29 @@ for (const instance of [sms, bott]) {
   instance.interceptors.response.use(
     function (response) {
       const states = useStatesStore();
-      const main = useMainStore();
+      const lang = useLang();
 
-      states.endLoad(response.config.url ?? '');
+      states.load(<LoadingNames>response.config.url ?? '');
 
       if (response.data.result === true) {
         return response;
       } else {
-        states.notify(
-          main.language.order_status_text[response.data.message] ??
-            response.data.message ??
-            main.language.errors.undefined_message
-        );
+        const message =
+          lang.order_status_text[response.data.message] ??
+          response.data.message ??
+          lang.errors.undefined_message;
+
+        useDialog(message, true);
 
         return Promise.reject('error');
       }
     },
     function (error) {
       const states = useStatesStore();
-      const main = useMainStore();
+      const lang = useLang();
 
-      states.endLoad(error.config.url ?? '');
-
-      if (error.config.line === 83) return;
-
-      states.notify(main.language.errors.connection);
+      states.load(error.config.url ?? '', true);
+      useDialog(lang.errors.connection, true);
 
       return Promise.reject(error);
     }

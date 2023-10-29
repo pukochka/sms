@@ -139,7 +139,7 @@ declare interface SMSOrder {
   /**
    *
    * */
-  cost: number;
+  cost: string;
   /**
    *
    * */

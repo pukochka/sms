@@ -7,7 +7,7 @@
     "html": {
       "attributes": [
         {
-          "name": "v-haptic",
+          "name": "v-clickable",
           "source": {
             "module": "sms",
             "symbol": "haptic"

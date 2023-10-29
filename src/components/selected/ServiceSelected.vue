@@ -1,8 +1,5 @@
 <template>
-  <q-item
-    class="col-12 rounded-10"
-    :class="[main.itemBackgroundClass]"
-    style="height: 52px">
+  <q-item class="rounded-10 bg-item">
     <q-item-section avatar>
       <q-btn
         flat
@@ -10,17 +7,19 @@
         size="md"
         color="primary"
         icon="close"
-        @click="data.selectedServiceValue = null" />
+        @click="data.services.selectedValue = null" />
     </q-item-section>
 
     <q-item-section avatar>
-      <div class="icon-sms">
-        <Image />
-      </div>
+      <q-img
+        class="rounded-10"
+        :src="data.selectedService.image"
+        spinner-color="primary"
+        style="height: 24px; width: 24px" />
     </q-item-section>
 
     <q-item-section>
-      <q-item-label :class="[main.textClasses]">
+      <q-item-label class="text-subtitle1">
         {{ data.selectedService?.longName }}
       </q-item-label>
     </q-item-section>
@@ -30,19 +29,18 @@
       floating
       color="primary"
       text-color="white"
-      :label="main.language.selected_service" />
+      :label="lang.selected_service" />
   </q-item>
 </template>
 
 <script lang="ts" setup>
-import { useMainStore } from 'stores/main/mainStore';
+import { computed } from 'vue';
+import { useLang } from 'src/utils/use/useLang';
+
 import { useDataStore } from 'stores/data/dataStore';
-import { ServiceImage } from 'src/utils/images';
 
-const main = useMainStore();
 const data = useDataStore();
-
-const Image = () => ServiceImage(data.selectedService?.name);
+const lang = computed(() => useLang());
 </script>
 
 <style lang="scss" scoped></style>

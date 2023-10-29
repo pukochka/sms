@@ -1,33 +1,47 @@
+import config from 'src/config';
 import { defineStore } from 'pinia';
-import { LocalStorage } from 'quasar';
-import { DialogNames, StatesStore, TabNames } from 'stores/states/models';
+
+import {
+  DialogNames,
+  LoadingNames,
+  StatesStore,
+  TabNames,
+} from 'stores/states/models';
+
+import { fetchSMS } from 'boot/queries';
+import { useDataStore } from 'stores/data/dataStore';
 
 export const useStatesStore = defineStore('states', {
   state: () =>
     ({
       dialogs: {
         order: false,
+        repeat_order: false,
+        rent: false,
+        rent_view: false,
+        rent_build: false,
+        rent_continue: false,
         orders_view: false,
+        replenish: false,
       },
 
       loadings: {
+        getCountries: false,
+        getRentCountries: false,
+
         init: true,
-        services: false,
-        countries: false,
-        operators: false,
+        error: false,
       },
 
-      tab: 'catalog',
+      tab: 'service',
 
       drawer: false,
+      favorites: false,
 
       notifyValue: {
         state: false,
         message: '',
       },
-
-      anyCountriesButtons: [],
-      reportedOrdersValue: LocalStorage.getItem('anyCountries') ?? [],
     } as StatesStore),
   getters: {},
   actions: {
@@ -38,41 +52,35 @@ export const useStatesStore = defineStore('states', {
       this.dialogs[name] = false;
     },
 
-    startLoad(url: string, params: any) {
-      if (url === 'setService' || url === 'services')
-        this.loadings.services = true;
-
-      if (url === 'setCountry' || params.hasOwnProperty('interval')) {
-        this.loadings.countries = true;
-      }
-    },
-    endLoad(url: string) {
-      if (url === 'services' || url === 'setCountry' || url === 'setService')
-        this.loadings.services = false;
-      if (url === 'countries' || url === 'setCountry')
-        this.loadings.countries = false;
-    },
-
-    stop() {
-      this.loadings.init = false;
-    },
-
     toggleDrawer() {
       this.drawer = !this.drawer;
     },
 
+    toggleFavorites() {
+      this.favorites = !this.favorites;
+    },
+
+    load(section: LoadingNames, value?: boolean) {
+      this.loadings[section] = value ?? false;
+    },
+
     toggleTab(name: TabNames) {
+      const data = useDataStore();
+      if (
+        this.tab !== 'multi-service' &&
+        name === 'multi-service' &&
+        data.countries.multi.length === 0
+      ) {
+        fetchSMS('getCountries', { public_key: config.public_key }).then();
+      } else if (
+        this.tab !== 'rent' &&
+        name === 'rent' &&
+        data.countries.rent.length === 0
+      ) {
+        fetchSMS('getRentCountries', { public_key: config.public_key }).then();
+      }
+
       this.tab = name;
-    },
-
-    notify(message: string) {
-      this.notifyValue.state = true;
-      this.notifyValue.message = message;
-    },
-    removeAny(order: SMSOrder) {
-      this.reportedOrdersValue.push(order.id);
-
-      LocalStorage.set('anyCountries', this.reportedOrdersValue);
     },
   },
 });

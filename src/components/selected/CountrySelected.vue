@@ -1,8 +1,5 @@
 <template>
-  <q-item
-    class="col-12 rounded-10"
-    :class="[main.itemBackgroundClass]"
-    style="height: 52px">
+  <q-item class="rounded-10 bg-item">
     <q-item-section avatar>
       <q-btn
         flat
@@ -10,17 +7,19 @@
         size="md"
         color="primary"
         icon="close"
-        @click="data.selectedCountryValue = null" />
+        @click="nullify" />
     </q-item-section>
 
     <q-item-section avatar>
-      <div class="icon-sms">
-        <Image />
-      </div>
+      <q-img
+        class="rounded-10"
+        :src="image"
+        spinner-color="primary"
+        style="height: 24px; width: 24px" />
     </q-item-section>
 
     <q-item-section>
-      <q-item-label :class="[main.textClasses]">{{ title }}</q-item-label>
+      <q-item-label class="text-subtitle1">{{ label }}</q-item-label>
     </q-item-section>
 
     <q-badge
@@ -28,27 +27,33 @@
       floating
       color="primary"
       text-color="white"
-      :label="main.language.selected_country" />
+      :label="lang.selected_country" />
   </q-item>
 </template>
 
 <script lang="ts" setup>
 import { computed } from 'vue';
 
-import { useMainStore } from 'stores/main/mainStore';
+import namesCountry from 'src/utils/names/contries';
+
 import { useDataStore } from 'stores/data/dataStore';
-import { CountryImage } from 'src/utils/images';
 
-const main = useMainStore();
+import { useLang } from 'src/utils/use/useLang';
+
 const data = useDataStore();
+const lang = computed(() => useLang());
 
-const title = computed(() =>
-  data.userValue?.language === 'ru'
-    ? data.selectedCountry?.title_ru
-    : data.selectedCountry?.title_eng
+const label = computed(() =>
+  data.user.language === 'ru'
+    ? namesCountry[data.countries.selectedRent?.id ?? '']
+    : data.countries.selectedRent?.title_eng ?? ''
 );
 
-const Image = () => CountryImage(data.selectedCountry?.id);
+const image = computed(() => data.countries.selectedRent?.image ?? '');
+
+const nullify = () => {
+  data.countries.selectedRent = null;
+};
 </script>
 
 <style lang="scss" scoped></style>
