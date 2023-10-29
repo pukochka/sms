@@ -276,7 +276,7 @@ const products: Record<string, string> = {
   rj: 'Детский мир',
   uh: 'Yubo',
   es: 'iQIYI',
-  be: 'СберМегаМаркет',
+  be: 'МегаМаркет',
   aq: 'Glovo',
   pd: 'IFood',
   zw: 'Quack',
