@@ -47,7 +47,7 @@ const products: Record<string, string> = {
   fw: '99acres',
   sn: 'OLX',
   kc: 'Vinted',
-  be: 'СберМегаМаркет',
+  be: 'МегаМаркет',
   ft: 'Букмекерские',
   pf: 'pof.com',
   qf: 'RedBook',

@@ -3,11 +3,11 @@
     clickable
     style="height: 52px"
     class="relative-position country-item"
-    @click="data.services.selectedRent = item">
+    @click="data.services.selectedRent = props.item">
     <q-item-section avatar>
       <q-img
         class="rounded-10"
-        :src="props.item.image"
+        :src="image"
         spinner-color="primary"
         style="height: 24px; width: 24px" />
     </q-item-section>
@@ -61,6 +61,9 @@ const lang = computed(() => useLang());
 
 const title = computed(() => props.item?.longName ?? '');
 const price = computed(() => props.item.cost.comma(lang.value.fromAt + ' '));
+const image = computed(() =>
+  props.item.name === 'be' ? '/megamarket.png' : props.item.image
+);
 
 const selected = computed(
   () => data.services.selectedRent?.name === props.item.name

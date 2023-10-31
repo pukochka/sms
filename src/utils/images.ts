@@ -11,11 +11,15 @@ const CountryImage = (country_id?: string) => {
   });
 };
 
-const ServiceImage = (name?: string) => {
+const ServiceImage = (name?: string, crutch?: boolean) => {
+  let link = (config.activate_service_url + name ?? 'ot') + '0.webp';
+
+  if (name === 'be' && crutch) link = '/megamarket.png';
+
   return h(QImg, {
     class: ' rounded-10 q-list--bordered',
     style: 'height:24px; width:24px',
-    src: (config.activate_service_url + name ?? 'ot') + '0.webp',
+    src: link,
   });
 };
 

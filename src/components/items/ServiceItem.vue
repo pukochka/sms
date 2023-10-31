@@ -7,7 +7,7 @@
     <q-item-section avatar>
       <q-img
         class="rounded-10"
-        :src="props.item.image ?? ''"
+        :src="image ?? ''"
         spinner-color="primary"
         style="height: 24px; width: 24px" />
     </q-item-section>
@@ -45,6 +45,10 @@ const data = useDataStore();
 const loading = ref(false);
 
 const name = computed(() => products[props.item.name] ?? props.item.name);
+
+const image = computed(() =>
+  props.item.name === 'be' ? '/megamarket.png' : props.item.image
+);
 
 const select = () => {
   loading.value = true;

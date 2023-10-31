@@ -10,7 +10,7 @@
 
         <q-img
           class="rounded-10"
-          :src="props.item.image"
+          :src="image"
           spinner-color="primary"
           style="height: 24px; width: 24px" />
 
@@ -54,6 +54,9 @@ const lang = computed(() => useLang());
 
 const label = computed(() => products[props.item.name]);
 const price = computed(() => props.item.cost.comma());
+const image = computed(() =>
+  props.item.name === 'be' ? '/megamarket.png' : props.item.image
+);
 
 const selected = computed(() =>
   data.selectedMultiServices
