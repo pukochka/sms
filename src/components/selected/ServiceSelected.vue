@@ -13,7 +13,7 @@
     <q-item-section avatar>
       <q-img
         class="rounded-10"
-        :src="data.selectedService.image"
+        :src="data.selectedService?.image ?? ''"
         spinner-color="primary"
         style="height: 24px; width: 24px">
         <template v-slot:error>

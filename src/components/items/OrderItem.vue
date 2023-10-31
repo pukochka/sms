@@ -115,7 +115,7 @@ const openRepeat = () => {
 };
 
 const ImageCountry = () => CountryImage(props.item.country);
-const ImageService = () => ServiceImage(props.item.service);
+const ImageService = () => ServiceImage(props.item.service, true);
 
 interface OrderItemProps {
   item: SMSOrder;

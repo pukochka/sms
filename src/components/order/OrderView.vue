@@ -60,7 +60,7 @@
               </q-item-label>
             </q-item-section>
 
-            <CopyButton :text="data.createdOrder.phone" />
+            <CopyButton :text="data.createdOrder?.phone ?? ''" />
           </q-item>
         </q-list>
       </div>
@@ -153,7 +153,6 @@ import { useLang } from 'src/utils/use/useLang';
 
 import { fetchSMS } from 'boot/queries';
 
-import PaginationList from 'components/other/PaginationList.vue';
 import CopyButton from 'components/other/CopyButton.vue';
 import OrderCode from 'components/other/OrderCode.vue';
 
@@ -253,7 +252,7 @@ const hide = () => {
 };
 
 const ImageCountry = () => CountryImage(data.createdOrder?.country);
-const ImageService = () => ServiceImage(data.createdOrder?.service);
+const ImageService = () => ServiceImage(data.createdOrder?.service, true);
 
 const order = computed(() => [
   {
