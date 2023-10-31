@@ -13,7 +13,7 @@
     <q-item-section avatar>
       <q-img
         class="rounded-10"
-        :src="data.selectedService.image"
+        :src="image"
         spinner-color="primary"
         style="height: 24px; width: 24px" />
     </q-item-section>
@@ -41,6 +41,12 @@ import { useDataStore } from 'stores/data/dataStore';
 
 const data = useDataStore();
 const lang = computed(() => useLang());
+
+const image = computed(() =>
+  data.selectedService?.name === 'be'
+    ? '/megamarket.png'
+    : data.selectedService?.image ?? ''
+);
 </script>
 
 <style lang="scss" scoped></style>
