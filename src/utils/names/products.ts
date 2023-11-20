@@ -1521,7 +1521,7 @@ export const searchItems = {
   lv: 'megogomegogo',
   lw: 'mrgreenmrgreen',
   lz: 'thingsthings',
-  md: 'банкибанки',
+  md: 'банки,банки,,fyrb',
   mk: 'longhulonghu',
   mn: 'rrsarrsa',
   mp: 'winmasterswinmasters',
