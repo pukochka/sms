@@ -1,4 +1,5 @@
 const products: Record<string, string> = {
+  aes: 'Золотое яблоко',
   lb: 'Mailru Group',
   vk: 'Вконтакте',
   ok: 'Ok.ru',
@@ -783,7 +784,7 @@ export const searchItems = {
   bn: 'alfagiftalfagift',
   kj: 'yappyyappy',
   nc: 'payoneerpayoneer',
-  xm: 'лэтуальлэтуаль',
+  xm: 'лэтуаль,летуаль,литуаль,ktnefkm,kbnefkm',
   jr: 'самокатсамокат,samokat,ыфьщлфе,cfvjrfn',
   mg: 'магнитmagnit,magnit,vfuybn,ьфптше',
   nt: 'sravnisravni',
@@ -1195,7 +1196,11 @@ export const searchItems = {
   zv: 'digikaladigikala',
   zy: 'nttgamenttgame,теепфьу,ynnutqv,нттгейм',
   zz: 'dentdentдент,ltyn',
+  aes: 'золотоеяблоко,яблоко,apple,goldenapple,golden,pjkjnjtz,kjrj',
 };
+
+const start = ['xj', 'be', 'md'];
+const excludes = ['abm', 'aes'];
 
 export function mapServiceTitle<T extends SMSServices>(
   value: Array<T>
@@ -1205,7 +1210,8 @@ export function mapServiceTitle<T extends SMSServices>(
       item.longName = products[item.name]?.toString() ?? item.name;
       return item;
     })
-    .filter((item) => !(item.name.length > 2) || item.name === 'abm');
+    .filter((item) => !(item.name.length > 2) || excludes.includes(item.name))
+    .sort((a) => (start.includes(a.name) ? -1 : 1));
 }
 
 export { products };
