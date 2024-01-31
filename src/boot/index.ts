@@ -19,6 +19,7 @@ export default boot(({ app }) => {
   useLocalColor();
 
   window.Telegram.WebApp.enableClosingConfirmation();
+  window.Telegram.WebApp.expand();
 
   fetchSMS('getSettings', { public_key: config.public_key }).then();
 
