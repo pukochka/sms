@@ -1199,7 +1199,7 @@ export const searchItems = {
   aes: 'золотоеяблоко,яблоко,apple,goldenapple,golden,pjkjnjtz,kjrj',
 };
 
-const start = ['xj', 'be', 'md'];
+const start = ['xj', 'be', 'md', 'mg', 'aes', 'ah'];
 const excludes = ['abm', 'aes'];
 
 export function mapServiceTitle<T extends SMSServices>(
