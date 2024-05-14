@@ -699,6 +699,14 @@ const namesCountry: Record<string, Record<string, string>> = {
     name_en: 'Zimbabwe',
     name_ru: 'Зимбабве',
   },
+  usv: {
+    name_en: 'United States Virtual',
+    name_ru: 'США Виртуальные',
+  },
+  cav: {
+    name_en: 'Canada',
+    name_ru: 'Канада',
+  },
 };
 
 export default namesCountry;

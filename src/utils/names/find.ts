@@ -3,8 +3,6 @@ import { useDataStore } from 'stores/data/dataStore';
 import { products } from 'src/utils/names/products';
 
 export function findServiceName(name?: string) {
-  const data = useDataStore();
-
   return products[name ?? ''] ?? name;
 }
 
@@ -12,8 +10,8 @@ export function findCountryName(name?: string) {
   const data = useDataStore();
 
   return data.user.language === 'eng'
-    ? namesCountry[name ?? 'ru'].name_en
-    : namesCountry[name ?? 'ru'].name_ru;
+    ? namesCountry[name ?? 'ru']?.name_en || ''
+    : namesCountry[name ?? 'ru']?.name_ru || '';
 }
 
 export function findCountryImage(name?: string) {
