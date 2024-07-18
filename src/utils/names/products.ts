@@ -1209,7 +1209,7 @@ export const searchItems = {
   atu: 'Сбер,sber,c,th,',
 };
 
-const start = ['xj', 'be', 'md', 'mg', 'aes', 'ahn', 'ahc'];
+const start = ['xj', 'atu', 'be', 'md', 'mg', 'aes', 'ahn', 'ahc'];
 const excludes = ['abm', 'aes', 'ahc', 'ahn', 'aeh', 'aca', 'atu'];
 
 export function mapServiceTitle<T extends SMSServices>(
