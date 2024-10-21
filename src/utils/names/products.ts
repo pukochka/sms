@@ -5,6 +5,7 @@ const products: Record<string, string> = {
   ahn: 'Рив Гош',
   aeh: 'Аптека Апрель',
   aes: 'Золотое яблоко',
+  aug: 'Magnit Market',
   lb: 'Mailru Group',
   vk: 'Вконтакте',
   ok: 'Ok.ru',
@@ -1207,10 +1208,11 @@ export const searchItems = {
   aeh: 'Аптека Апрель,аптека апрель,аптека,апрель,fgntrf,fghtkm',
   aca: 'Sunlight,санлайт,cfykfqn',
   atu: 'Сбер,sber,c,th,',
+  aug: 'Magnit,ьфптше',
 };
 
 const start = ['xj', 'atu', 'be', 'md', 'mg', 'aes', 'ahn', 'ahc'];
-const excludes = ['abm', 'aes', 'ahc', 'ahn', 'aeh', 'aca', 'atu'];
+const excludes = ['abm', 'aes', 'ahc', 'ahn', 'aeh', 'aca', 'atu', 'aug'];
 
 export function mapServiceTitle<T extends SMSServices>(
   value: Array<T>
