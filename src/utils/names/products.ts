@@ -1208,7 +1208,7 @@ export const searchItems = {
   aeh: 'Аптека Апрель,аптека апрель,аптека,апрель,fgntrf,fghtkm',
   aca: 'Sunlight,санлайт,cfykfqn',
   atu: 'Сбер,sber,c,th,',
-  aug: 'Magnit,ьфптше',
+  aug: 'Magnit,ьфптше,магнит,ьфклуе,vauybn',
 };
 
 const start = ['xj', 'atu', 'be', 'md', 'mg', 'aes', 'ahn', 'ahc'];
