@@ -188,12 +188,12 @@ const time = computed(() =>
 const status = computed(() => data.createdOrder?.status ?? 8);
 
 const codes = computed(() => {
-  let mass;
+  let mass: any;
 
   if (data.createdOrder?.codes === null) {
     mass = [];
   } else {
-    mass = JSON.parse(data.createdOrder?.codes ?? '');
+    mass = [JSON.parse(data.createdOrder?.codes ?? '')];
   }
 
   mass.map((item: string) => {
