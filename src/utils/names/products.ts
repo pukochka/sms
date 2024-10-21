@@ -173,7 +173,7 @@ const products: Record<string, string> = {
   js: 'Голос',
   zo: 'Kaggle',
   aq: 'Glovo',
-  mg: 'Магнит',
+  mg: 'Магнит - Магнит Маркет',
   qe: 'GG',
   rc: 'Rencredit',
   pr: 'Trendyol',
